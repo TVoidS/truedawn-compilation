@@ -11,6 +11,8 @@ public class PlayerStats : MonoBehaviour
     [Header("Spirit Vein UI Button Objects")]
     public Button test;
 
+    SkillControlls skill;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,6 +20,7 @@ public class PlayerStats : MonoBehaviour
         // That list will be used for connecting to skills or anything else, based on the ID of the attatched component
         Button testBtn = test.GetComponent<Button>();
         testBtn.onClick.AddListener(TestPrint);
+        skill = gameObject.AddComponent<SkillControlls>();
     }
 
     void TestPrint() 
@@ -29,6 +32,6 @@ public class PlayerStats : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        skill.check();
     }
 }
