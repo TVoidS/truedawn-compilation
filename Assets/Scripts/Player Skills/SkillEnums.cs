@@ -17,6 +17,7 @@ public class SkillEnums
     {
         Instant,
         Toggle,
-        Passive
+        Passive,
+        PassiveTimer
     }
 }
