@@ -4,48 +4,65 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerStats : MonoBehaviour
+public static class PlayerStats
 {
 
     //TODO: Make this the entire character stat and skill screen for all games. :D
 
-    [Header("Spirit Vein UI Button Objects")]
-    public Button test;
 
-    [Header("Spirit Vein Qi Generation")]
-    public TextMeshProUGUI qiCountDisplay;
+    static SkillController skill;
 
-    SkillControlls skill;
+    // Stored values.
+    // TODO: LOAD THESE FROM FILE?
+    static ulong sysPoints;
 
-    protected long qiCount;
-
-    // Start is called before the first frame update
-    void Start()
+    public static void setup(GameObject gameObject) 
     {
-        
-        qiCount = 0;
-        // TODO: Automatically form a collection of buttons that meet a certain criteiria (have a specific component attatched)
-        // That list will be used for connecting to skills or anything else, based on the ID of the attatched component
-        Button testBtn = test.GetComponent<Button>();
-        testBtn.onClick.AddListener(TestPrint);
-        skill = gameObject.AddComponent<SkillControlls>();
+        // Load Player Data
+        QiCount.initiate((ulong)0);
+        sysPoints = 0;
     }
 
-    void TestPrint() 
+    static void setupSkillController(GameObject gameObject) 
     {
-        Debug.Log("Test Success");
-        
+        skill = gameObject.GetComponent<SkillController>();
     }
 
-    // Update is called once per frame
-    void Update()
+}
+
+static class QiCount 
+{
+    private static ulong qi = 0;
+    public static bool initiate(ulong qi) 
     {
-        skill.check();
+        if (qi == 0)
+        {
+            // TODO: Checks for failure,  somehow.
+            QiCount.qi = qi;
+            return true;
+        } 
+        else
+        {
+            return false;
+        }
     }
 
-    private void FixedUpdate()
+    public static bool add(ulong qiAdd) 
     {
-        qiCount += 1;
-        qiCountDisplay.SetText(qiCount+"");
+        qi += qiAdd;
+        return true;
+    }
+
+    public static bool sub(ulong qiSub) 
+    {
+        if (qi - qiSub > qi)
+        {
+            return false;
+        }
+        else 
+        {
+            qi -= qiSub;
+            return true;
+        }
     }
 }

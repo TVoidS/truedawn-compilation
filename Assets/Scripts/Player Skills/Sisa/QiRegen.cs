@@ -5,7 +5,6 @@ using static SkillEnums;
 
 public class QiRegen : ISpiritVeinSkills
 {
-
     private readonly byte _ID = 0;
     public byte ID => _ID; // UNIQUE ID FOR SKILLS, Make sure all skills have a UUID.
 
@@ -23,7 +22,6 @@ public class QiRegen : ISpiritVeinSkills
 
     public DurationType SkillType => DurationType.PassiveTimer;
 
-    public byte _GrowthType; // Might change with certain situations?
     public GrowthType GrowthType => GrowthType.Linear;
 
     public string Description => "The basic ability all Spirit Veins have.  To recover Qi naturally. \n You however have the ability to recover Qi much faster. \n If you invest in this Skill that is...";
@@ -32,6 +30,11 @@ public class QiRegen : ISpiritVeinSkills
 
     private byte _MaxLevel = 9;
     public byte MaxLevel => _MaxLevel;
+
+    private float _cooldown = 1.0f;
+    public float cooldown => _cooldown;
+
+    private uint regenQuantity = 1;
 
     public QiRegen(byte level, byte rank) 
     {
@@ -55,5 +58,14 @@ public class QiRegen : ISpiritVeinSkills
     public bool LevelUp() // TODO: Need to make this have checks for validity, and take System Points from the Player.
     {
         throw new System.NotImplementedException();
+    }
+
+    public void regen() 
+    {
+        QiCount.add(regenQuantity);
+
+        // TODO: FIX.  Probably cause not Monobehavior.  Don't really want it to be a monobehavior.  
+        // Look Into it.
+        Invoke("regen", cooldown);
     }
 }
