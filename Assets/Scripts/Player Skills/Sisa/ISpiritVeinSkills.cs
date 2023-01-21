@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static SkillEnums;
 
 public interface ISpiritVeinSkills
 {
@@ -10,8 +11,8 @@ public interface ISpiritVeinSkills
     public ulong UpgradeCost { get; }
 
 
-    public byte SkillType { get; }
-    public byte GrowthType { get; }
+    public DurationType SkillType { get; }
+    public GrowthType GrowthType { get; }
 
 
     public string Description { get; }
