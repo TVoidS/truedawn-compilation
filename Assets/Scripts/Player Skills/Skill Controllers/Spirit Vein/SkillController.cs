@@ -12,6 +12,7 @@ public class SkillController : MonoBehaviour
 
     [Header("Spirit Vein Qi Generation")]
     public TextMeshProUGUI qiCountDisplay;
+    public Slider qiRegenProgressBar;
 
     private QiRegen qiRegener;
 
@@ -22,7 +23,7 @@ public class SkillController : MonoBehaviour
         Button qiConvertBtn_ = qiConvertBtn.GetComponent<Button>();
         qiConvertBtn_.onClick.AddListener(TestPrint);
 
-        PlayerStats.setup(gameObject);
+        PlayerStats.setup(gameObject, qiCountDisplay);
 
         // This will instead be handled by a Skill Initiator later.
         float qiRegenTime = 10f;
@@ -36,12 +37,17 @@ public class SkillController : MonoBehaviour
     private void skillSetup()
     {
         // Make this load from PlayerStats file
-        qiRegener = new QiRegen(0, 0);
+        qiRegener = new QiRegen(0, 0, qiRegenProgressBar);
+    }
+
+    private void Update()
+    {
+        QiCount.add(qiRegener.regen());
     }
 
     private void startAlwaysOnPassives()
     {
-        Invoke("qiRegener.regen", qiRegener.cooldown);
+
     }
 
     public void check()

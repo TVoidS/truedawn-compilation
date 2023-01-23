@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using static SkillEnums;
 
 public class QiRegen : ISpiritVeinSkills
@@ -34,12 +35,20 @@ public class QiRegen : ISpiritVeinSkills
     private float _cooldown = 1.0f;
     public float cooldown => _cooldown;
 
+    // TODO: Tie this to Qi Purity
     private uint regenQuantity = 1;
 
-    public QiRegen(byte level, byte rank) 
+    // Represents the number of seconds to regen Qi
+    private float tickRegenCost = 6f;
+
+    private Slider _Regener;
+
+    public QiRegen(byte level, byte rank, Slider regen) 
     {
         _Level = level;
         _Rank = rank;
+        _Regener = regen.GetComponent<Slider>();
+        _Regener.value = 0f;
     }
 
     public bool RankUp()
@@ -60,12 +69,16 @@ public class QiRegen : ISpiritVeinSkills
         throw new System.NotImplementedException();
     }
 
-    public void regen() 
+    public uint regen() 
     {
-        QiCount.add(regenQuantity);
-
-        // TODO: FIX.  Probably cause not Monobehavior.  Don't really want it to be a monobehavior.  
-        // Look Into it.
-        Invoke("regen", cooldown);
+        _Regener.value += (Time.deltaTime / tickRegenCost);
+        if (_Regener.value >= 1f) 
+        {
+            _Regener.value = 0f;
+            return regenQuantity;
+        } else 
+        {
+            return 0;
+        }
     }
 }
