@@ -16,10 +16,10 @@ public static class PlayerStats
     // TODO: LOAD THESE FROM FILE?
     static ulong sysPoints;
 
-    public static void setup(GameObject gameObject) 
+    public static void setup(GameObject gameObject, TextMeshProUGUI qiCountDisplay) 
     {
         // Load Player Data
-        QiCount.initiate((ulong)0);
+        QiCount.initiate((ulong)0, qiCountDisplay, (ulong)10);
         sysPoints = 0;
     }
 
@@ -33,24 +33,37 @@ public static class PlayerStats
 static class QiCount 
 {
     private static ulong qi = 0;
-    public static bool initiate(ulong qi) 
+    private static ulong max = 10;
+    private static TextMeshProUGUI display;
+
+    public static bool initiate(ulong qi, TextMeshProUGUI display, ulong max) 
     {
-        if (qi == 0)
-        {
-            // TODO: Checks for failure,  somehow.
-            QiCount.qi = qi;
-            return true;
-        } 
-        else
-        {
-            return false;
-        }
+        QiCount.qi = qi;
+        QiCount.display = display;
+        return true;
     }
 
     public static bool add(ulong qiAdd) 
     {
-        qi += qiAdd;
-        return true;
+        if (qi < max)
+        {
+            if (qi + qiAdd < max)
+            {
+                qi += qiAdd;
+                disp();
+                return true;
+            }
+            else
+            {
+                qi = max;
+                disp();
+                return true;
+            }
+        }
+        else 
+        {
+            return false;
+        }
     }
 
     public static bool sub(ulong qiSub) 
@@ -62,7 +75,13 @@ static class QiCount
         else 
         {
             qi -= qiSub;
+            disp();
             return true;
         }
+    }
+
+    private static void disp() 
+    {
+        display.SetText(qi + "/" + max);
     }
 }
