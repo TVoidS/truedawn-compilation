@@ -15,17 +15,27 @@ public static class PlayerStats
     // Stored values.
     // TODO: LOAD THESE FROM FILE?
     static ulong sysPoints;
+    static ulong issMass;
 
-    public static void setup(GameObject gameObject, TextMeshProUGUI qiCountDisplay) 
+    public static void setup(GameObject gameObject, TextMeshProUGUI qiCountDisplay, TextMeshProUGUI slagCount) 
     {
         // Load Player Data
         QiCount.initiate((ulong)0, qiCountDisplay, (ulong)10);
         sysPoints = 0;
+        issMass = 0;
+        slagDisplay = slagCount;
     }
 
     static void setupSkillController(GameObject gameObject) 
     {
         skill = gameObject.GetComponent<SkillController>();
+    }
+
+    static TextMeshProUGUI slagDisplay;
+    public static void addSlag(ulong slag) 
+    {
+        issMass += slag;
+        slagDisplay.SetText(issMass + "g");
     }
 
 }

@@ -18,6 +18,7 @@ public class SkillEnums
         Instant,
         Toggle,
         Passive,
-        PassiveTimer
+        PassiveTimer,
+        DelayedInstant
     }
 }

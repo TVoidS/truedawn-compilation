@@ -7,14 +7,18 @@ using TMPro;
 public class SkillController : MonoBehaviour
 {
 
-    [Header("Spirit Vein UI Button Objects")]
-    public Button qiConvertBtn;
-
     [Header("Spirit Vein Qi Generation")]
     public TextMeshProUGUI qiCountDisplay;
     public Slider qiRegenProgressBar;
 
+    [Header("Spirit Vein Qi Conversion")]
+    public TextMeshProUGUI issDisplay;
+    public Slider qiConvertSlider;
+    public Button qiConvertBtn;
+    public TMP_Dropdown qiConvertSelector;
+
     private QiRegen qiRegener;
+    private QiConvert qiConverter;
 
     private void Start()
     {
@@ -23,11 +27,7 @@ public class SkillController : MonoBehaviour
         Button qiConvertBtn_ = qiConvertBtn.GetComponent<Button>();
         qiConvertBtn_.onClick.AddListener(TestPrint);
 
-        PlayerStats.setup(gameObject, qiCountDisplay);
-
-        // This will instead be handled by a Skill Initiator later.
-        float qiRegenTime = 10f;
-
+        PlayerStats.setup(gameObject, qiCountDisplay, issDisplay);
 
         skillSetup();
 
@@ -38,11 +38,14 @@ public class SkillController : MonoBehaviour
     {
         // Make this load from PlayerStats file
         qiRegener = new QiRegen(0, 0, qiRegenProgressBar);
+        qiConverter = new QiConvert(qiConvertSlider, qiConvertSelector);
     }
 
     private void Update()
     {
         QiCount.add(qiRegener.regen());
+        qiConverter.convert();
+        
     }
 
     private void startAlwaysOnPassives()
