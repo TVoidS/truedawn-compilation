@@ -14,7 +14,7 @@ public class SkillController : MonoBehaviour
     [Header("Spirit Vein Qi Conversion")]
     public TextMeshProUGUI issDisplay;
     public Slider qiConvertSlider;
-    public Button qiConvertBtn;
+    public Button slagConvertBtn;
     public TMP_Dropdown qiConvertSelector;
 
     private QiRegen qiRegener;
@@ -24,9 +24,7 @@ public class SkillController : MonoBehaviour
     {
         // TODO: Automatically form a collection of buttons that meet a certain criteiria (have a specific component attatched)
         // That list will be used for connecting to skills or anything else, based on the ID of the attatched component
-        Button qiConvertBtn_ = qiConvertBtn.GetComponent<Button>();
-        qiConvertBtn_.onClick.AddListener(TestPrint);
-
+        
         PlayerStats.setup(gameObject, qiCountDisplay, issDisplay);
 
         skillSetup();
@@ -38,7 +36,7 @@ public class SkillController : MonoBehaviour
     {
         // Make this load from PlayerStats file
         qiRegener = new QiRegen(0, 0, qiRegenProgressBar);
-        qiConverter = new QiConvert(qiConvertSlider, qiConvertSelector);
+        qiConverter = new QiConvert(qiConvertSlider, qiConvertSelector, slagConvertBtn);
     }
 
     private void Update()
@@ -51,6 +49,13 @@ public class SkillController : MonoBehaviour
     private void startAlwaysOnPassives()
     {
 
+    }
+
+    private void skillCallbackAdd(string skillID, string function) 
+    {
+        /**
+         * TODO: Make this a registerable passive updater.
+         */
     }
 
     public void check()

@@ -31,7 +31,8 @@ public class QiConvert : ISpiritVeinSkills
 
     public bool LevelUp()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("Attempted Level UP!");
+        return false;
     }
 
     public bool RankUp()
@@ -39,17 +40,51 @@ public class QiConvert : ISpiritVeinSkills
         throw new System.NotImplementedException();
     }
 
+    private Button lvlUpBtn;
+    private void LevelUpSetup(Button levelUpButton) 
+    {
+        lvlUpBtn = levelUpButton.GetComponent<Button>();
+        
+        lvlUpBtn.onClick.AddListener(() => 
+        {
+            if (LevelUp())
+            {
+                Debug.Log("Level Up Worked!");
+            }
+            else 
+            {
+                Debug.Log("Level Up Failed!");
+            }
+        });
+    }
+
 
     private Slider progressBar;
     private TMP_Dropdown matSelector;
 
-    public QiConvert(Slider convertSlider, TMP_Dropdown convertSelector) 
+    public QiConvert(Slider convertSlider, TMP_Dropdown convertSelector, Button convertTrigger) 
     {
+        setupConvert(convertTrigger);
         progressBar = convertSlider;
         matSelector = convertSelector;
     }
 
-
+    private void setupConvert(Button trigger) 
+    {
+        trigger.onClick.AddListener(() => 
+        {
+            // TODO: register itself to the passive list 
+            if (QiCount.sub(1))
+            {
+                convert();
+            }
+            else 
+            {
+                //Not enough QI
+                Debug.Log("Not Enough QI!");
+            }
+        });
+    }
     public void convert() 
     {
         if (progressBar.value >= 1) 

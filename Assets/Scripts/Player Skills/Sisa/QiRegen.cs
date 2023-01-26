@@ -69,6 +69,11 @@ public class QiRegen : ISpiritVeinSkills
         throw new System.NotImplementedException();
     }
 
+    public bool LevelUpSetup() 
+    {
+        return true;
+    }
+
     public uint regen() 
     {
         _Regener.value += (Time.deltaTime / tickRegenCost);
