@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -47,5 +48,10 @@ public class SpiritVeinSkill : Skill
     {
         // This is the parent function, it should not be called to rank up the child!
         return false;
+    }
+
+    public void update() 
+    {
+        throw new NotImplementedException();
     }
 }

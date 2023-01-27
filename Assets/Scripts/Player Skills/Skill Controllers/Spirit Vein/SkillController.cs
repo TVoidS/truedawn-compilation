@@ -20,11 +20,25 @@ public class SkillController : MonoBehaviour
     private QiRegen qiRegener;
     private QiConvert qiConverter;
 
+    private List<SpiritVeinSkill> TimerSkills = new List<SpiritVeinSkill>();
+
+    public bool registerTimerSkill(SpiritVeinSkill skill)
+    {
+        TimerSkills.Add(skill);
+        return true;
+    }
+
+    public bool deregisterTimerSkill(SpiritVeinSkill skill)
+    {
+        TimerSkills.Remove(skill);
+        return true;
+    }
+
     private void Start()
     {
         // TODO: Automatically form a collection of buttons that meet a certain criteiria (have a specific component attatched)
         // That list will be used for connecting to skills or anything else, based on the ID of the attatched component
-        
+
         PlayerStats.setup(gameObject, qiCountDisplay, issDisplay);
 
         skillSetup();
@@ -41,9 +55,17 @@ public class SkillController : MonoBehaviour
 
     private void Update()
     {
-        QiCount.add(qiRegener.regen());
-        qiConverter.convert();
-        
+        /*QiCount.add(qiRegener.regen());
+        qiConverter.convert();*/
+        runTimerSkills();
+    }
+
+    private void runTimerSkills() 
+    {
+        foreach (SpiritVeinSkill skill in TimerSkills) 
+        {
+            skill.update();
+        }
     }
 
     private void startAlwaysOnPassives()
