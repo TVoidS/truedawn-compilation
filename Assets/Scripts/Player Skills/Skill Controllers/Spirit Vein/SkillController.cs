@@ -35,8 +35,8 @@ public class SkillController : MonoBehaviour
     private void skillSetup()
     {
         // Make this load from PlayerStats file
-        qiRegener = new QiRegen(0, 0, qiRegenProgressBar);
-        qiConverter = new QiConvert(qiConvertSlider, qiConvertSelector, slagConvertBtn);
+        qiRegener = new QiRegen(0, 0, 0, qiRegenProgressBar);
+        qiConverter = new QiConvert(1, 0, 0, qiConvertSlider, qiConvertSelector, slagConvertBtn);
     }
 
     private void Update()

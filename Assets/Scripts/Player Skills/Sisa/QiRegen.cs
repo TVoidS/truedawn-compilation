@@ -4,34 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using static SkillEnums;
 
-public class QiRegen : ISpiritVeinSkills
+public class QiRegen : SpiritVeinSkill
 {
-    private readonly byte _ID = 0;
-    public byte ID => _ID; // UNIQUE ID FOR SKILLS, Make sure all skills have a UUID.
-
-
-    private byte _Level;
-    public byte Level => _Level;
-
-
-    private byte _Rank;
-    public byte Rank => _Rank; // Initially pull from Player, but propogate back when rank changes.
-
-
-    private ulong _UpgradeCost;
-    public ulong UpgradeCost => _UpgradeCost; // Only set locally by calculations on start and after level up or rank up.
-
-    public DurationType SkillType => DurationType.PassiveTimer;
-
-    public GrowthType GrowthType => GrowthType.Linear;
-
-    public string Description => "The basic ability all Spirit Veins have.  To recover Qi naturally. \n You however have the ability to recover Qi much faster. \n If you invest in this Skill that is...";
-
-    public string Name => "Qi Regeneration";
-
-    private byte _MaxLevel = 9;
-    public byte MaxLevel => _MaxLevel;
-
     private float _cooldown = 1.0f;
     public float cooldown => _cooldown;
 
@@ -43,10 +17,16 @@ public class QiRegen : ISpiritVeinSkills
 
     private Slider _Regener;
 
-    public QiRegen(byte level, byte rank, Slider regen) 
+    public QiRegen(byte id, byte level, byte rank, Slider regen) : 
+        base(id,
+             DurationType.PassiveTimer,
+             "Qi Regeneration",
+             "The basic ability all Spirit Veins have.  To recover Qi naturally. \n You however have the ability to recover Qi much faster. \n If you invest in this Skill that is...",
+             level,
+             9,
+             rank,
+             GrowthType.Linear)
     {
-        _Level = level;
-        _Rank = rank;
         _Regener = regen.GetComponent<Slider>();
         _Regener.value = 0f;
     }

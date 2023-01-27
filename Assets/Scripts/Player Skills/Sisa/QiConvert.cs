@@ -3,32 +3,48 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static SkillEnums;
 
-public class QiConvert : ISpiritVeinSkills
+public class QiConvert : SpiritVeinSkill
 {
-    private byte _Level = 0;
-    public byte Level => _Level;
+    /// <summary>
+    /// The bar that shows how close to done we are
+    /// </summary>
+    private Slider progressBar;
 
-    private byte _MaxLevel = 9;
-    public byte MaxLevel => _MaxLevel;
+    /// <summary>
+    /// The dropdown that shows what resource we are going to convert for the upcoming batch.
+    /// </summary>
+    private TMP_Dropdown matSelector;
 
-    private byte _Rank = 0;
-    public byte Rank => _Rank;
+    /// <summary>
+    /// Construct the Qi Conversion skill.
+    /// This should only be run ONCE.  And even then, only from the SkillController.
+    /// </summary>
+    /// <param name="id"> The Skill's unique ID </param>
+    /// <param name="level"> The player's level in the skill </param>
+    /// <param name="rank"> The player's rank in the skill </param>
+    /// <param name="convertSlider"> The worldspace slider that represents the progress </param>
+    /// <param name="convertSelector"> The worldspace dropdown that represents what material is to be generated </param>
+    /// <param name="convertTrigger"> The worldspace button that triggers the conversion process to begin </param>
+    public QiConvert(byte id, byte level, byte rank, Slider convertSlider, TMP_Dropdown convertSelector, Button convertTrigger) : 
+        base(id,
+             DurationType.DelayedInstant, // Skill's trigger/duration type, tells how to treat the trigger event
+             "Qi Conversion",
+             "This skill converts your Qi into Spirit Slag of various types!",
+             level,
+             9, // Skill's Max Level!
+             rank,
+             GrowthType.Linear) // Skill's stat growth type for the purposes of number calculation later!
+    {
+        setupConvert(convertTrigger);
+        progressBar = convertSlider;
+        matSelector = convertSelector;
+    }
 
-    // TODO: Make this actually calculate based on existing data
-    public ulong UpgradeCost => 1;
-
-    public SkillEnums.DurationType SkillType => SkillEnums.DurationType.DelayedInstant;
-
-    public SkillEnums.GrowthType GrowthType => SkillEnums.GrowthType.Multiplicative;
-
-    public string Description => "The most basic of skills for a budding Spirit Vein.  This converts your Qi into Inferior Spirit Slag!";
-
-    public string Name => "Qi Conversion";
-
-    // TODO: Setup an ID system!
-    public byte ID => throw new System.NotImplementedException();
-
+    /*
+     * Delete if not needed by the end!
+     * 
     public bool LevelUp()
     {
         Debug.Log("Attempted Level UP!");
@@ -39,6 +55,7 @@ public class QiConvert : ISpiritVeinSkills
     {
         throw new System.NotImplementedException();
     }
+    */
 
     private Button lvlUpBtn;
     private void LevelUpSetup(Button levelUpButton) 
@@ -57,18 +74,7 @@ public class QiConvert : ISpiritVeinSkills
             }
         });
     }
-
-
-    private Slider progressBar;
-    private TMP_Dropdown matSelector;
-
-    public QiConvert(Slider convertSlider, TMP_Dropdown convertSelector, Button convertTrigger) 
-    {
-        setupConvert(convertTrigger);
-        progressBar = convertSlider;
-        matSelector = convertSelector;
-    }
-
+    
     private void setupConvert(Button trigger) 
     {
         trigger.onClick.AddListener(() => 
