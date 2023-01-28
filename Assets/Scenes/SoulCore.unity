@@ -6323,6 +6323,7 @@ MonoBehaviour:
   slagConvertBtn: {fileID: 1200625254}
   qiConvertSelector: {fileID: 388325004}
   sysPointsDisp: {fileID: 744645958}
+  sellSlag: {fileID: 527200484}
 --- !u!23 &526827914755775354
 MeshRenderer:
   m_ObjectHideFlags: 0

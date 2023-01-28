@@ -19,6 +19,7 @@ public class SkillController : MonoBehaviour
 
     [Header("Spirit Vein System Points")]
     public TextMeshProUGUI sysPointsDisp;
+    public Button sellSlag;
 
     private QiRegen qiRegener;
     private QiConvert qiConverter;
@@ -49,6 +50,11 @@ public class SkillController : MonoBehaviour
         TimerSkills.ForEach(i => i.SkillUpdate());
     }
 
+    public static void Log(string log) 
+    {
+        Debug.Log(log);
+    }
+
     // END STATIC SECTION
 
     private void Start()
@@ -56,11 +62,9 @@ public class SkillController : MonoBehaviour
         // TODO: Automatically form a collection of buttons that meet a certain criteiria (have a specific component attatched)
         // That list will be used for connecting to skills or anything else, based on the ID of the attatched component
 
-        PlayerStats.setup(gameObject, qiCountDisplay, issDisplay, sysPointsDisp);
+        PlayerStats.setup(gameObject, qiCountDisplay, issDisplay, sysPointsDisp, sellSlag);
 
         skillSetup();
-
-        startAlwaysOnPassives();
     }
 
     private void skillSetup()
@@ -73,34 +77,5 @@ public class SkillController : MonoBehaviour
     private void Update()
     {
         RunTimerSkills();
-    }
-
-    private void startAlwaysOnPassives()
-    {
-
-    }
-
-    private void skillCallbackAdd(string skillID, string function) 
-    {
-        /**
-         * TODO: Make this a registerable passive updater.
-         */
-    }
-
-    public void check()
-    {
-        if (Input.GetKeyDown("n")) 
-        {
-            SkillExecute("N");
-        }
-    }
-
-    void SkillExecute(string name) 
-    {
-        Debug.Log(name + " has been pressed");
-    }
-    void TestPrint()
-    {
-        Debug.Log("Test Success");
     }
 }

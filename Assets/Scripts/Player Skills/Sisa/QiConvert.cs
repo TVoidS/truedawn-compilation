@@ -102,11 +102,11 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill
         return true;
     }
 
-    private float timeTaken = 10f;
+    private float timeTaken = 1f;
     public bool RecalculateTime() 
     {
         // TODO: make this based off of the QiConversion skill level and rank
-        timeTaken = 10f;
+        timeTaken = 1f;
         return true;
     }
 }
