@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using static SkillEnums;
 
 public class SpiritVeinSkill : Skill
@@ -12,7 +8,7 @@ public class SpiritVeinSkill : Skill
     public readonly GrowthType GrowthType;
 
     // Internally updateable, not externally
-    private ulong _UpgradeCost;
+    protected ulong _UpgradeCost;
     // Allows outsiders to read internally updateable data.
     public ulong UpgradeCost => _UpgradeCost;
 
@@ -48,10 +44,5 @@ public class SpiritVeinSkill : Skill
     {
         // This is the parent function, it should not be called to rank up the child!
         return false;
-    }
-
-    public void update() 
-    {
-        throw new NotImplementedException();
     }
 }

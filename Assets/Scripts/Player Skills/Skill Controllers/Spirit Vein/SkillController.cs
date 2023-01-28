@@ -17,29 +17,46 @@ public class SkillController : MonoBehaviour
     public Button slagConvertBtn;
     public TMP_Dropdown qiConvertSelector;
 
+    [Header("Spirit Vein System Points")]
+    public TextMeshProUGUI sysPointsDisp;
+
     private QiRegen qiRegener;
     private QiConvert qiConverter;
 
-    private List<SpiritVeinSkill> TimerSkills = new List<SpiritVeinSkill>();
+    // STATIC SECTION:
 
-    public bool registerTimerSkill(SpiritVeinSkill skill)
+    // TODO: Make this thread-safe!
+    // The exception relating to the RunTimerSkills() method is due to it deleting itself while it is looking at itself!
+
+    private static readonly List<ITimerSkill> TimerSkills = new();
+
+    public static bool RegisterTimerSkill(ITimerSkill skill)
     {
         TimerSkills.Add(skill);
         return true;
     }
 
-    public bool deregisterTimerSkill(SpiritVeinSkill skill)
+    public static bool DeregisterTimerSkill(ITimerSkill skill)
     {
+        Debug.Log(TimerSkills.ToString());
         TimerSkills.Remove(skill);
+        Debug.Log(TimerSkills.ToString());
         return true;
     }
+
+    private static void RunTimerSkills()
+    {
+        TimerSkills.ForEach(i => i.SkillUpdate());
+    }
+
+    // END STATIC SECTION
 
     private void Start()
     {
         // TODO: Automatically form a collection of buttons that meet a certain criteiria (have a specific component attatched)
         // That list will be used for connecting to skills or anything else, based on the ID of the attatched component
 
-        PlayerStats.setup(gameObject, qiCountDisplay, issDisplay);
+        PlayerStats.setup(gameObject, qiCountDisplay, issDisplay, sysPointsDisp);
 
         skillSetup();
 
@@ -55,17 +72,7 @@ public class SkillController : MonoBehaviour
 
     private void Update()
     {
-        /*QiCount.add(qiRegener.regen());
-        qiConverter.convert();*/
-        runTimerSkills();
-    }
-
-    private void runTimerSkills() 
-    {
-        foreach (SpiritVeinSkill skill in TimerSkills) 
-        {
-            skill.update();
-        }
+        RunTimerSkills();
     }
 
     private void startAlwaysOnPassives()
@@ -95,6 +102,5 @@ public class SkillController : MonoBehaviour
     void TestPrint()
     {
         Debug.Log("Test Success");
-
     }
 }
