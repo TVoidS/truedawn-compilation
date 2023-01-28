@@ -4,18 +4,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using static SkillEnums;
 
-public class QiRegen : SpiritVeinSkill
+public class QiRegen : SpiritVeinSkill, ITimerSkill
 {
-    private float _cooldown = 1.0f;
-    public float cooldown => _cooldown;
-
     // TODO: Tie this to Qi Purity
-    private uint regenQuantity = 1;
+    private uint RegenQuantity = 1;
 
     // Represents the number of seconds to regen Qi
-    private float tickRegenCost = 6f;
+    private float TickRegenCost = 6f;
 
-    private Slider _Regener;
+    private readonly Slider RegenDisplaySlider;
 
     public QiRegen(byte id, byte level, byte rank, Slider regen) : 
         base(id,
@@ -27,43 +24,18 @@ public class QiRegen : SpiritVeinSkill
              rank,
              GrowthType.Linear)
     {
-        _Regener = regen.GetComponent<Slider>();
-        _Regener.value = 0f;
+        RegenDisplaySlider = regen;
+        RegenDisplaySlider.value = 0f;
+        SkillController.RegisterTimerSkill(this);
     }
 
-    public bool RankUp()
+    public void SkillUpdate()
     {
-        if (Level < MaxLevel)
+        RegenDisplaySlider.value += (Time.deltaTime / TickRegenCost);
+        if (RegenDisplaySlider.value >= 1f)
         {
-            return false;
-        }
-        else 
-        {
-            // TODO: Make more checks and take System Points to achieve.
-            return true;
-        }
-    }
-
-    public bool LevelUp() // TODO: Need to make this have checks for validity, and take System Points from the Player.
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public bool LevelUpSetup() 
-    {
-        return true;
-    }
-
-    public uint regen() 
-    {
-        _Regener.value += (Time.deltaTime / tickRegenCost);
-        if (_Regener.value >= 1f) 
-        {
-            _Regener.value = 0f;
-            return regenQuantity;
-        } else 
-        {
-            return 0;
+            RegenDisplaySlider.value = 0f;
+            QiCount.add(RegenQuantity);
         }
     }
 }

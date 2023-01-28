@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static SkillEnums;
 
-public class QiConvert : SpiritVeinSkill
+public class QiConvert : SpiritVeinSkill, ITimerSkill
 {
     /// <summary>
     /// The bar that shows how close to done we are
@@ -37,75 +35,67 @@ public class QiConvert : SpiritVeinSkill
              rank,
              GrowthType.Linear) // Skill's stat growth type for the purposes of number calculation later!
     {
-        setupConvert(convertTrigger);
+        SetupConvert(convertTrigger);
         progressBar = convertSlider;
         matSelector = convertSelector;
     }
 
-    /*
-     * Delete if not needed by the end!
-     * 
-    public bool LevelUp()
-    {
-        Debug.Log("Attempted Level UP!");
-        return false;
-    }
-
-    public bool RankUp()
-    {
-        throw new System.NotImplementedException();
-    }
-    */
-
-    private Button lvlUpBtn;
-    private void LevelUpSetup(Button levelUpButton) 
-    {
-        lvlUpBtn = levelUpButton.GetComponent<Button>();
-        
-        lvlUpBtn.onClick.AddListener(() => 
-        {
-            if (LevelUp())
-            {
-                Debug.Log("Level Up Worked!");
-            }
-            else 
-            {
-                Debug.Log("Level Up Failed!");
-            }
-        });
-    }
-    
-    private void setupConvert(Button trigger) 
+    /// <summary>
+    /// The status of the conversion process.
+    /// True if the progress bar is filling up.
+    /// </summary>
+    private bool Converting = false;
+    /// <summary>
+    /// This Method adds the Listener that will register the skill to update when the provided button is clicked.
+    /// </summary>
+    /// <param name="trigger"> The button that will trigger the timer event for the skill </param>
+    private void SetupConvert(Button trigger) 
     {
         trigger.onClick.AddListener(() => 
         {
             // TODO: register itself to the passive list 
-            if (QiCount.sub(1))
+            if (Converting)
             {
-                convert();
+                // fail.
+                Debug.Log("BUSY.  Hold your horses!");
             }
-            else 
+            else if (QiCount.sub(1))
             {
-                //Not enough QI
-                Debug.Log("Not Enough QI!");
+                // TODO: change the 1 in sub() to QiCost for dynamic cost caluclations
+                // Start Converting!
+                Converting = true;
+                SkillController.RegisterTimerSkill(this);
+            }
+            else
+            {
+                // Too broke
+                Debug.Log("Not Enough Qi");
             }
         });
     }
-    public void convert() 
+
+    // Interface Implementation from ITimerSkill
+    public void SkillUpdate()
     {
-        if (progressBar.value >= 1) 
+
+        // This just checks if the bar is done, then finishes the convert.
+        // It then removes itself from the TimerSkills list in SkillController.  This may need to be Thread-Safe later...
+        if (progressBar.value >= 1)
         {
             progressBar.value = 0;
             PlayerStats.addSlag(gains);
-        } 
-        else 
+            Converting = false;
+            SkillController.DeregisterTimerSkill(this);
+        }
+        else
         {
             progressBar.value += (Time.deltaTime / timeTaken);
         }
     }
 
+
     private ulong gains = 1;
-    public bool recalculateGains() 
+    public bool RecalculateGains() 
     {
         // TODO: make this based off of the QiPurity skill level and rank.
         gains = 1;
@@ -113,7 +103,7 @@ public class QiConvert : SpiritVeinSkill
     }
 
     private float timeTaken = 10f;
-    public bool recalculateTime() 
+    public bool RecalculateTime() 
     {
         // TODO: make this based off of the QiConversion skill level and rank
         timeTaken = 10f;

@@ -20,19 +20,33 @@ public class SkillController : MonoBehaviour
     private QiRegen qiRegener;
     private QiConvert qiConverter;
 
-    private List<SpiritVeinSkill> TimerSkills = new List<SpiritVeinSkill>();
+    // STATIC SECTION:
 
-    public bool registerTimerSkill(SpiritVeinSkill skill)
+    // TODO: Make this thread-safe!
+    // The exception relating to the RunTimerSkills() method is due to it deleting itself while it is looking at itself!
+
+    private static readonly List<ITimerSkill> TimerSkills = new();
+
+    public static bool RegisterTimerSkill(ITimerSkill skill)
     {
         TimerSkills.Add(skill);
         return true;
     }
 
-    public bool deregisterTimerSkill(SpiritVeinSkill skill)
+    public static bool DeregisterTimerSkill(ITimerSkill skill)
     {
+        Debug.Log(TimerSkills.ToString());
         TimerSkills.Remove(skill);
+        Debug.Log(TimerSkills.ToString());
         return true;
     }
+
+    private static void RunTimerSkills()
+    {
+        TimerSkills.ForEach(i => i.SkillUpdate());
+    }
+
+    // END STATIC SECTION
 
     private void Start()
     {
@@ -55,17 +69,7 @@ public class SkillController : MonoBehaviour
 
     private void Update()
     {
-        /*QiCount.add(qiRegener.regen());
-        qiConverter.convert();*/
-        runTimerSkills();
-    }
-
-    private void runTimerSkills() 
-    {
-        foreach (SpiritVeinSkill skill in TimerSkills) 
-        {
-            skill.update();
-        }
+        RunTimerSkills();
     }
 
     private void startAlwaysOnPassives()
@@ -95,6 +99,5 @@ public class SkillController : MonoBehaviour
     void TestPrint()
     {
         Debug.Log("Test Success");
-
     }
 }
