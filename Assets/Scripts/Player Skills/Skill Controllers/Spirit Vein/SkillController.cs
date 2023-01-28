@@ -17,6 +17,9 @@ public class SkillController : MonoBehaviour
     public Button slagConvertBtn;
     public TMP_Dropdown qiConvertSelector;
 
+    [Header("Spirit Vein System Points")]
+    public TextMeshProUGUI sysPointsDisp;
+
     private QiRegen qiRegener;
     private QiConvert qiConverter;
 
@@ -53,7 +56,7 @@ public class SkillController : MonoBehaviour
         // TODO: Automatically form a collection of buttons that meet a certain criteiria (have a specific component attatched)
         // That list will be used for connecting to skills or anything else, based on the ID of the attatched component
 
-        PlayerStats.setup(gameObject, qiCountDisplay, issDisplay);
+        PlayerStats.setup(gameObject, qiCountDisplay, issDisplay, sysPointsDisp);
 
         skillSetup();
 

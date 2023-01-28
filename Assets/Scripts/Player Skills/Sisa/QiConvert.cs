@@ -59,7 +59,7 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill
                 // fail.
                 Debug.Log("BUSY.  Hold your horses!");
             }
-            else if (QiCount.sub(1))
+            else if (QiCount.Sub(1))
             {
                 // TODO: change the 1 in sub() to QiCost for dynamic cost caluclations
                 // Start Converting!
@@ -83,7 +83,7 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill
         if (progressBar.value >= 1)
         {
             progressBar.value = 0;
-            PlayerStats.addSlag(gains);
+            SlagCount.Add(gains, SlagCount.Type.InfereriorSpiritSlag);
             Converting = false;
             SkillController.DeregisterTimerSkill(this);
         }
@@ -94,11 +94,11 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill
     }
 
 
-    private ulong gains = 1;
+    private ulong gains = 10;
     public bool RecalculateGains() 
     {
         // TODO: make this based off of the QiPurity skill level and rank.
-        gains = 1;
+        gains = 10;
         return true;
     }
 

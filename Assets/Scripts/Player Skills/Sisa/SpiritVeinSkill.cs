@@ -8,7 +8,7 @@ public class SpiritVeinSkill : Skill
     public readonly GrowthType GrowthType;
 
     // Internally updateable, not externally
-    private ulong _UpgradeCost;
+    protected ulong _UpgradeCost;
     // Allows outsiders to read internally updateable data.
     public ulong UpgradeCost => _UpgradeCost;
 

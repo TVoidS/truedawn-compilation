@@ -35,7 +35,7 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill
         if (RegenDisplaySlider.value >= 1f)
         {
             RegenDisplaySlider.value = 0f;
-            QiCount.add(RegenQuantity);
+            QiCount.Add(RegenQuantity);
         }
     }
 }
