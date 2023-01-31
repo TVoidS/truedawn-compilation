@@ -14,7 +14,7 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill
 
     private readonly Slider RegenDisplaySlider;
 
-    public QiRegen(byte id, byte level, byte rank, Slider regen) : 
+    public QiRegen(byte id, byte level, byte rank, Slider regen, Button levelTrigger) : 
         base(id,
              DurationType.PassiveTimer,
              "Qi Regeneration",
@@ -22,7 +22,8 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill
              level,
              9,
              rank,
-             GrowthType.Linear)
+             GrowthType.Linear,
+             levelTrigger)
     {
         RegenDisplaySlider = regen;
         RegenDisplaySlider.value = 0f;

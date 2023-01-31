@@ -25,7 +25,8 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill
     /// <param name="convertSlider"> The worldspace slider that represents the progress </param>
     /// <param name="convertSelector"> The worldspace dropdown that represents what material is to be generated </param>
     /// <param name="convertTrigger"> The worldspace button that triggers the conversion process to begin </param>
-    public QiConvert(byte id, byte level, byte rank, Slider convertSlider, TMP_Dropdown convertSelector, Button convertTrigger) : 
+    /// <param name="levelTrigger"> The Worldspace button that triggers the LevelUp event. </param>
+    public QiConvert(byte id, byte level, byte rank, Slider convertSlider, TMP_Dropdown convertSelector, Button convertTrigger, Button levelTrigger) : 
         base(id,
              DurationType.DelayedInstant, // Skill's trigger/duration type, tells how to treat the trigger event
              "Qi Conversion",
@@ -33,7 +34,8 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill
              level,
              9, // Skill's Max Level!
              rank,
-             GrowthType.Linear) // Skill's stat growth type for the purposes of number calculation later!
+             GrowthType.Linear, // Skill's stat growth type for the purposes of number calculation later!
+             levelTrigger) // Level Up Trigger.
     {
         SetupConvert(convertTrigger);
         progressBar = convertSlider;
@@ -45,6 +47,7 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill
     /// True if the progress bar is filling up.
     /// </summary>
     private bool Converting = false;
+
     /// <summary>
     /// This Method adds the Listener that will register the skill to update when the provided button is clicked.
     /// </summary>
@@ -93,8 +96,17 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill
         }
     }
 
-
+    /// <summary>
+    /// The mass of spirit slag of a given type gained from each conversion
+    /// TODO: Make this be more than a single ulong.  One for each type of slag!
+    /// </summary>
     private ulong gains = 10;
+
+    /// <summary>
+    /// Recalculates the Conversion Gains for each type of slag.
+    /// This should be triggered whenever there is a change to the Qi Purity
+    /// </summary>
+    /// <returns> True if succeeded, false otherwise. </returns>
     public bool RecalculateGains() 
     {
         // TODO: make this based off of the QiPurity skill level and rank.
@@ -102,7 +114,17 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill
         return true;
     }
 
+    /// <summary>
+    /// The time taken by the system to complete the conversion of Qi to Slag.
+    /// TODO: Make this have multiple floats.  One for each type of SLAG!
+    /// </summary>
     private float timeTaken = 1f;
+
+    /// <summary>
+    /// Recalculates the Time Requirements of each slag's conversion from Qi.
+    /// This should be triggered each time there is a change in Level or Qi Purity!
+    /// </summary>
+    /// <returns> True if succeeded, false otherwise. </returns>
     public bool RecalculateTime() 
     {
         // TODO: make this based off of the QiConversion skill level and rank

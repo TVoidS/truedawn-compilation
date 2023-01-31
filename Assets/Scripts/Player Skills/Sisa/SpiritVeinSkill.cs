@@ -1,4 +1,5 @@
 using static SkillEnums;
+using UnityEngine.UI;
 
 public class SpiritVeinSkill : Skill
 {
@@ -12,7 +13,7 @@ public class SpiritVeinSkill : Skill
     // Allows outsiders to read internally updateable data.
     public ulong UpgradeCost => _UpgradeCost;
 
-    public SpiritVeinSkill(byte id, DurationType duration,string name, string description, byte level, byte maxlevel, byte rank, GrowthType growth) : base(id, duration, name, description) 
+    public SpiritVeinSkill(byte id, DurationType duration, string name, string description, byte level, byte maxlevel, byte rank, GrowthType growth, Button LevelUpBtn) : base(id, duration, name, description) 
     {
         Level = level;
         MaxLevel = maxlevel;
@@ -20,8 +21,17 @@ public class SpiritVeinSkill : Skill
         GrowthType = growth;
 
         CalculateUpgradeCost();
+
+        LevelupSetup(LevelUpBtn);
     }
 
+    private void LevelupSetup(Button trigger) 
+    {
+        trigger.onClick.AddListener(() => 
+        {
+            LevelUp();
+        });
+    }
 
     public void CalculateUpgradeCost() 
     {
@@ -43,6 +53,7 @@ public class SpiritVeinSkill : Skill
     public bool LevelUp() 
     {
         // This is the parent function, it should not be called to rank up the child!
+        SkillController.Log("Parent LvlUp");
         return false;
     }
 }
