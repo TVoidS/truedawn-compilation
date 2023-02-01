@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using static SkillEnums;
 
-public class QiRegen : SpiritVeinSkill, ITimerSkill
+public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
 {
     // TODO: Tie this to Qi Purity
     private uint RegenQuantity = 1;
@@ -30,6 +30,7 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill
         SkillController.RegisterTimerSkill(this);
     }
 
+    // Interface ITimerSkill implementation
     public void SkillUpdate()
     {
         RegenDisplaySlider.value += (Time.deltaTime / TickRegenCost);
@@ -38,5 +39,22 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill
             RegenDisplaySlider.value = 0f;
             QiCount.Add(RegenQuantity);
         }
+    }
+
+    // Interface ILevelable Implementation
+    private byte _Level;
+    public byte Level => _Level;
+
+    private byte _Rank;
+    public byte Rank => _Rank;
+
+    public void LevelUp() 
+    {
+        // TODO: Implement
+    }
+
+    void LevelUpSetup() 
+    {
+        // TODO:
     }
 }
