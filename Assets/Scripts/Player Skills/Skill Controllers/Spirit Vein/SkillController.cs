@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public partial class SkillController : MonoBehaviour
@@ -14,8 +15,9 @@ public partial class SkillController : MonoBehaviour
 
     private void SkillSetup()
     {
+        
         // Make this load from PlayerStats file
-        qiRegener = new QiRegen(0, 0, 0, qiRegenProgressBar, QiLevelUpTrigger);
+        qiRegener = new QiRegen(0, 0, 0, qiRegenProgressBar, QiLevelUpTrigger.onClick, "");
         qiConverter = new QiConvert(1, 0, 0, qiConvertSlider, qiConvertSelector, slagConvertBtn, conversionLevelUpTrigger);
     }
 

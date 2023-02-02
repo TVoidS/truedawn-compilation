@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using static SkillEnums;
+using static UnityEngine.UI.Button;
 
 public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
 {
@@ -14,17 +15,19 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
 
     private readonly Slider RegenDisplaySlider;
 
-    public QiRegen(byte id, byte level, byte rank, Slider regen, Button levelTrigger) : 
+    public QiRegen(byte id, byte level, byte rank, Slider regen, ButtonClickedEvent LevelUITrigger, string LevelKeyTrigger) : 
         base(id,
              DurationType.PassiveTimer,
              "Qi Regeneration",
-             "The basic ability all Spirit Veins have.  To recover Qi naturally. \n You however have the ability to recover Qi much faster. \n If you invest in this Skill that is...",
-             level,
-             9,
-             rank,
-             GrowthType.Linear,
-             levelTrigger)
+             "The basic ability all Spirit Veins have.  To recover Qi naturally. \n You however have the ability to recover Qi much faster. \n If you invest in this Skill that is...")
     {
+        // Recieved and Standard values
+        _MaxLevel = 9;
+        _Level = level;
+        _Rank = rank;
+        LevelUpSetup(LevelUITrigger, LevelKeyTrigger);
+
+
         RegenDisplaySlider = regen;
         RegenDisplaySlider.value = 0f;
         SkillController.RegisterTimerSkill(this);
@@ -45,16 +48,35 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
     private byte _Level;
     public byte Level => _Level;
 
+    private byte _MaxLevel;
+    public byte MaxLevel => _MaxLevel;
+
     private byte _Rank;
     public byte Rank => _Rank;
+
+    private ulong _LevelCost;
+    public ulong LevelCost => _LevelCost;
+
+    public readonly GrowthType Growth = GrowthType.Linear;
 
     public void LevelUp() 
     {
         // TODO: Implement
     }
 
-    void LevelUpSetup() 
+    public void RankUp() 
     {
         // TODO:
     }
+
+    public void LevelUpSetup(ButtonClickedEvent UITrigger, string KeyTrigger) 
+    {
+        // TODO:
+    }
+
+    public void CalculateLevelCosts() 
+    {
+        // TODO:
+    }
+    // End Interface Implementations
 }
