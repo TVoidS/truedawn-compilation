@@ -10,7 +10,6 @@ public class animationTrigger : MonoBehaviour {
         if (Input.GetKeyDown("1"))
         {
             anim.Play("startRotation");
-            anim.Play("loopRotation");
         }
     }
 };

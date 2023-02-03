@@ -240,5 +240,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d80a920296627044870983276e9b071, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Animator: {fileID: 4171751933762096303}
-  startRotation: StartRotation
+  anim: {fileID: 4171751933762096303}
