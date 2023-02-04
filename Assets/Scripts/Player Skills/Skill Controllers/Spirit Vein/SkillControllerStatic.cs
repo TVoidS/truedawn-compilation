@@ -41,9 +41,7 @@ public partial class SkillController : MonoBehaviour
     /// <returns> The success state of the function, always true for now. </returns>
     public static bool DeregisterTimerSkill(ITimerSkill skill)
     {
-        Debug.Log(TimerSkills.ToString());
         TimerSkills.Remove(skill);
-        Debug.Log(TimerSkills.ToString());
         return true;
     }
 

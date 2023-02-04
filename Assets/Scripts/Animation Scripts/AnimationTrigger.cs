@@ -29,22 +29,25 @@ public class AnimationTrigger : MonoBehaviour {
     /// <param name="time"> The duration of the animation </param>
     public void TriggerAnim(float time) 
     {
-        AnimTime = time/3f;
-        anim.PlayInFixedTime("startRotation", -1, AnimTime);
-        Invoke("AnimOffsetLoop", AnimTime);
+        //AnimTime = time/3f;
+        //anim.PlayInFixedTime("startRotation", -1, AnimTime);
+        
+        anim.Play("startRotation");
+        anim.SetInteger("repeat", (int)(time/2f));
+        //Invoke("AnimOffsetLoop", AnimTime);
        
     }
 
     private void AnimOffsetLoop() 
     {
         float multi = 1f;
-        anim.PlayInFixedTime("rotationLoop", -1, AnimTime*multi);
+        //anim.PlayInFixedTime("rotationLoop", -1, AnimTime*multi);
         Invoke("AnimOffsetEnd", AnimTime*multi);
     }
 
     private void AnimOffsetEnd()
     {
-        anim.PlayInFixedTime("endRotation", -1, AnimTime);
+        //anim.PlayInFixedTime("endRotation", -1, AnimTime);
     }
 }
 
