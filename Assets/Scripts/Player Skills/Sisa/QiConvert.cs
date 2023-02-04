@@ -27,8 +27,8 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable
     /// <param name="convertSelector"> The worldspace dropdown that represents what material is to be generated </param>
     /// <param name="convertTrigger"> The worldspace button that triggers the conversion process to begin </param>
     /// <param name="levelTrigger"> The Worldspace button that triggers the LevelUp event. </param>
-    public QiConvert(byte id, byte level, byte rank, Slider convertSlider, TMP_Dropdown convertSelector, Button convertTrigger, Button levelTrigger) :
-        base(id,
+    public QiConvert(byte level, byte rank, Slider convertSlider, TMP_Dropdown convertSelector, Button convertTrigger, Button levelTrigger) :
+        base(SkillEnums.Skill.QiConvert,
              DurationType.DelayedInstant, // Skill's trigger/duration type, tells how to treat the trigger event
              "Qi Conversion",
              "This skill converts your Qi into Spirit Slag of various types!")
@@ -93,7 +93,7 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable
         }
         else
         {
-            progressBar.value += (Time.deltaTime / timeTaken);
+            progressBar.value += (Time.deltaTime / TimeTaken);
         }
     }
 
@@ -119,7 +119,8 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable
     /// The time taken by the system to complete the conversion of Qi to Slag.
     /// TODO: Make this have multiple floats.  One for each type of SLAG!
     /// </summary>
-    private float timeTaken = 1f;
+    public float TimeTaken => _timeTaken;
+    private float _timeTaken = 1f;
 
     /// <summary>
     /// Recalculates the Time Requirements of each slag's conversion from Qi.
@@ -129,7 +130,7 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable
     public bool RecalculateTime()
     {
         // TODO: make this based off of the QiConversion skill level and rank
-        timeTaken = 1f;
+        _timeTaken = 1f;
         return true;
     }
 

@@ -8,9 +8,9 @@ public class Skill
 
     public readonly string Name;
 
-    public readonly byte ID;
+    public readonly SkillEnums.Skill ID;
 
-    public Skill(byte id, DurationType duration, string name, string description) 
+    public Skill(SkillEnums.Skill id, DurationType duration, string name, string description) 
     {
         ID = id;
         Name = name;

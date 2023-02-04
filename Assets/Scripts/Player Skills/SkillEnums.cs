@@ -21,4 +21,10 @@ public class SkillEnums
         PassiveTimer,
         DelayedInstant
     }
+
+    public enum Skill 
+    {
+        QiRegen,
+        QiConvert
+    }
 }

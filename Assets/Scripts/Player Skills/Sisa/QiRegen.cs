@@ -11,12 +11,13 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
     private uint RegenQuantity = 1;
 
     // Represents the number of seconds to regen Qi
-    private float TickRegenCost = 6f;
+    private float _timeTaken = 6f;
+    public float TimeTaken => _timeTaken;
 
     private readonly Slider RegenDisplaySlider;
 
-    public QiRegen(byte id, byte level, byte rank, Slider regen, ButtonClickedEvent LevelUITrigger, string LevelKeyTrigger) : 
-        base(id,
+    public QiRegen(byte level, byte rank, Slider regen, ButtonClickedEvent LevelUITrigger, string LevelKeyTrigger) : 
+        base(SkillEnums.Skill.QiRegen,
              DurationType.PassiveTimer,
              "Qi Regeneration",
              "The basic ability all Spirit Veins have.  To recover Qi naturally. \n You however have the ability to recover Qi much faster. \n If you invest in this Skill that is...")
@@ -36,7 +37,7 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
     // Interface ITimerSkill implementation
     public void SkillUpdate()
     {
-        RegenDisplaySlider.value += (Time.deltaTime / TickRegenCost);
+        RegenDisplaySlider.value += (Time.deltaTime / _timeTaken);
         if (RegenDisplaySlider.value >= 1f)
         {
             RegenDisplaySlider.value = 0f;
