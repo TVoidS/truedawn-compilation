@@ -20,13 +20,31 @@ public class AnimationTrigger : MonoBehaviour {
         SkillController.RegisterAnim(new AnimTriggerCallback(this, TriggerSkill));
     }
 
+
+    private float AnimTime;
+
     /// <summary>
     /// Triggers the Animation of the attatched object for a fixed amount of time
     /// </summary>
     /// <param name="time"> The duration of the animation </param>
     public void TriggerAnim(float time) 
     {
-        anim.PlayInFixedTime("loopRotation",-1, time);
+        AnimTime = time/3f;
+        anim.PlayInFixedTime("startRotation", -1, AnimTime);
+        Invoke("AnimOffsetLoop", AnimTime);
+       
+    }
+
+    private void AnimOffsetLoop() 
+    {
+        float multi = 1f;
+        anim.PlayInFixedTime("rotationLoop", -1, AnimTime*multi);
+        Invoke("AnimOffsetEnd", AnimTime*multi);
+    }
+
+    private void AnimOffsetEnd()
+    {
+        anim.PlayInFixedTime("endRotation", -1, AnimTime);
     }
 }
 
