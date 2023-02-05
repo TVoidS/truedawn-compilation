@@ -120,7 +120,7 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable
     /// TODO: Make this have multiple floats.  One for each type of SLAG!
     /// </summary>
     public float TimeTaken => _timeTaken;
-    private float _timeTaken = 1f;
+    private float _timeTaken = 8f;
 
     /// <summary>
     /// Recalculates the Time Requirements of each slag's conversion from Qi.
@@ -130,7 +130,7 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable
     public bool RecalculateTime()
     {
         // TODO: make this based off of the QiConversion skill level and rank
-        _timeTaken = 1f;
+        _timeTaken = 8f;
         return true;
     }
 

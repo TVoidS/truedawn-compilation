@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 public class AnimationTrigger : MonoBehaviour {
     /// <summary>
@@ -18,10 +16,8 @@ public class AnimationTrigger : MonoBehaviour {
     void Start () {
         anim = GetComponent<Animator>();
         SkillController.RegisterAnim(new AnimTriggerCallback(this, TriggerSkill));
+        UpdateAnimTimes();
     }
-
-
-    private float AnimTime;
 
     /// <summary>
     /// Triggers the Animation of the attatched object for a fixed amount of time
@@ -29,48 +25,25 @@ public class AnimationTrigger : MonoBehaviour {
     /// <param name="time"> The duration of the animation </param>
     public void TriggerAnim(float time) 
     {
-        //AnimTime = time/3f;
-        //anim.PlayInFixedTime("startRotation", -1, AnimTime);
-        
-        anim.Play("startRotation");
-        anim.SetInteger("repeat", (int)(time/2f));
-        //Invoke("AnimOffsetLoop", AnimTime);
-       
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Cube.idle"))
+        {
+            int repeat = (int) ((time - 4f)/2f);
+            anim.SetInteger("repeat", repeat);
+            anim.Play("startRotation");
+        }
     }
 
-    private void AnimOffsetLoop() 
-    {
-        float multi = 1f;
-        //anim.PlayInFixedTime("rotationLoop", -1, AnimTime*multi);
-        Invoke("AnimOffsetEnd", AnimTime*multi);
-    }
-
-    private void AnimOffsetEnd()
-    {
-        //anim.PlayInFixedTime("endRotation", -1, AnimTime);
-    }
-}
-
-public class AnimTriggerCallback 
-{
-    /// <summary>
-    /// The AnimationTrigger class that holds all the information regarding the animation
-    /// </summary>
-    public AnimationTrigger Anim { get; }
 
     /// <summary>
-    /// The ID of the skill that triggers the animation.
+    /// TODO:
     /// </summary>
-    public SkillEnums.Skill TriggerSkill { get; }
-
-    /// <summary>
-    /// Constructor
-    /// </summary>
-    /// <param name="anim"> The AnimationTrigger that holds all the information regarding the animation </param>
-    /// <param name="trigger"> The ID of the skill that triggers the animation. </param>
-    public AnimTriggerCallback(AnimationTrigger anim, SkillEnums.Skill trigger) 
+    private float AnimDuration = 0f;
+    public void UpdateAnimTimes() 
     {
-        Anim = anim;
-        TriggerSkill = trigger;
+        AnimDuration = 0f;
+        foreach (AnimationClip AnimClip in anim.runtimeAnimatorController.animationClips)
+        {
+            AnimDuration += AnimClip.length * anim.speed;
+        }
     }
 }

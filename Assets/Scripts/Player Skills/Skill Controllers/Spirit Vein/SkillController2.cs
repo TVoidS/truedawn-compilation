@@ -19,7 +19,4 @@ public partial class SkillController : MonoBehaviour
     [Header("Spirit Vein System Points")]
     public TextMeshProUGUI sysPointsDisp;
     public Button sellSlag;
-
-    private QiRegen qiRegener;
-    private QiConvert qiConverter;
 }

@@ -63,11 +63,20 @@ public partial class SkillController : MonoBehaviour
         Debug.Log(log);
     }
 
+    /// <summary>
+    /// Adds an AnimTriggerCallback object to the list as a triggerable animation
+    /// </summary>
+    /// <param name="callback"> The callback associated with the animation. </param>
     public static void RegisterAnim(AnimTriggerCallback callback)
     {
         AnimTriggers.Add(callback);
     }
 
+    /// <summary>
+    /// Triggers an animation based on the skill ID, and can modify the playtime of the animation based on the given time.
+    /// </summary>
+    /// <param name="skillID"> The skill's animation to be played. </param>
+    /// <param name="time"> The duration of the skill.  This may be ignored, or left behind in some cases. </param>
     public static void TriggerAnim(SkillEnums.Skill skillID, float time) 
     {
         int i = AnimTriggers.FindIndex(x => x.TriggerSkill == skillID);

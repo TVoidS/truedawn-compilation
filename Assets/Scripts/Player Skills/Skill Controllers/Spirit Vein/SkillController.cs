@@ -17,8 +17,8 @@ public partial class SkillController : MonoBehaviour
     {
         
         // Make this load from PlayerStats file
-        qiRegener = new QiRegen(0, 0, qiRegenProgressBar, QiLevelUpTrigger.onClick, "");
-        qiConverter = new QiConvert(0, 0, qiConvertSlider, qiConvertSelector, slagConvertBtn, conversionLevelUpTrigger);
+        new QiRegen(0, 0, qiRegenProgressBar, QiLevelUpTrigger.onClick, "");
+        new QiConvert(0, 0, qiConvertSlider, qiConvertSelector, slagConvertBtn, conversionLevelUpTrigger);
     }
 
     private void Update()
