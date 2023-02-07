@@ -86,5 +86,43 @@ public partial class SkillController : MonoBehaviour
         }
     }
 
+    //
+    //  Start code for Button Event Handling:
+    //
+
+    /// <summary>
+    /// Buttons call this function to get their events to handle correctly for each skill
+    /// </summary>
+    /// <param name="SkillID"> The Enumerated ID of the skill the event will trigger on. </param>
+    /// <param name="EventType">The Enumerated ID of the type of event that will trigger. </param>
+    public static void ButtonEvent(SkillEnums.Skill SkillID, SkillEnums.ButtonEvent EventType) 
+    {
+        //TODO:
+        // 1. Find Skill By ID
+        switch (EventType) 
+        {
+            case SkillEnums.ButtonEvent.Level:
+                // TODO:
+                // 2. Check if Skill is of appropriate type
+                // 3. Trigger or Don't trigger event based on result from 2.
+                // 4. If no trigger, log error.
+                break;
+            case SkillEnums.ButtonEvent.Activate:
+                // TODO:
+                // 2. Check if Skill is of appropriate type
+                // 3. Trigger or Don't trigger event based on result from 2.
+                // 4. If no trigger, log error.
+                break;
+            case SkillEnums.ButtonEvent.Toggle:
+                // TODO:
+                // 2. Check if Skill is of appropriate type
+                // 3. Trigger or Don't trigger event based on result from 2.
+                // 4. If no trigger, log error.
+                break;
+            default:
+                Debug.Log("ButtonEvent not of a defined EventID. MUST FIX.");
+                break;
+        }
+    }
     // END STATIC SECTION
 }
