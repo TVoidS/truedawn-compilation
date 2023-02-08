@@ -4033,7 +4033,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eae50c678cf31664680f99dd8dffeab5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SkillID: 1
+  SkillID: 0
   EventType: 0
 --- !u!1 &1223744899
 GameObject:
