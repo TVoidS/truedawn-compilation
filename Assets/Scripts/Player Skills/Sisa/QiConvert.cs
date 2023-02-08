@@ -41,6 +41,9 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable
         SetupConvert(convertTrigger);
         progressBar = convertSlider;
         matSelector = convertSelector;
+
+        // Add the skill to the SkillList list for event tracking and identification.
+        SkillController.RegisterSkill(this);
     }
 
     /// <summary>

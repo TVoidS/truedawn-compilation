@@ -1,22 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class SkillButton : MonoBehaviour
 {
-
-    private Button btn;
-
+    /// <summary>
+    /// Enumerated Skill ID for the skill associated to the event to be triggered.
+    /// </summary>
     public SkillEnums.Skill SkillID;
-    public SkillEnums.ButtonEvent EventType;
 
+    /// <summary>
+    /// Enumerated Event ID for the type of event that will be triggered.
+    /// </summary>
+    public SkillEnums.ButtonEvent EventType;
 
     // Start is called before the first frame update
     void Start()
     {
-        btn = gameObject.GetComponent<Button>();
-        btn.onClick.AddListener(() => 
+        gameObject.GetComponent<Button>().onClick.AddListener(() => 
         {
             // On click event.  Notify the Skill Controller
             SkillController.ButtonEvent(SkillID, EventType);

@@ -16,7 +16,7 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
 
     private readonly Slider RegenDisplaySlider;
 
-    public QiRegen(byte level, byte rank, Slider regen, ButtonClickedEvent LevelUITrigger, string LevelKeyTrigger) : 
+    public QiRegen(byte level, byte rank, Slider regen, ButtonClickedEvent LevelUITrigger) : 
         base(SkillEnums.Skill.QiRegen,
              DurationType.PassiveTimer,
              "Qi Regeneration",
@@ -32,6 +32,7 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
         RegenDisplaySlider = regen;
         RegenDisplaySlider.value = 0f;
         SkillController.RegisterTimerSkill(this);
+        SkillController.RegisterSkill(this);
     }
 
     // Interface ITimerSkill implementation
@@ -78,6 +79,11 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
     public void CalculateLevelCosts() 
     {
         // TODO:
+    }
+
+    public void LevelableCheck() 
+    {
+        // Doesn't need to do anything other than exist.
     }
     // End Interface Implementations
 }

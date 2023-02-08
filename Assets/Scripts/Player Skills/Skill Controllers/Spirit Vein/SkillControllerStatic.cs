@@ -13,9 +13,19 @@ public partial class SkillController : MonoBehaviour
     /// The list of all skills that are in need of the Update() function.
     /// This item needs to be ThreadSafe soon.
     /// </summary>
-    private static readonly List<ITimerSkill> TimerSkills = new();
+    private static readonly List<ITimerSkill> ActiveTimerSkills = new();
 
+    /// <summary>
+    /// The unchanging list of EventListeners for the Animation Triggers.
+    /// This does NOT need to be threadsafe, as there will not be any removal events probably.
+    /// </summary>
     private static readonly List<AnimTriggerCallback> AnimTriggers = new();
+
+    /// <summary>
+    /// The list of all skills.  This should NEVER have anything removed from it, and it should not have more than one of each skill.
+    /// As this will not have any removal, there is no need for being thread-safe.
+    /// </summary>
+    private static readonly List<Skill> SkillList = new();
 
     /// <summary>
     /// Adds the skill to the list that will be ran over every frame by Unity.
@@ -24,7 +34,7 @@ public partial class SkillController : MonoBehaviour
     /// <returns> Success state, true or false, always true for now. </returns>
     public static bool RegisterTimerSkill(ITimerSkill skill)
     {
-        TimerSkills.Add(skill);
+        ActiveTimerSkills.Add(skill);
         Type type = skill.GetType();
         if (type.IsSubclassOf(typeof(Skill))) 
         {
@@ -41,7 +51,7 @@ public partial class SkillController : MonoBehaviour
     /// <returns> The success state of the function, always true for now. </returns>
     public static bool DeregisterTimerSkill(ITimerSkill skill)
     {
-        TimerSkills.Remove(skill);
+        ActiveTimerSkills.Remove(skill);
         return true;
     }
 
@@ -51,7 +61,7 @@ public partial class SkillController : MonoBehaviour
     /// </summary>
     private static void RunTimerSkills()
     {
-        TimerSkills.ForEach(i => i.SkillUpdate());
+        ActiveTimerSkills.ForEach(i => i.SkillUpdate());
     }
 
     /// <summary>
@@ -106,23 +116,69 @@ public partial class SkillController : MonoBehaviour
                 // 2. Check if Skill is of appropriate type
                 // 3. Trigger or Don't trigger event based on result from 2.
                 // 4. If no trigger, log error.
+                try // Try to do the event anyways
+                {
+                    // There should only be one copy of the skill, so this shouldn't error.  Please replace with:
+                    // List<Skill> skill = SkillList.FindAll(x => x.ID == SkillID);
+                    // If there is an error.
+                    QiRegen skill = (QiRegen) SkillList.Find(x => x.ID == SkillID);
+
+                    skill.LevelableCheck(); // This will error if there is no LevelableCheck() function predefined in the class.  At least it should.
+
+                    Debug.Log("Level Event");
+                }
+                catch // Catch if it fails
+                {
+                    Debug.LogError("Tried to do a Level event on " + SkillID + " but it is not compatible or does not exist");
+                }
                 break;
             case SkillEnums.ButtonEvent.Activate:
                 // TODO:
                 // 2. Check if Skill is of appropriate type
                 // 3. Trigger or Don't trigger event based on result from 2.
                 // 4. If no trigger, log error.
+                try // Try to do the event anyways
+                {
+                    
+                }
+                catch // Catch if it fails
+                {
+                    Debug.LogError("Tried to do a Activate event on " + SkillID + " but it is not compatible or does not exist");
+                }
                 break;
             case SkillEnums.ButtonEvent.Toggle:
                 // TODO:
                 // 2. Check if Skill is of appropriate type
                 // 3. Trigger or Don't trigger event based on result from 2.
                 // 4. If no trigger, log error.
+                try // Try to do the event anyways
+                {
+
+                }
+                catch // Catch if it fails
+                {
+                    Debug.LogError("Tried to do a Toggle event on " + SkillID + " but it is not compatible or does not exist");
+                }
                 break;
             default:
                 Debug.Log("ButtonEvent not of a defined EventID. MUST FIX.");
                 break;
         }
     }
+
+    public static void RegisterSkill(Skill skill) 
+    {
+        if (SkillList.Exists(x => x.ID == skill.ID))
+        {
+            // It EXISTS
+            Debug.LogError("Duplicate Skill found for Skill ID: " + skill.ID + " \n Please figure out why.");
+        }
+        else 
+        {
+            // If it doesn't exist:
+            SkillList.Add(skill);
+        }
+    }
+
     // END STATIC SECTION
 }
