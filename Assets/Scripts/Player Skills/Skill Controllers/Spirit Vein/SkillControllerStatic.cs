@@ -121,7 +121,7 @@ public partial class SkillController : MonoBehaviour
                     // There should only be one copy of the skill, so this shouldn't error.  Please replace with:
                     // List<Skill> skill = SkillList.FindAll(x => x.ID == SkillID);
                     // If there is an error.
-                    QiRegen skill = (QiRegen) SkillList.Find(x => x.ID == SkillID);
+                    ILevelable skill = (ILevelable) SkillList.Find(x => x.ID == SkillID);
 
                     skill.LevelableCheck(); // This will error if there is no LevelableCheck() function predefined in the class.  At least it should.
 

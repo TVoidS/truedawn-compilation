@@ -36,15 +36,6 @@ public interface ILevelable
     public void RankUp();
 
     /// <summary>
-    /// The setup function for buttons or other triggers that will connect to the LevelUp skill.
-    /// It is NOT public, as it should only be accessed from within the class.
-    /// It isn't private, because I'm not allowed to set it as such.
-    /// </summary>
-    /// <param name="trigger"> The UI event(s) that will cause the Level Up check. Send an empty array if there are no UI triggers. </param>
-    /// <param name="keyName"> The name of the input that can cause the Level Up check. Provide "null" if no keyboard trigger. </param>
-    public void LevelUpSetup(ButtonClickedEvent UITrigger, string KeyTrigger);
-
-    /// <summary>
     /// Run this whenever a potential change to level up costs occurs
     /// </summary>
     public void CalculateLevelCosts();
@@ -53,5 +44,5 @@ public interface ILevelable
     /// This is to verify that the class is actually ILevelable.
     /// </summary>
     /// <returns></returns>
-    //public void LevelableCheck();
+    public void LevelableCheck();
 }

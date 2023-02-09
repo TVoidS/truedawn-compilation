@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using static SkillEnums;
@@ -16,7 +14,7 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
 
     private readonly Slider RegenDisplaySlider;
 
-    public QiRegen(byte level, byte rank, Slider regen, ButtonClickedEvent LevelUITrigger) : 
+    public QiRegen(byte level, byte rank, Slider regen) : 
         base(SkillEnums.Skill.QiRegen,
              DurationType.PassiveTimer,
              "Qi Regeneration",
@@ -26,7 +24,6 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
         _MaxLevel = 9;
         _Level = level;
         _Rank = rank;
-        LevelUpSetup(LevelUITrigger, LevelKeyTrigger);
 
 
         RegenDisplaySlider = regen;
@@ -71,11 +68,6 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
         // TODO:
     }
 
-    public void LevelUpSetup(ButtonClickedEvent UITrigger, string KeyTrigger) 
-    {
-        // TODO:
-    }
-
     public void CalculateLevelCosts() 
     {
         // TODO:
@@ -84,6 +76,7 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
     public void LevelableCheck() 
     {
         // Doesn't need to do anything other than exist.
+        
     }
     // End Interface Implementations
 }
