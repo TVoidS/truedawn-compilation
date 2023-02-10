@@ -4,17 +4,13 @@ using UnityEngine.UI;
 using static SkillEnums;
 using static UnityEngine.UI.Button;
 
-public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable
+public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
 {
     /// <summary>
     /// The bar that shows how close to done we are
     /// </summary>
     private Slider progressBar;
 
-    /// <summary>
-    /// The dropdown that shows what resource we are going to convert for the upcoming batch.
-    /// </summary>
-    private TMP_Dropdown matSelector;
 
     /// <summary>
     /// Construct the Qi Conversion skill.
@@ -27,7 +23,7 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable
     /// <param name="convertSelector"> The worldspace dropdown that represents what material is to be generated </param>
     /// <param name="convertTrigger"> The worldspace button that triggers the conversion process to begin </param>
     /// <param name="levelTrigger"> The Worldspace button that triggers the LevelUp event. </param>
-    public QiConvert(byte level, byte rank, Slider convertSlider, TMP_Dropdown convertSelector, Button convertTrigger, Button levelTrigger) :
+    public QiConvert(byte level, byte rank, Slider convertSlider) :
         base(SkillEnums.Skill.QiConvert,
              DurationType.DelayedInstant, // Skill's trigger/duration type, tells how to treat the trigger event
              "Qi Conversion",
@@ -38,9 +34,7 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable
         _Rank = rank;
         _MaxLevel = 9;
 
-        SetupConvert(convertTrigger);
         progressBar = convertSlider;
-        matSelector = convertSelector;
 
         // Add the skill to the SkillList list for event tracking and identification.
         SkillController.RegisterSkill(this);
@@ -52,33 +46,27 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable
     /// </summary>
     private bool Converting = false;
 
-    /// <summary>
-    /// This Method adds the Listener that will register the skill to update when the provided button is clicked.
-    /// </summary>
-    /// <param name="trigger"> The button that will trigger the timer event for the skill </param>
-    private void SetupConvert(Button trigger)
+    // Interface Implementation from IActivatable.
+    public void Activate() 
     {
-        trigger.onClick.AddListener(() =>
+        // TODO: register itself to the passive list 
+        if (Converting)
         {
-            // TODO: register itself to the passive list 
-            if (Converting)
-            {
-                // fail.
-                Debug.Log("BUSY.  Hold your horses!");
-            }
-            else if (QiCount.Sub(1))
-            {
-                // TODO: change the 1 in sub() to QiCost for dynamic cost caluclations
-                // Start Converting!
-                Converting = true;
-                SkillController.RegisterTimerSkill(this);
-            }
-            else
-            {
-                // Too broke
-                Debug.Log("Not Enough Qi");
-            }
-        });
+            // fail.
+            Debug.Log("BUSY.  Hold your horses!");
+        }
+        else if (QiCount.Sub(1))
+        {
+            // TODO: change the 1 in sub() to QiCost for dynamic cost caluclations
+            // Start Converting!
+            Converting = true;
+            SkillController.RegisterTimerSkill(this);
+        }
+        else
+        {
+            // Too broke
+            Debug.Log("Not Enough Qi");
+        }
     }
 
     // Interface Implementation from ITimerSkill
@@ -172,5 +160,13 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable
     public void CalculateLevelCosts() 
     {
         //TODO:
+    }
+
+    /// <summary>
+    /// Just a method that only exists for Levelable skills.
+    /// </summary>
+    public void LevelableCheck() 
+    {
+        // Complete.  Please don't touch this.
     }
 }

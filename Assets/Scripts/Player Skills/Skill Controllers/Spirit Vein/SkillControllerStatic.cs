@@ -139,7 +139,13 @@ public partial class SkillController : MonoBehaviour
                 // 4. If no trigger, log error.
                 try // Try to do the event anyways
                 {
-                    
+                    // Find the skill and pretend that it is Activatable.
+                    IActivatable skill = (IActivatable)SkillList.Find(x => x.ID == SkillID);
+
+                    // Activate the skill.  This will throw an error if the skill wasn't implementing IActivatable.
+                    skill.Activate();
+
+                    // I should be done here.
                 }
                 catch // Catch if it fails
                 {

@@ -1,7 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI;
 using static SkillEnums;
-using static UnityEngine.UI.Button;
 
 public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
 {
@@ -12,9 +10,15 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
     private float _timeTaken = 6f;
     public float TimeTaken => _timeTaken;
 
-    private readonly Slider RegenDisplaySlider;
+    private float Progress;
 
-    public QiRegen(byte level, byte rank, Slider regen) : 
+    /// <summary>
+    /// Initiates the QiRegen skill for the player.
+    /// </summary>
+    /// <param name="level"> The player's level in Qi Regen </param>
+    /// <param name="rank"> The player's rank in Qi Regen </param>
+    public QiRegen(byte level, byte rank) : 
+        // Everything fed into the base() call is generic data that all skills have, but customized to Qi Regen.
         base(SkillEnums.Skill.QiRegen,
              DurationType.PassiveTimer,
              "Qi Regeneration",
@@ -24,10 +28,8 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
         _MaxLevel = 9;
         _Level = level;
         _Rank = rank;
+        Progress = 0f;
 
-
-        RegenDisplaySlider = regen;
-        RegenDisplaySlider.value = 0f;
         SkillController.RegisterTimerSkill(this);
         SkillController.RegisterSkill(this);
     }
@@ -35,10 +37,11 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
     // Interface ITimerSkill implementation
     public void SkillUpdate()
     {
-        RegenDisplaySlider.value += (Time.deltaTime / _timeTaken);
-        if (RegenDisplaySlider.value >= 1f)
+        Progress += (Time.deltaTime / _timeTaken);
+        if (Progress >= 1f)
         {
-            RegenDisplaySlider.value = 0f;
+            // TODO: Send Display Update event 
+            Progress = 0f;
             QiCount.Add(RegenQuantity);
         }
     }
@@ -60,17 +63,20 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
 
     public void LevelUp() 
     {
-        // TODO: Implement
+        // TODO: +Complete
+        _Level++;
     }
 
     public void RankUp() 
     {
-        // TODO:
+        // TODO: Complete
+        _Rank++;
+        _Level = 0;
     }
 
     public void CalculateLevelCosts() 
     {
-        // TODO:
+        // TODO: Everythign
     }
 
     public void LevelableCheck() 

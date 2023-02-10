@@ -19,8 +19,8 @@ public static class PlayerStats
     private static void Load() 
     {
         // Make this load from PlayerStats file
-        new QiRegen(0, 0);
-        new QiConvert(0, 0);
+        //new QiRegen(0, 0);
+        //new QiConvert(0, 0);
 
         // TODO: Fix.
     }
