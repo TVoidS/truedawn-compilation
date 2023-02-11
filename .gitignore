@@ -75,3 +75,6 @@ crashlytics-build.properties
 # This was added by me. May not be correct, who knows.
 /[Aa]ssets/TextMesh Pro/*
 /[Aa]ssets/TextMesh Pro/
+/[Aa]ssets/saves/*
+/[Aa]ssets/saves/
+/[Aa]ssets/saves.meta
