@@ -32,7 +32,8 @@ public class SkillEnums
     public enum Skill 
     {
         QiRegen,
-        QiConvert
+        QiConvert,
+        QiPurity
     }
 
     /// <summary>

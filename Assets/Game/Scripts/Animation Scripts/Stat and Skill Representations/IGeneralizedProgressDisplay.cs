@@ -21,10 +21,19 @@ public interface IGeneralizedProgressDisplay
     public float Value { get; }
 
     /// <summary>
-    /// Allows the update of the Value and updates the physical display
+    /// Allows the update of the Value and updates the physical display.
     /// </summary>
     /// <param name="newValue"> The new Value of the display. </param>
     public void UpdateValue(float newValue);
+
+    /// <summary>
+    /// RECOMMENDED TO NOT USE
+    /// Allows the simple addition of values to the progress bar.
+    /// Simpler to use, but doesn't allow for checking of the current value.
+    /// Best to leave input as seconds.
+    /// </summary>
+    /// <param name="value"></param>
+    public void AddValue(float value);
      
     /// <summary>
     /// Allows the control of the MaxValue of the display.
@@ -33,4 +42,10 @@ public interface IGeneralizedProgressDisplay
     /// </summary>
     /// <param name="newMax"> The new MaxValue of the Progress Bar. </param>
     public void UpdateMaxValue(float newMax);
+
+    /// <summary>
+    /// The skill that the display is meant to represent progress for.
+    /// This is what it will tell the SkillController to list it under when it sends out updates.
+    /// </summary>
+    public SkillEnums.Skill DisplayedSkill { get; }
 }

@@ -1,7 +1,7 @@
-using System;
+using NUnit.Framework;
+using System.Collections.Generic;
 using static SkillEnums;
 
-[Serializable]
 public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
 {
     /// <summary>
@@ -75,6 +75,19 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
         {
             Value += (deltaTime / TimeTaken);
         }
+        UpdateDisplays(Value);
+    }
+
+    private readonly List<IGeneralizedProgressDisplay> displays = new();
+
+    public void RegisterDisplay(IGeneralizedProgressDisplay display) 
+    {
+        displays.Add(display);
+    }
+
+    private void UpdateDisplays(float newValue) 
+    {
+        displays.ForEach(x=> { x.UpdateValue(newValue); });
     }
 
     /// <summary>
@@ -130,7 +143,6 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
     private ulong _LevelCost;
     public ulong LevelCost => _LevelCost;
 
-    [NonSerialized]
     public GrowthType Growth = GrowthType.Linear;
 
     public void LevelUp() 

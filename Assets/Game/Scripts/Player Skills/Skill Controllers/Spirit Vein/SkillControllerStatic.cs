@@ -97,10 +97,18 @@ public partial class SkillController : MonoBehaviour
         }
     }
 
-    //
-    //  Start code for Button Event Handling:
-    //
-
+    public static void AttatchDisplay(SkillEnums.Skill skill, IGeneralizedProgressDisplay display) 
+    {
+        try
+        {
+            ITimerSkill Skill = (ITimerSkill)SkillList.Find(x => x.ID == skill);
+            Skill.RegisterDisplay(display);
+        }
+        catch 
+        {
+            Debug.Log("Didn't Work");
+        }
+    }
     /// <summary>
     /// Buttons call this function to get their events to handle correctly for each skill
     /// </summary>

@@ -10,4 +10,12 @@ public interface ITimerSkill
     /// The time taken by the skill to achieve the desired effect.  Also applies to animation length.
     /// </summary>
     public float TimeTaken { get; }
+
+    /// <summary>
+    /// Will register a class that implements the IGeneralizedProgressDisplay interface
+    /// for updating the value.
+    /// This will allow the skill to be displayed in a in-world manner.
+    /// </summary>
+    /// <param name="display"> The display that will be registerd as valid. </param>
+    public void RegisterDisplay(IGeneralizedProgressDisplay display);
 }

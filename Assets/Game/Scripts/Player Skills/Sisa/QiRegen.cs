@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using static SkillEnums;
 
 public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
@@ -43,6 +44,29 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
             Progress = 0f;
             QiCount.Add(RegenQuantity);
         }
+        UpdateDisplays(Progress);
+    }
+
+    /// <summary>
+    /// Used to handle display of any and all progress bars.
+    /// </summary>
+    private readonly List<IGeneralizedProgressDisplay> _displays = new();
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="display"></param>
+    public void RegisterDisplay(IGeneralizedProgressDisplay display) 
+    {
+        _displays.Add(display);
+    }
+
+    private void UpdateDisplays(float newValue) 
+    {
+        _displays.ForEach(x => 
+        {
+            x.UpdateValue(newValue);
+        });
     }
 
     // Interface ILevelable Implementation
