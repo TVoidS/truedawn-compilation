@@ -101,11 +101,5 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
     {
         // TODO: Everythign
     }
-
-    public void LevelableCheck() 
-    {
-        // Doesn't need to do anything other than exist.
-        
-    }
     // End Interface Implementations
 }

@@ -36,7 +36,7 @@ public partial class SkillController : MonoBehaviour
     {
         ActiveTimerSkills.Add(skill);
         Type type = skill.GetType();
-        if (type.IsSubclassOf(typeof(Skill))) 
+        if (type.IsSubclassOf(typeof(Skill)))
         {
             var skilled = (Skill)skill;
             TriggerAnim(skilled.ID, skill.TimeTaken);
@@ -88,7 +88,7 @@ public partial class SkillController : MonoBehaviour
     /// </summary>
     /// <param name="skillID"> The skill's animation to be played. </param>
     /// <param name="time"> The duration of the skill.  This may be ignored, or left behind in some cases. </param>
-    public static void TriggerAnim(SkillEnums.Skill skillID, float time) 
+    public static void TriggerAnim(SkillEnums.Skill skillID, float time)
     {
         int i = AnimTriggers.FindIndex(x => x.TriggerSkill == skillID);
         if (i >= 0)
@@ -97,44 +97,56 @@ public partial class SkillController : MonoBehaviour
         }
     }
 
-    public static void AttatchDisplay(SkillEnums.Skill skill, IGeneralizedProgressDisplay display) 
+    /// <summary>
+    /// Attatches the given display to the given skill, if possible.
+    /// If not possible, it will log the fail event, and move on.
+    /// </summary>
+    /// <param name="skill"> The ID of the skill that will receive the display. </param>
+    /// <param name="display"> The display that will connect to the skill. </param>
+    public static void AttatchDisplay(SkillEnums.Skill skill, IGeneralizedProgressDisplay display)
     {
         try
         {
             ITimerSkill Skill = (ITimerSkill)SkillList.Find(x => x.ID == skill);
             Skill.RegisterDisplay(display);
         }
-        catch 
+        catch
         {
             Debug.Log("Didn't Work");
         }
     }
+
     /// <summary>
     /// Buttons call this function to get their events to handle correctly for each skill
     /// </summary>
     /// <param name="SkillID"> The Enumerated ID of the skill the event will trigger on. </param>
     /// <param name="EventType">The Enumerated ID of the type of event that will trigger. </param>
-    public static void ButtonEvent(SkillEnums.Skill SkillID, SkillEnums.ButtonEvent EventType) 
+    public static void ButtonEvent(SkillEnums.Skill SkillID, SkillEnums.ButtonEvent EventType)
     {
-        //TODO:
-        // 1. Find Skill By ID
-        switch (EventType) 
+        // Filter by event type
+        switch (EventType)
         {
             case SkillEnums.ButtonEvent.Level:
-                // TODO:
-                // 2. Check if Skill is of appropriate type
-                // 3. Trigger or Don't trigger event based on result from 2.
-                // 4. If no trigger, log error.
                 try // Try to do the event anyways
                 {
                     // There should only be one copy of the skill, so this shouldn't error.  Please replace with:
                     // List<Skill> skill = SkillList.FindAll(x => x.ID == SkillID);
                     // If there is an error.
-                    ILevelable skill = (ILevelable) SkillList.Find(x => x.ID == SkillID);
+                    ILevelable skill = (ILevelable)SkillList.Find(x => x.ID == SkillID);
 
-                    skill.LevelableCheck(); // This will error if there is no LevelableCheck() function predefined in the class.  At least it should.
-
-                    Debug.Log("Level Event");
+                    // This will error (due to skill.LevelCost) if the skill isn't a levelable skill
+                    // This will also return false if the player doesn't have enough SystemPoints to spend for the event.
+                    if (SystemPointsCount.Sub(skill.LevelCost))
+                    {
+                        if (skill.Level == skill.MaxLevel)
+                        {
+                            skill.RankUp();
+                        }
+                        else
+                        {
+                            skill.LevelUp();
+                        }
+                    }
                 }
                 catch // Catch if it fails
                 {
@@ -142,11 +154,7 @@ public partial class SkillController : MonoBehaviour
                 }
                 break;
             case SkillEnums.ButtonEvent.Activate:
-                // TODO:
-                // 2. Check if Skill is of appropriate type
-                // 3. Trigger or Don't trigger event based on result from 2.
-                // 4. If no trigger, log error.
-                try // Try to do the event anyways
+                try
                 {
                     // Find the skill and pretend that it is Activatable.
                     IActivatable skill = (IActivatable)SkillList.Find(x => x.ID == SkillID);
@@ -162,13 +170,9 @@ public partial class SkillController : MonoBehaviour
                 }
                 break;
             case SkillEnums.ButtonEvent.Toggle:
-                // TODO:
-                // 2. Check if Skill is of appropriate type
-                // 3. Trigger or Don't trigger event based on result from 2.
-                // 4. If no trigger, log error.
                 try // Try to do the event anyways
                 {
-
+                    throw new NotImplementedException();
                 }
                 catch // Catch if it fails
                 {
@@ -185,14 +189,14 @@ public partial class SkillController : MonoBehaviour
     /// Registers a Skill to the SkillList, so that it can be called by button events.
     /// </summary>
     /// <param name="skill"> The Skill that is being added. </param>
-    public static void RegisterSkill(Skill skill) 
+    public static void RegisterSkill(Skill skill)
     {
         if (SkillList.Exists(x => x.ID == skill.ID))
         {
             // It EXISTS
             Debug.LogError("Duplicate Skill found for Skill ID: " + skill.ID + " \n Please figure out why.");
         }
-        else 
+        else
         {
             // If it doesn't exist:
             SkillList.Add(skill);
@@ -203,19 +207,30 @@ public partial class SkillController : MonoBehaviour
     /// Generates a JSON-formatted string by concatenating all skill save methods in a single Skills container.
     /// </summary>
     /// <returns> A JSON-formatted string containing the data of all registered Skills. </returns>
-    public static string SerializeSkills() 
+    public static string SerializeSkills()
     {
         string ret = "";
 
-        SkillList.ForEach(x => 
+        SkillList.ForEach(x =>
         {
-            Debug.Log("Found Skill: " + x.ID);
-            ret += "," + SaveLoad.Save(x);
+            // Debug.Log("Found Skill: " + x.ID);
+            ret += ",{" + x.Save() + "}";
         });
 
         ret = ret[1..];
 
         return "[" + ret + "]";
+    }
+
+    /// <summary>
+    /// Returns the requested Skill as a Skill object.
+    /// Please remember to cast your object to your required state in order to interact properly.
+    /// </summary>
+    /// <param name="skillID"></param>
+    /// <returns></returns>
+    public static Skill GetSkill(SkillEnums.Skill skillID) 
+    {
+        return SkillList.Find(x => x.ID == skillID);
     }
     // END STATIC SECTION
 }

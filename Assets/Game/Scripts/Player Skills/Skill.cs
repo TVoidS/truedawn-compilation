@@ -18,7 +18,7 @@ public class Skill
         SkillType = duration;
     }
 
-    public string toString() 
+    public virtual string Save() 
     {
         string ret = "\"ID\":" + ID;
         return ret;

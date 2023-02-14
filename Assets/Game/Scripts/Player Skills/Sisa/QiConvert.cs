@@ -1,4 +1,3 @@
-using NUnit.Framework;
 using System.Collections.Generic;
 using static SkillEnums;
 
@@ -12,7 +11,7 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
     /// <param name="rank"> The player's rank in the skill </param>
     public QiConvert(byte level, byte rank) :
         base(SkillEnums.Skill.QiConvert,
-             DurationType.DelayedInstant, // Skill's trigger/duration type, tells how to treat the trigger event
+             DurationType.DelayedInstant, // Skill's trigger/duration type, tells how to treat the trigger event Probably useless, but keeping for now.
              "Qi Conversion",
              "This skill converts your Qi into Spirit Slag of various types!")
     {
@@ -21,9 +20,14 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
         _Rank = rank;
         _MaxLevel = 9;
 
-        Value = 0f;
+        // Just booted up, there is no progress towards the next Conversion
+        Progress = 0f;
 
-        // Add the skill to the SkillList list for event tracking and identification.
+        // Set the cost of leveling.
+        CalculateLevelCosts();
+        CalculateTime();
+
+        // Add the skill to the SkillList list for event tracking, saving, and identification.
         SkillController.RegisterSkill(this);
     }
 
@@ -57,34 +61,46 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
     }
 
     // Variables used in SkillUpdate()
-    private float Value;
+    private float Progress;
 
     // Interface Implementation from ITimerSkill
     public void SkillUpdate(float deltaTime)
     {
         // This just checks if the bar is done, then finishes the convert.
         // It then removes itself from the TimerSkills list in SkillController.  This may need to be Thread-Safe later...
-        if (Value >= 1f)
+        if (Progress >= 1f)
         {
-            Value = 0f;
+            Progress = 0f;
             SlagCount.Add(gains, SlagCount.Type.InfereriorSpiritSlag);
             Converting = false;
             SkillController.DeregisterTimerSkill(this);
         }
         else
         {
-            Value += (deltaTime / TimeTaken);
+            Progress += (deltaTime / TimeTaken);
         }
-        UpdateDisplays(Value);
+        UpdateDisplays(Progress);
     }
 
+    /// <summary>
+    /// The list of progress bars that are going to be updated each frame.
+    /// </summary>
     private readonly List<IGeneralizedProgressDisplay> displays = new();
 
+    /// <summary>
+    /// Adds the displays to a privatly stored list that contains progress bars.
+    /// These progress bars will be updated frame by frame for display purposes.
+    /// </summary>
+    /// <param name="display"></param>
     public void RegisterDisplay(IGeneralizedProgressDisplay display) 
     {
         displays.Add(display);
     }
 
+    /// <summary>
+    /// Sends the update message to the attatched displays.
+    /// </summary>
+    /// <param name="newValue"> The new % of the displays. </param>
     private void UpdateDisplays(float newValue) 
     {
         displays.ForEach(x=> { x.UpdateValue(newValue); });
@@ -101,11 +117,10 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
     /// This should be triggered whenever there is a change to the Qi Purity
     /// </summary>
     /// <returns> True if succeeded, false otherwise. </returns>
-    public bool RecalculateGains()
+    public void CalculateGains()
     {
-        // TODO: make this based off of the QiPurity skill level and rank.
-        gains = 10;
-        return true;
+        // TODO: make this dependent on the type of slag being produced.
+        gains = ((QiPurity)SkillController.GetSkill(SkillEnums.Skill.QiPurity)).GetPurity()*10;
     }
 
     /// <summary>
@@ -121,11 +136,11 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
     /// This should be triggered each time there is a change in Level or Qi Purity!
     /// </summary>
     /// <returns> True if succeeded, false otherwise. </returns>
-    public bool RecalculateTime()
+    public void CalculateTime()
     {
-        // TODO: make this based off of the QiConversion skill level and rank
-        _timeTaken = 8f;
-        return true;
+        // TODO: Make this based off the type of slag being produced.
+        // Base time of 60 seconds for now.
+        _timeTaken = 60f - (Level + (2 * Rank));
     }
 
 
@@ -149,6 +164,8 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
     {
         //TODO:
         _Level++;
+        CalculateLevelCosts();
+        CalculateTime();
     }
 
     public void RankUp() 
@@ -156,18 +173,13 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
         //TODO:
         _Rank++;
         _Level = 0;
+        CalculateLevelCosts();
+        CalculateTime();
     }
 
     public void CalculateLevelCosts() 
     {
         //TODO:
-    }
-
-    /// <summary>
-    /// Just a method that only exists for Levelable skills.
-    /// </summary>
-    public void LevelableCheck() 
-    {
-        // Complete.  Please don't touch this.
+        _LevelCost = 1;
     }
 }

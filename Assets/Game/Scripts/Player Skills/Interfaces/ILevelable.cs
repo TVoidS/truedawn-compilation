@@ -39,10 +39,4 @@ public interface ILevelable
     /// Run this whenever a potential change to level up costs occurs
     /// </summary>
     public void CalculateLevelCosts();
-
-    /// <summary>
-    /// This is to verify that the class is actually ILevelable.
-    /// </summary>
-    /// <returns></returns>
-    public void LevelableCheck();
 }
