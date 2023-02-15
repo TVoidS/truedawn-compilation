@@ -1,4 +1,4 @@
-public class SkillEnums
+public static class SkillEnums
 {
     /// <summary>
     /// The approximate rate of stat growth to expect from the skill associated skill.
