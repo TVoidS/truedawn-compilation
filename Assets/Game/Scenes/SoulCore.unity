@@ -3870,6 +3870,7 @@ GameObject:
   - component: {fileID: 975015249}
   - component: {fileID: 975015251}
   - component: {fileID: 975015250}
+  - component: {fileID: 975015252}
   m_Layer: 5
   m_Name: Qi Count
   m_TagString: Untagged
@@ -3994,6 +3995,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 975015248}
   m_CullTransparentMesh: 1
+--- !u!114 &975015252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 975015248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7a69ae428add2b41873dd21c5a08a34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  displayType: 0
+  <Stat>k__BackingField: 0
 --- !u!1 &1069430248
 GameObject:
   m_ObjectHideFlags: 0
@@ -4444,9 +4459,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e312becfca72fae4d97ed0b7bda2d6e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DisplayedStat: 2
-  DisplayType: 0
-  DisplayedSlagType: 1
+  displayType: 0
+  DisplayedSlagType: 0
 --- !u!1 &1237191932
 GameObject:
   m_ObjectHideFlags: 0

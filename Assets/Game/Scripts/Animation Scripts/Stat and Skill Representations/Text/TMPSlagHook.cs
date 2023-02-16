@@ -1,11 +1,15 @@
-using TMPro;
+using System.ComponentModel;
 using UnityEngine;
 
-public class TMPSlagHook : TMPStatHook, ISlagTextDisplay
+[DisplayName("Slag Text Display")]
+public class TMPSlagHook : TMPHook, ISlagTextDisplay
 {
     [SerializeField]
     private SlagTypes DisplayedSlagType;
 
     // ISlagTextDisplay needed Additions
     public SlagTypes SlagType => DisplayedSlagType;
+
+    
+    public StatEnums Stat { get { return StatEnums.Slag; } }
 }

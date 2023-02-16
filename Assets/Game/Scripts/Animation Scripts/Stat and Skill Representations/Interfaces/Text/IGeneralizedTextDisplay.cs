@@ -7,7 +7,7 @@ public interface IGeneralizedTextDisplay
     /// The type of data that the text will be displaying.
     /// This uses the DisplayEnums static class, so you will need to do so as well to interact with this correctly.
     /// </summary>
-    public DisplayEnums.TextDisplayType TextDisplayType { get; }
+    public DisplayEnums.TextDisplayType DisplayType { get; }
 
     /// <summary>
     /// Gets the currently displayed Text.
