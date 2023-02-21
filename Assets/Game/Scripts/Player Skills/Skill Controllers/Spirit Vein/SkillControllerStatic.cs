@@ -28,6 +28,12 @@ public partial class SkillController : MonoBehaviour
     private static readonly List<Skill> SkillList = new();
 
     /// <summary>
+    /// The list of all Text Displays.
+    /// Use this to update any text display that has been registered in the event handler.
+    /// </summary>
+    private static readonly List<IGeneralizedTextDisplay> TextDisplays = new();
+
+    /// <summary>
     /// Adds the skill to the list that will be ran over every frame by Unity.
     /// </summary>
     /// <param name="skill"> The skill to be Updated every frame. This should usually be "this" but can be other skills if a skill triggers multiple things. </param>
@@ -103,7 +109,7 @@ public partial class SkillController : MonoBehaviour
     /// </summary>
     /// <param name="skill"> The ID of the skill that will receive the display. </param>
     /// <param name="display"> The display that will connect to the skill. </param>
-    public static void AttatchDisplay(SkillEnums.Skill skill, IGeneralizedProgressDisplay display)
+    public static void AttatchProgressDisplay(SkillEnums.Skill skill, IGeneralizedProgressDisplay display)
     {
         try
         {
@@ -112,7 +118,44 @@ public partial class SkillController : MonoBehaviour
         }
         catch
         {
-            Debug.Log("Didn't Work");
+            Debug.Log("ITimerSkill cast failed in AttatchProgressDisplay");
+        }
+    }
+
+    /// <summary>
+    /// Attatches the provided display to a list for handling updates to an associated skill.
+    /// </summary>
+    /// <param name="display"> The display to track for updates. </param>
+    public static void AttatchTextDisplay(IGeneralizedTextDisplay display) 
+    {
+        // Nasty block for making sure a Skill isn't selected as Slag without a SlagType.
+        try 
+        {
+            if (((IStatTextDisplay)display).Stat == StatEnums.Slag) 
+            {
+                try 
+                {
+                    // Will error if it isn't slag type.  It should right now tho
+                    if (((ISlagTextDisplay)display).SlagType >= SlagTypes.InferiorSlag)
+                    {
+                        // Slag has a type
+                        TextDisplays.Add(display);
+                        // This block is always hit, as all other slag types are higher in Enum value.
+                    }
+                }
+                catch
+                {
+                    Debug.Log("Slag selected as a stat!  Not good choice, as it doesn't have a slag type!");
+                }
+            }
+            else 
+            {
+                TextDisplays.Add(display);
+            }
+        }
+        catch 
+        {
+            TextDisplays.Add(display);
         }
     }
 
@@ -201,6 +244,88 @@ public partial class SkillController : MonoBehaviour
             // If it doesn't exist:
             SkillList.Add(skill);
         }
+    }
+
+    /// <summary>
+    /// Used to update the text of any SkillTextDisplays.
+    /// </summary>
+    /// <param name="skillID"> The skill that is updated </param>
+    /// <param name="dataType"> The type of data being updated. </param>
+    /// <param name="text"> The new text to display. </param>
+    public static void UpdateTextDisplay(SkillEnums.Skill skillID, DisplayEnums.TextDisplayType dataType ,string text) 
+    {
+        TextDisplays.FindAll(delegate(IGeneralizedTextDisplay x) 
+        {
+            try
+            {
+                if (((ISkillTextDisplay)x).Skill == skillID && ((ISkillTextDisplay)x).DisplayType == dataType)
+                {
+                    return true;
+                }
+                else 
+                {
+                    return false;
+                }
+            }
+            catch 
+            {
+                return false;
+            }
+        }).ForEach(x => x.SetText(text));
+    }
+
+    /// <summary>
+    /// Used to update the text of any SlagTextDisplays.
+    /// </summary>
+    /// <param name="slagType"> The Type of Slag being updated. </param>
+    /// <param name="text"> The new text to display in the Text Display. </param>
+    public static void UpdateTextDisplay(SlagTypes slagType, string text) 
+    {
+        TextDisplays.FindAll(delegate (IGeneralizedTextDisplay x)
+        {
+            try
+            {
+                if (((ISlagTextDisplay)x).SlagType == slagType)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }).ForEach(x => x.SetText(text));
+    }
+
+    /// <summary>
+    /// Used to update the text of any StatTextDisplays.
+    /// </summary>
+    /// <param name="stat"> The stat being updated. </param>
+    /// <param name="text"> The new text for the StatDisplay </param>
+    public static void UpdateTextDisplay(StatEnums stat, string text) 
+    {
+        TextDisplays.FindAll(delegate (IGeneralizedTextDisplay x)
+        {
+            try
+            {
+                if (((IStatTextDisplay)x).Stat == stat)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }).ForEach(x => x.SetText(text));
     }
 
     /// <summary>

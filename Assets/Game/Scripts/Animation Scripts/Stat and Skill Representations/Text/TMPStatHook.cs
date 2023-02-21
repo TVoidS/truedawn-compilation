@@ -1,10 +1,31 @@
 using System.ComponentModel;
+using TMPro;
 using UnityEngine;
-using UnityEngine.UIElements;
 
+[DisplayName("Stat Text Display")]
 public class TMPStatHook : TMPHook, IStatTextDisplay
 {
+    [SerializeField]
+    private StatEnums displayStat;
+
+    // Required event:
+    void Awake()
+    {
+        Display = gameObject.GetComponent<TextMeshProUGUI>();
+        SkillController.AttatchTextDisplay(this);
+    }
+
     // IGeneralizedTextHook Implementations:
-    [field: SerializeField]
-    public virtual StatEnums Stat { get; protected set; }
+    public StatEnums Stat => displayStat;
+    public DisplayEnums.TextDisplayType DisplayType => DisplayEnums.TextDisplayType.Quantity;
+
+    public string GetText()
+    {
+        return Display.text;
+    }
+
+    public void SetText(string text)
+    {
+        Display.SetText(text);
+    }
 }

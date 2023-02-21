@@ -2,31 +2,43 @@ using TMPro;
 
 public static class QiCount
 {
-    private static ulong Qi = 0;
-    private static ulong Max = 10;
-    private static TextMeshProUGUI DisplayLbl;
+    private static ulong _Qi = 0;
+    public static ulong Qi => _Qi;
 
-    public static bool Initiate(ulong qi, TextMeshProUGUI display, ulong max)
+    private static ulong _Max = 10;
+    public static ulong Max => _Max;
+
+    private static bool initiated = false;
+
+    public static bool Initiate(ulong qi, ulong max)
     {
-        Qi = qi;
-        DisplayLbl = display;
-        Display();
-        return true;
+        if (!initiated)
+        {
+            _Qi = qi;
+            _Max = max;
+            initiated = true;
+            return true;
+        }
+        else 
+        {
+            return false;
+        }
+
     }
 
     public static bool Add(ulong qiAdd)
     {
-        if (Qi < Max)
+        if (_Qi < _Max)
         {
-            if (Qi + qiAdd < Max)
+            if (_Qi + qiAdd < _Max)
             {
-                Qi += qiAdd;
+                _Qi += qiAdd;
                 Display();
                 return true;
             }
             else
             {
-                Qi = Max;
+                _Qi = _Max;
                 Display();
                 return true;
             }
@@ -39,20 +51,26 @@ public static class QiCount
 
     public static bool Sub(ulong qiSub)
     {
-        if (Qi - qiSub > Qi)
+        if (_Qi - qiSub > _Qi)
         {
             return false;
         }
         else
         {
-            Qi -= qiSub;
+            _Qi -= qiSub;
             Display();
             return true;
         }
     }
 
-    private static void Display()
+    public static bool NewMax(ulong newMax) 
     {
-        DisplayLbl.SetText(Qi + "/" + Max);
+        _Max = newMax;
+        return true;
+    }
+
+    public static void Display()
+    {
+        SkillController.UpdateTextDisplay(StatEnums.Qi, _Qi + "/" +_Max + " Qi");
     }
 }

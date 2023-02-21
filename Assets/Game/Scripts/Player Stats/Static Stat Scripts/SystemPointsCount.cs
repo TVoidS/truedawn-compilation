@@ -1,10 +1,8 @@
-using TMPro;
-
 public class SystemPointsCount
 {
     protected static ulong systemPoints = 0;
     protected static bool initiated = false;
-    public static bool Initiate(TextMeshProUGUI countDisplay, ulong sysPoints) 
+    public static bool Initiate(ulong sysPoints) 
     {
         if (initiated)
         {
@@ -13,9 +11,7 @@ public class SystemPointsCount
         else 
         {
             systemPoints = sysPoints;
-            display = countDisplay;
             initiated = true;
-            Display();
             return true;
         }
     }
@@ -40,10 +36,8 @@ public class SystemPointsCount
             return true;
         }
     }
-
-    protected static TextMeshProUGUI display;
     public static void Display() 
     {
-        display.SetText("" + systemPoints);
+        SkillController.UpdateTextDisplay(StatEnums.SystemPoints, systemPoints + " SP");
     }
 }

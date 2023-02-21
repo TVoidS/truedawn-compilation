@@ -3387,6 +3387,7 @@ GameObject:
   - component: {fileID: 744645957}
   - component: {fileID: 744645959}
   - component: {fileID: 744645958}
+  - component: {fileID: 744645960}
   m_Layer: 5
   m_Name: Sys Points Count
   m_TagString: Untagged
@@ -3513,6 +3514,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 744645956}
   m_CullTransparentMesh: 1
+--- !u!114 &744645960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 744645956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7a69ae428add2b41873dd21c5a08a34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  displayStat: 1
 --- !u!1 &813193082
 GameObject:
   m_ObjectHideFlags: 0
@@ -4007,8 +4021,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7a69ae428add2b41873dd21c5a08a34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  displayType: 0
-  <Stat>k__BackingField: 0
+  displayStat: 0
 --- !u!1 &1069430248
 GameObject:
   m_ObjectHideFlags: 0
@@ -4322,7 +4335,6 @@ GameObject:
   - component: {fileID: 1223744900}
   - component: {fileID: 1223744902}
   - component: {fileID: 1223744901}
-  - component: {fileID: 1223744903}
   m_Layer: 5
   m_Name: ISS Count
   m_TagString: Untagged
@@ -4447,20 +4459,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1223744899}
   m_CullTransparentMesh: 1
---- !u!114 &1223744903
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1223744899}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e312becfca72fae4d97ed0b7bda2d6e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  displayType: 0
-  DisplayedSlagType: 0
 --- !u!1 &1237191932
 GameObject:
   m_ObjectHideFlags: 0
@@ -7737,10 +7735,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8574ece48380df04c8a052f871b41638, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  qiCountDisplay: {fileID: 975015250}
   issDisplay: {fileID: 1223744901}
-  qiConvertSelector: {fileID: 388325004}
-  sysPointsDisp: {fileID: 744645958}
   sellSlag: {fileID: 527200484}
 --- !u!23 &526827914755775354
 MeshRenderer:

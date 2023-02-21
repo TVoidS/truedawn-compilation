@@ -46,7 +46,7 @@ public class ProgressBarHook : MonoBehaviour, IGeneralizedProgressDisplay
         slider = GetComponent<Slider>();
 
         // Register Display to SkillController
-        SkillController.AttatchDisplay(Skill, this);
+        SkillController.AttatchProgressDisplay(Skill, this);
     }
 
     public void Update()

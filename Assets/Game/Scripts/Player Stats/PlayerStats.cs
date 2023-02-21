@@ -1,4 +1,5 @@
 using System.IO;
+using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,13 +9,12 @@ public static class PlayerStats
 
     //TODO: Make this the entire character stat and skill screen for all games. :D
 
-    public static void Setup(TextMeshProUGUI qiCountDisplay, TextMeshProUGUI slagCount, TextMeshProUGUI sysDisp, Button slagSell) 
+    public static void Setup(TextMeshProUGUI slagCount, Button slagSell) 
     {
         // Load Player Data
-        QiCount.Initiate(10, qiCountDisplay, 10);
-        SystemPointsCount.Initiate(sysDisp, 0);
+        QiCount.Initiate(10, 10);
+        SystemPointsCount.Initiate(0);
         SlagCount.Initiate(slagCount,slagSell, 0);
-        SystemPointsCount.Display();
 
         Load();
 
@@ -32,5 +32,13 @@ public static class PlayerStats
         new QiConvert(0, 0);
         new QiRegen(0, 0);
         new QiPurity(0, 0);
+    }
+
+    public static void Display() 
+    {
+        SystemPointsCount.Display();
+        QiCount.Display();
+        // Add any future stat displays here for updating.
+        // This is primarily used for bootup display.
     }
 }
