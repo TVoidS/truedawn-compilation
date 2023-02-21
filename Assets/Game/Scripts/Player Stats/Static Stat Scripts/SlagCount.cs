@@ -1,74 +1,105 @@
-using TMPro;
-using UnityEngine.UI;
+using System;
+using System.Collections.Generic;
 
 public class SlagCount
 {
-    public enum Type 
+    private static ulong[] Slags = new ulong[Enum.GetNames(typeof(SlagTypes)).Length];
+
+    private static readonly List<ISlagTextDisplay> SlagDisplays = new();
+
+    private static bool initiated = false;
+    public static bool Initiate(ulong[] slag)
     {
-        InfereriorSpiritSlag,
-        SpiritSlag,
-        SuperiorSpiritSlag,
-        SpiritShards,
-        SpiritStones
-    }
-
-    private static ulong Slag = 0;
-    private static TextMeshProUGUI DisplayLbl;
-
-    public static bool Initiate(TextMeshProUGUI display, Button sellSlag, ulong slag)
-    {
-        Slag = slag;
-        DisplayLbl = display;
-        Display(Type.InfereriorSpiritSlag);
-
-        setupSellBtn(sellSlag);
-
-        return true;
-    }
-
-    private static void setupSellBtn(Button sellBtn) 
-    {
-        sellBtn.onClick.AddListener(() =>
+        if(!initiated)
         {
-            // Check for enough slag to sell
-            if (Slag >= 100)
+            // Default Slag:
+            for (int i = 0; i < Slags.Length; i++) 
             {
-                var reward = Slag / 100;
-                SystemPointsCount.Add(reward);
-                Slag %= 100;
-                Display(Type.InfereriorSpiritSlag);
+                try
+                {
+                    Slags[i] = slag[i];
+                }
+                catch 
+                {
+                    Slags[i] = 0;
+                }
             }
-            else 
-            {
-                // No bonus
-                SkillController.Log("Not enough SLAG");
-            }
-        });
+            initiated = true;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
-    public static bool Add(ulong slagAdd, Type type)
+    public static bool Add(ulong slagAdd, SlagTypes type)
     {
-        Slag += slagAdd;
+        Slags[(int)type] += slagAdd;
         Display(type);
         return true;
     }
 
-    public static bool Sub(ulong slagSub, Type type)
+    public static bool Sub(ulong slagSub, SlagTypes type)
     {
-        if (Slag - slagSub > Slag)
+        if (Slags[(int)type] - slagSub > Slags[(int)type])
         {
             return false;
         }
         else
         {
-            Slag -= slagSub;
+            Slags[(int)type] -= slagSub;
             Display(type);
             return true;
         }
     }
 
-    private static void Display(Type type)
+    private static void Display(SlagTypes type)
     {
-        DisplayLbl.SetText(Slag + "g");
+        SlagDisplays.ForEach(delegate (ISlagTextDisplay x) {
+            if (x.SlagType == type) 
+            {
+                x.SetText(Slags[(int)type] + " g");
+            }
+        });
+    }
+
+    public static void DisplayAll() 
+    {
+        SlagDisplays.ForEach(delegate (ISlagTextDisplay x) {
+            x.SetText(Slags[(int)x.SlagType] + " g");
+        });
+    }
+
+    public static void RegisterDisplay(ISlagTextDisplay display) 
+    {
+        SlagDisplays.Add(display);
+    }
+
+    public static void SlagSell(SlagTypes type)
+    {
+        if (Slags[(int)type] > 100)
+        {
+            ulong slag = Slags[(int)type];
+            Slags[(int)type] %= 100;
+            slag -= Slags[(int)type];
+            SystemPointsCount.Add(Convert(slag, type));
+            Display(type);
+        }
+        else 
+        {
+            SkillController.Log("Not Enough Slag");
+        }
+    }
+
+    private static ulong Convert(ulong slag, SlagTypes type) 
+    {
+        return (ulong)(slag*Math.Pow(10,(((int)type)-2)));
+        // Math.Pow             // Run exponential growth based on Type
+        // 10                   // We are multiplying by a specific amount of 10.
+        // (uint)type           // get the integer representation of the type
+        //              This will be 0 for the lowest setting of Slag
+        // -2                   // Offset the power by -2 so that we are dividing by 100 at the lowest level.
+        // This results in each tier selling for 10 times more than the last per gram.
     }
 }

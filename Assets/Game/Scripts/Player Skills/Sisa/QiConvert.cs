@@ -71,7 +71,7 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
         if (Progress >= 1f)
         {
             Progress = 0f;
-            SlagCount.Add(gains, SlagCount.Type.InfereriorSpiritSlag);
+            SlagCount.Add(gains, SlagTypes.InferiorSlag);
             Converting = false;
             SkillController.DeregisterTimerSkill(this);
         }

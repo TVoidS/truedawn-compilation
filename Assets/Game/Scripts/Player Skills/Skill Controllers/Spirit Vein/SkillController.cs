@@ -4,7 +4,7 @@ public partial class SkillController : MonoBehaviour
 {
     private void Awake()
     {
-        PlayerStats.Setup(issDisplay, sellSlag);
+        PlayerStats.Setup();
     }
 
     void Start()

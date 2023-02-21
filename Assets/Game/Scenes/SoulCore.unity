@@ -2329,6 +2329,7 @@ GameObject:
   - component: {fileID: 527200486}
   - component: {fileID: 527200485}
   - component: {fileID: 527200484}
+  - component: {fileID: 527200487}
   m_Layer: 5
   m_Name: SlagSellBtn
   m_TagString: Untagged
@@ -2439,6 +2440,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 527200482}
   m_CullTransparentMesh: 1
+--- !u!114 &527200487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 527200482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfa9d087fd72a944b885c43bc6c5de13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SlagToSell: 0
 --- !u!1 &545023236
 GameObject:
   m_ObjectHideFlags: 0
@@ -4335,6 +4349,7 @@ GameObject:
   - component: {fileID: 1223744900}
   - component: {fileID: 1223744902}
   - component: {fileID: 1223744901}
+  - component: {fileID: 1223744903}
   m_Layer: 5
   m_Name: ISS Count
   m_TagString: Untagged
@@ -4459,6 +4474,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1223744899}
   m_CullTransparentMesh: 1
+--- !u!114 &1223744903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1223744899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e312becfca72fae4d97ed0b7bda2d6e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DisplayedSlagType: 0
 --- !u!1 &1237191932
 GameObject:
   m_ObjectHideFlags: 0

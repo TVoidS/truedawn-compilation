@@ -32,6 +32,8 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
 
         SkillController.RegisterTimerSkill(this);
         SkillController.RegisterSkill(this);
+
+        CalculateLevelCosts();
     }
 
     // Interface ITimerSkill implementation
@@ -100,6 +102,7 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
     public void CalculateLevelCosts() 
     {
         // TODO: Everythign
+        _LevelCost = 1;
     }
     // End Interface Implementations
 }

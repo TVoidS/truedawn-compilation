@@ -12,7 +12,7 @@ public class TMPSlagHook : TMPHook, ISlagTextDisplay
     void Awake()
     {
         Display = gameObject.GetComponent<TextMeshProUGUI>();
-        SkillController.AttatchTextDisplay(this);
+        SlagCount.RegisterDisplay(this);
     }
 
     // ISlagTextDisplay implementation:
