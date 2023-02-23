@@ -182,4 +182,9 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
         //TODO:
         _LevelCost = 1;
     }
+
+    public override string Save()
+    {
+        return base.Save() + ",\"Level\":" + Level + ",\"Rank\":" + Rank;
+    }
 }

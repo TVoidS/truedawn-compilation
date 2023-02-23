@@ -6,7 +6,7 @@ public static class QiCount
     public static ulong Qi => _Qi;
 
     private static ulong _Max = 10;
-    public static ulong Max => _Max;
+    public static ulong Max => _Max; // TODO: Let the Qi Capacity skill control this.
 
     private static bool initiated = false;
 
@@ -72,5 +72,18 @@ public static class QiCount
     public static void Display()
     {
         SkillController.UpdateTextDisplay(StatEnums.Qi, _Qi + "/" +_Max + " Qi");
+    }
+
+    /// <summary>
+    /// Converts the class into a JSON format for saving.
+    /// </summary>
+    /// <returns> the JSON representation of the player's QiCount. </returns>
+    public static string ToJson() 
+    {
+        string json = "{";
+        json += "\"Qi\":" + Qi +",";
+        json += "\"Max\":" + Max;
+        json += "}";
+        return json;
     }
 }

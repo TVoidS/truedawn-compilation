@@ -40,4 +40,10 @@ public class SystemPointsCount
     {
         SkillController.UpdateTextDisplay(StatEnums.SystemPoints, systemPoints + " SP");
     }
+
+    public static string ToJson() 
+    {
+        string json = "{\"SP\":"+systemPoints+"}";
+        return json;
+    }
 }

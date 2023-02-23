@@ -344,7 +344,7 @@ public partial class SkillController : MonoBehaviour
 
         ret = ret[1..];
 
-        return "[" + ret + "]";
+        return "\"Skills\":[" + ret + "]";
     }
 
     /// <summary>

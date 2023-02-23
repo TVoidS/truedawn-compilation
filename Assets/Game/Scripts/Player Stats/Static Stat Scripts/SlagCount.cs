@@ -102,4 +102,18 @@ public class SlagCount
         // -2                   // Offset the power by -2 so that we are dividing by 100 at the lowest level.
         // This results in each tier selling for 10 times more than the last per gram.
     }
+
+    public static string ToJson() 
+    {
+        string json = "";
+
+        foreach (SlagTypes type in typeof(SlagTypes).GetEnumValues()) 
+        {
+            json += ",\"" + Enum.GetName(typeof(SlagTypes), type) + "\":" + Slags[(int)type];
+        }
+
+        json = "\"Slag\":[" + json[1..] + "]";
+
+        return "{" + json + "}";
+    }
 }

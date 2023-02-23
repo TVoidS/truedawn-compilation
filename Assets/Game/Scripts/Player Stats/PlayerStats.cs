@@ -42,4 +42,18 @@ public static class PlayerStats
         // Add any future stat displays here for updating.
         // This is primarily used for bootup display.
     }
+
+    /// <summary>
+    /// Generates the JSON string representing the stats of the character.
+    /// </summary>
+    /// <returns> The JSON representation of player stats. </returns>
+    public static string SerializeStats() 
+    {
+        string json = "Stats:[";
+        // Fill with stats
+        json += QiCount.ToJson() + ",";
+        json += SlagCount.ToJson() + ",";
+        json += SystemPointsCount.ToJson();
+        return json + "]";
+    }
 }

@@ -105,4 +105,8 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
         _LevelCost = 1;
     }
     // End Interface Implementations
+    public override string Save()
+    {
+        return base.Save() + ",\"Level\":" + Level + ",\"Rank\":" + Rank;
+    }
 }

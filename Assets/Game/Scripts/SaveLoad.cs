@@ -44,7 +44,11 @@ public static class SaveLoad
     /// </summary>
     public static void Save()
     {
-        string json = "{\"Skills\":" + SkillController.SerializeSkills() + "}";
+        // TODO: Add quest saving here!
+        string json = "{"
+            + SkillController.SerializeSkills() + ","
+            + PlayerStats.SerializeStats()
+            + "}";
 
         json = Prettify(json);
 
