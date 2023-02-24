@@ -42,7 +42,7 @@ public static class SaveLoad
     /// Saves the game.  TODO: finish this.  It requires double checking everything works and all that.
     /// And loading.  that too.
     /// </summary>
-    public static void Save()
+    public static void Save(string saveName)
     {
         // TODO: Add quest saving here!
         string json = "{"
@@ -54,6 +54,16 @@ public static class SaveLoad
 
         // Save to the save1.json file in the saves directory.
         // TODO: make this more files.
-        File.WriteAllText(SaveLoc + Path.DirectorySeparatorChar + "save1.json", json);
+        File.WriteAllText(SaveLoc + Path.DirectorySeparatorChar + saveName + ".json", json);
+    }
+
+    /// <summary>
+    /// Returns the list of all .json files in the saves folder.
+    /// This does no other verification on the file other than that it is a json in the correct folder.
+    /// </summary>
+    /// <returns> The array of .json files in the Saves folder. </returns>
+    public static string[] SavedFiles() 
+    {
+        return Directory.GetFiles(SaveLoc,".json");
     }
 }

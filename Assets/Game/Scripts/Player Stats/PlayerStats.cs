@@ -1,11 +1,10 @@
-using TMPro;
-using UnityEngine.UI;
+using System.Linq;
 
 public static class PlayerStats
 {
 
     //TODO: Make this the entire character stat and skill screen for all games. :D
-
+    private static string save = "";
 
     public static void Setup() 
     {
@@ -22,7 +21,7 @@ public static class PlayerStats
 
         // This is a debug line more than anything for now.
         // I use it to check the state on bootup.
-        SaveLoad.Save();
+        SaveLoad.Save("autosave");
     }
 
     private static void Load() 
@@ -55,5 +54,32 @@ public static class PlayerStats
         json += SlagCount.ToJson() + ",";
         json += SystemPointsCount.ToJson();
         return json + "]";
+    }
+
+    /// <summary>
+    /// Sets the file to be loaded by SaveLoad when the game is about to begin.
+    /// An empty string as the target sets the system to load its default state, making a new game.
+    /// </summary>
+    /// <param name="target"> The save that will be loaded. </param>
+    public static bool SetLoadFile(string target) 
+    {
+        if (target == "")
+        {
+            // New Game.
+            return true;
+        }
+        else 
+        {
+            if (SaveLoad.SavedFiles().Contains<string>(target))
+            {
+                save = target;
+                return true;
+            }
+            else 
+            {
+                // This shouldn't happen, but it is here if it does.
+                return false;
+            }
+        }
     }
 }
