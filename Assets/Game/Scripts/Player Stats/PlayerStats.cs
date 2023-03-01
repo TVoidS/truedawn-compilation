@@ -10,7 +10,7 @@ public static class PlayerStats
     {
         // Load Player Data
         QiCount.Initiate(10, 10);
-        SystemPointsCount.Initiate(0);
+        SystemPointsCount.Initiate(100);
         ulong[] temp = new ulong[1];
         temp[0] = 0;
         SlagCount.Initiate(temp);

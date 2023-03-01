@@ -2,12 +2,27 @@ using static SkillEnums;
 
 public class Skill
 {
+    /// <summary>
+    /// Probably Userped by the interfaces.
+    /// </summary>
     public readonly DurationType SkillType;
     
+    /// <summary>
+    /// The Description of the skill.
+    /// This is primarily used for display purposes.
+    /// I may need to make this privately editable later though.
+    /// </summary>
     public readonly string Description;
     
+    /// <summary>
+    /// The Display Name of the skill.  
+    /// Primarily used for display purposes.
+    /// </summary>
     public readonly string Name;
 
+    /// <summary>
+    /// The ID of the skill.  Cannot change.
+    /// </summary>
     public readonly SkillEnums.Skill ID;
 
     public Skill(SkillEnums.Skill id, DurationType duration, string name, string description) 
@@ -18,9 +33,24 @@ public class Skill
         SkillType = duration;
     }
 
+    /// <summary>
+    /// Converts the Skill to a JSON formatted string
+    /// </summary>
+    /// <returns> The JSON formatted version of the Skill. </returns>
     public virtual string Save() 
     {
         string ret = "\"ID\":" + ID;
         return ret;
+    }
+
+    /// <summary>
+    /// Updates all displays attatched to the skill.
+    /// </summary>
+    public virtual void UpdateAllText() 
+    {
+        // This implementation is primarily for the children to override.
+        // This "skill" only has a name and description, so that is all it updates
+        SkillController.UpdateTextDisplay(ID, DisplayEnums.TextDisplayType.Name, Name);
+        SkillController.UpdateTextDisplay(ID, DisplayEnums.TextDisplayType.Description, Description);
     }
 }

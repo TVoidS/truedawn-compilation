@@ -94,12 +94,12 @@ public class SlagCount
 
     private static ulong Convert(ulong slag, SlagTypes type) 
     {
-        return (ulong)(slag*Math.Pow(10,(((int)type)-2)));
+        return (ulong)(slag*Math.Pow(10,((int)type)-1));
         // Math.Pow             // Run exponential growth based on Type
         // 10                   // We are multiplying by a specific amount of 10.
         // (uint)type           // get the integer representation of the type
         //              This will be 0 for the lowest setting of Slag
-        // -2                   // Offset the power by -2 so that we are dividing by 100 at the lowest level.
+        // -1                   // Offset the power by -1 so that we are dividing by 10 at the lowest level.
         // This results in each tier selling for 10 times more than the last per gram.
     }
 

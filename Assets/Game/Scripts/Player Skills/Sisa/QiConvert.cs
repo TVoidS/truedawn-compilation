@@ -18,17 +18,21 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
         // Loaded and Standard Data
         _Level = level;
         _Rank = rank;
-        _MaxLevel = 9;
 
         // Just booted up, there is no progress towards the next Conversion
         Progress = 0f;
+
+        // Add the skill to the SkillList list for event tracking, saving, and identification.
+        SkillController.RegisterSkill(this);
 
         // Set the cost of leveling.
         CalculateLevelCosts();
         CalculateTime();
 
-        // Add the skill to the SkillList list for event tracking, saving, and identification.
-        SkillController.RegisterSkill(this);
+        // Set all other displays 
+        UpdateLevelDisplays();
+        base.UpdateAllText();
+        UpdateFancyRankDisplays();
     }
 
     /// <summary>
@@ -140,7 +144,7 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
     {
         // TODO: Make this based off the type of slag being produced.
         // Base time of 60 seconds for now.
-        _timeTaken = 60f - (Level + (2 * Rank));
+        _timeTaken = 6f;
     }
 
 
@@ -152,20 +156,35 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
     private byte _Rank;
     public byte Rank => _Rank;
 
-    private byte _MaxLevel;
-    public byte MaxLevel => _MaxLevel;
+    public byte MaxLevel => 9;
 
-    private ulong _LevelCost;
-    public ulong LevelCost => _LevelCost;
+    private double _LevelCost;
+    public double LevelCost => _LevelCost;
 
     public GrowthType Growth = GrowthType.Linear;
 
     public void LevelUp() 
     {
-        //TODO:
-        _Level++;
-        CalculateLevelCosts();
+        // If it leveled,
+        if (_Level == MaxLevel)
+        {
+            // And we are at max level,
+            _Level = 0;
+            _Rank++;
+            // Update the Rank Displays
+            UpdateFancyRankDisplays();
+        }
+        else 
+        {
+            _Level++;
+        }
+
+        // Recalculate Time
         CalculateTime();
+        // Recalculate the Level Costs
+        CalculateLevelCosts();
+        // And update the displays.
+        UpdateLevelDisplays();
     }
 
     public void RankUp() 
@@ -179,12 +198,38 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
 
     public void CalculateLevelCosts() 
     {
-        //TODO:
-        _LevelCost = 1;
+        _LevelCost = LevelCosts.CalculateCost(_Level, MaxLevel, _Rank, 10);
+        UpdateLevelCostDisplays();
     }
 
+    // Overrides of the Skill class
     public override string Save()
     {
         return base.Save() + ",\"Level\":" + Level + ",\"Rank\":" + Rank;
+    }
+
+    public override void UpdateAllText()
+    {
+        base.UpdateAllText();
+        UpdateLevelDisplays();
+        UpdateFancyRankDisplays();
+        UpdateLevelCostDisplays();
+    }
+
+    // Display code for internal use:
+    private void UpdateLevelDisplays()
+    {
+        SkillController.UpdateTextDisplay(ID, DisplayEnums.TextDisplayType.Level, "T" + _Rank + "G" + _Level);
+    }
+
+    private void UpdateFancyRankDisplays()
+    {
+        SkillController.UpdateTextDisplay(ID, DisplayEnums.TextDisplayType.RankFancy, "NOT IMPLEMENTED"); // TODO
+    }
+
+    private void UpdateLevelCostDisplays()
+    {
+        SkillController.UpdateTextDisplay(ID, DisplayEnums.TextDisplayType.LevelCost, _LevelCost + " SP"); // TODO Make this not big number only.
+        // Do shorthand or something.  Like 43M or 1B or 203Sp.
     }
 }

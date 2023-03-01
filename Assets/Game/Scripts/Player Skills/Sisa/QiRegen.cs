@@ -25,7 +25,6 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
              "The basic ability all Spirit Veins have.  To recover Qi naturally. \n You however have the ability to recover Qi much faster. \n If you invest in this Skill that is...")
     {
         // Recieved and Standard values
-        _MaxLevel = 9;
         _Level = level;
         _Rank = rank;
         Progress = 0f;
@@ -34,6 +33,11 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
         SkillController.RegisterSkill(this);
 
         CalculateLevelCosts();
+
+        // Set all other displays 
+        UpdateLevelDisplays();
+        base.UpdateAllText();
+        UpdateFancyRankDisplays();
     }
 
     // Interface ITimerSkill implementation
@@ -75,21 +79,36 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
     private byte _Level;
     public byte Level => _Level;
 
-    private byte _MaxLevel;
-    public byte MaxLevel => _MaxLevel;
+    public byte MaxLevel => 9;
 
     private byte _Rank;
     public byte Rank => _Rank;
 
-    private ulong _LevelCost;
-    public ulong LevelCost => _LevelCost;
+    private double _LevelCost;
+    public double LevelCost => _LevelCost;
 
     public readonly GrowthType Growth = GrowthType.Linear;
 
     public void LevelUp() 
     {
-        // TODO: +Complete
-        _Level++;
+        // If it leveled,
+        if (_Level == MaxLevel)
+        {
+            // And we are at max level,
+            _Level = 0;
+            _Rank++;
+            // Update the Rank Displays
+            UpdateFancyRankDisplays();
+        }
+        else
+        {
+            _Level++;
+        }
+
+        // Recalculate the Level Costs
+        CalculateLevelCosts();
+        // And update the displays.
+        UpdateLevelDisplays();
     }
 
     public void RankUp() 
@@ -101,12 +120,39 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
 
     public void CalculateLevelCosts() 
     {
-        // TODO: Everythign
-        _LevelCost = 1;
+        _LevelCost = LevelCosts.CalculateCost(_Level, MaxLevel, _Rank, 10);
+        UpdateLevelCostDisplays();
     }
     // End Interface Implementations
+
+    // Skill Override Section
     public override string Save()
     {
         return base.Save() + ",\"Level\":" + Level + ",\"Rank\":" + Rank;
+    }
+
+    public override void UpdateAllText()
+    {
+        base.UpdateAllText();
+        UpdateLevelDisplays();
+        UpdateFancyRankDisplays();
+        UpdateLevelCostDisplays();
+    }
+
+    // Display code for internal use:
+    private void UpdateLevelDisplays() 
+    {
+        SkillController.UpdateTextDisplay(ID, DisplayEnums.TextDisplayType.Level, "T" + _Rank + "G" + _Level);
+    }
+
+    private void UpdateFancyRankDisplays() 
+    {
+        SkillController.UpdateTextDisplay(ID, DisplayEnums.TextDisplayType.RankFancy, "NOT IMPLEMENTED"); // TODO
+    }
+
+    private void UpdateLevelCostDisplays() 
+    {
+        SkillController.UpdateTextDisplay(ID, DisplayEnums.TextDisplayType.LevelCost, _LevelCost + " SP"); // TODO Make this not big number only.
+        // Do shorthand or something.  Like 43M or 1B or 203Sp.
     }
 }

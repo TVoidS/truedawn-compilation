@@ -11,8 +11,9 @@ public static class DisplayEnums
     public enum TextDisplayType 
     {
         Level,
+        LevelCost,
         Quantity,
-        Rank,
+        RankFancy,
         Name,
         Description
     }

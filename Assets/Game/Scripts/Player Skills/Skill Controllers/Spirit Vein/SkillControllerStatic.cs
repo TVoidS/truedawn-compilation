@@ -181,14 +181,7 @@ public partial class SkillController : MonoBehaviour
                     // This will also return false if the player doesn't have enough SystemPoints to spend for the event.
                     if (SystemPointsCount.Sub(skill.LevelCost))
                     {
-                        if (skill.Level == skill.MaxLevel)
-                        {
-                            skill.RankUp();
-                        }
-                        else
-                        {
-                            skill.LevelUp();
-                        }
+                        skill.LevelUp();
                     }
                 }
                 catch // Catch if it fails

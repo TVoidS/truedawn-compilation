@@ -1,34 +1,63 @@
-using System.Collections.Generic;
+using System;
 
 public static class LevelCosts
 {
-    private static readonly ushort[] Costs = { 1, 2, 3, 5, 8, 13, 21, 34, 50, 100 };
+    private static readonly byte[] Costs = { 1, 2, 3, 5, 8, 13, 21, 34, 50, 100 };
     
     // TODO: make this somewhat optimal by saving the results to a list each time it is accessed, so it doesn't need to be calculated again.
     // LONG TODO: Save those precalcs into file and load them too? idk probably not would be a longer initial load, but optimize the run-time.
     // These optimizations come at the cost of memory space, instead of cpu time.
 
-    private static ulong TierCost(ushort rank) 
+    /// <summary>
+    /// Internal calculation of the Tier cost.
+    /// This will return the multipler that goes against the grade cost for a provided Tier.
+    /// This also calculates the flat additive that is applied to all
+    /// </summary>
+    /// <param name="rank"></param>
+    /// <returns></returns>
+    private static double TierCost(byte rank) 
     {
         // This has not been tested against the really high values that would exceed an int.
         // It might not work high enough to be worth ulong yet.
-        return (ulong)(Costs[(rank-1)%10] * 10^(rank) * 100^((rank-1)/10));
+
+        // Old method:
+        // return (ulong)(Costs[(rank-1)%10] * 10^(rank) * 100^((rank-1)/10));
+
+        // New Method:
+        return Math.Pow(9, rank) + Math.Pow(rank, rank + 9) - Math.Pow(rank, 2);
     }
 
-    public static ulong CalculateCost(ushort level, ushort maxLevel, ushort rank, byte baseMulti = 1, byte steps = 1) 
+    /// <summary>
+    /// This function will calculate the level cost for a given Level, Rank, Multiplier and Steps.
+    /// </summary>
+    /// <param name="level"> The Skill's Level </param>
+    /// <param name="maxLevel"> The Skill's Max Level per Rank. </param>
+    /// <param name="rank"> The Skill's Rank </param>
+    /// <param name="baseMulti"> The Cost multiplier.  Defaults to 1. </param>
+    /// <param name="steps"> The Steps count. More steps requires more levels to go up in cost. </param>
+    /// <returns></returns>
+    public static double CalculateCost(byte level, byte maxLevel, byte rank, byte baseMulti = 1, byte steps = 1) 
     {
-        // Check if the Level is in the final step
-        if (level >= maxLevel - steps + 1)
+        // TODO: Test the case where Steps is anything other than 1.  We need to make sure that doesn't break anything...
+
+
+        // Leveling Cost formula:
+        // Bm(((9^x) + (x^(x+9) - x^2))(Gc) + ((9^(x-1)) + ((x-1)^((x-1)+9) - (x-1)^2)))
+        // x = rank
+        // Gc = Grade cost
+        // Bm = Base Multiplier
+
+        if (rank == 0)
         {
-            return TierCost(rank) * baseMulti * Costs[9];
+            return baseMulti * Costs[level / steps];
         }
-        else if (level != 0)
+        else if (level+steps > maxLevel )
         {
-            return TierCost((ushort)(rank - 1)) * baseMulti * 100 + TierCost(rank) * baseMulti * Costs[level/ steps];
+            return baseMulti * (Costs[level / steps] * TierCost(rank));
         }
         else 
         {
-            return TierCost((ushort)(rank - 1)) * baseMulti * 100 + TierCost(rank) * baseMulti * Costs[0];
+            return baseMulti * (Costs[level / steps] * TierCost(rank) + TierCost((byte)(rank - 1)));
         }
     }
 }

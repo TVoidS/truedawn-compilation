@@ -17,7 +17,10 @@ public interface ILevelable
     /// </summary>
     public byte Rank { get; }
 
-    public ulong LevelCost { get; }
+    /// <summary>
+    /// The cost of going up one level, whatever that entails.
+    /// </summary>
+    public double LevelCost { get; }
 
     public static GrowthType Growth { get; }
 
