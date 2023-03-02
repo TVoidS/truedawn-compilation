@@ -325,19 +325,28 @@ public partial class SkillController : MonoBehaviour
     /// Generates a JSON-formatted string by concatenating all skill save methods in a single Skills container.
     /// </summary>
     /// <returns> A JSON-formatted string containing the data of all registered Skills. </returns>
-    public static string SerializeSkills()
+    public static string SerializeSkills(byte tabcount)
     {
+        string tabs = "";
+        for (byte i = 0; i < tabcount; i++)
+        {
+            tabs += "\t";
+        }
+
         string ret = "";
 
         SkillList.ForEach(x =>
         {
-            // Debug.Log("Found Skill: " + x.ID);
-            ret += ",{" + x.Save() + "}";
+            ret += ",\n"
+                + x.Save((byte)(tabcount +1));
         });
 
         ret = ret[1..];
 
-        return "\"Skills\":[" + ret + "]";
+        return "\n" 
+            + tabs + "\"Skills\":[" 
+            + ret + "\n" 
+            + tabs + "]";
     }
 
     /// <summary>

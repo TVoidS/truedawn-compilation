@@ -46,11 +46,11 @@ public static class SaveLoad
     {
         // TODO: Add quest saving here!
         string json = "{"
-            + SkillController.SerializeSkills() + ","
-            + PlayerStats.SerializeStats()
-            + "}";
+            + SkillController.SerializeSkills(1) + ","
+            + PlayerStats.SerializeStats(1)
+            + "\n}";
 
-        json = Prettify(json);
+        // json = Prettify(json);
 
         // Save to the save1.json file in the saves directory.
         // TODO: make this more files.

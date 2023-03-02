@@ -45,15 +45,22 @@ public static class PlayerStats
     /// <summary>
     /// Generates the JSON string representing the stats of the character.
     /// </summary>
+    /// <param name="tabcount"> The number of \t tabs to include before every line. </param>
     /// <returns> The JSON representation of player stats. </returns>
-    public static string SerializeStats() 
+    public static string SerializeStats(byte tabcount)
     {
-        string json = "Stats:[";
+        string tabs = "";
+        for (byte i = 0; i < tabcount; i++) 
+        {
+            tabs += "\t";
+        }
+
+        string json = "\n"+tabs+"\"Stats\":[\n";
         // Fill with stats
-        json += QiCount.ToJson() + ",";
-        json += SlagCount.ToJson() + ",";
-        json += SystemPointsCount.ToJson();
-        return json + "]";
+        json += QiCount.ToJson((byte)(tabcount + 1)) + ",\n";
+        json += SlagCount.ToJson((byte)(tabcount + 1)) + ",\n";
+        json += SystemPointsCount.ToJson((byte)(tabcount + 1));
+        return json + "\n" + tabs + "]";
     }
 
     /// <summary>

@@ -1,3 +1,5 @@
+using System.Security.Principal;
+
 public class QiPurity : SpiritVeinSkill, ILevelable
 {
     private uint purity;
@@ -84,11 +86,19 @@ public class QiPurity : SpiritVeinSkill, ILevelable
     }
 
     // Skill Override section
-    public override string Save()
+    public override string Save(byte tabcount)
     {
-        // Get the data shared by all skills, then add this skill's data, as needed by any particular interface.
-        var ret = base.Save() + ",\"Level\":"+_Level+",\"Rank\":"+_Rank;
-        return ret;
+        string tabs = "";
+        for (byte i = 0; i < tabcount; i++)
+        {
+            tabs += "\t";
+        }
+
+        return tabs + "{\n"
+            + tabs + "\t\"ID\":\"" + ID + "\",\n"
+            + tabs + "\t\"Level\":" + Level + ",\n"
+            + tabs + "\t\"Rank\":" + Rank + "\n"
+            + tabs + "}";
     }
     public override void UpdateAllText()
     {

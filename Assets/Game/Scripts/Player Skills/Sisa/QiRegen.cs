@@ -126,9 +126,19 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
     // End Interface Implementations
 
     // Skill Override Section
-    public override string Save()
+    public override string Save(byte tabcount)
     {
-        return base.Save() + ",\"Level\":" + Level + ",\"Rank\":" + Rank;
+        string tabs = "";
+        for (byte i = 0; i < tabcount; i++)
+        {
+            tabs += "\t";
+        }
+
+        return tabs + "{\n" 
+            + tabs + "\t\"ID\":\"" + ID + "\",\n" 
+            + tabs + "\t\"Level\":" + Level + ",\n" 
+            + tabs + "\t\"Rank\":" + Rank + "\n"
+            + tabs + "}";
     }
 
     public override void UpdateAllText()

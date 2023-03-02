@@ -34,12 +34,21 @@ public class Skill
     }
 
     /// <summary>
-    /// Converts the Skill to a JSON formatted string
+    /// Converts the Skill to a JSON formatted string.
+    /// If your skills is only saving the ID, then you need to override this and set your own save method.
     /// </summary>
     /// <returns> The JSON formatted version of the Skill. </returns>
-    public virtual string Save() 
+    public virtual string Save(byte tabcount) 
     {
-        string ret = "\"ID\":" + ID;
+        string tabs = "";
+        for (byte i = 0; i < tabcount; i++)
+        {
+            tabs += "\t";
+        }
+
+        string ret = tabs + "{\n" 
+            + "\t\"ID\":\"" + ID +"\"\n" 
+            + "}";
         return ret;
     }
 

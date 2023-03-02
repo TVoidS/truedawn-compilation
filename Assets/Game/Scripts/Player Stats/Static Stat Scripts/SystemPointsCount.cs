@@ -1,3 +1,5 @@
+using System.Security.Principal;
+
 public class SystemPointsCount
 {
     protected static double systemPoints = 0;
@@ -31,7 +33,7 @@ public class SystemPointsCount
         }
         else 
         {
-            systemPoints = systemPoints - spSub;
+            systemPoints -= spSub;
             Display();
             return true;
         }
@@ -42,9 +44,17 @@ public class SystemPointsCount
         SkillController.UpdateTextDisplay(StatEnums.SystemPoints, systemPoints + " SP");
     }
 
-    public static string ToJson() 
+    public static string ToJson(byte tabcount) 
     {
-        string json = "{\"SP\":"+systemPoints+"}";
+        string tabs = "";
+        for (byte i = 0; i < tabcount; i++)
+        {
+            tabs += "\t";
+        }
+
+        string json = tabs + "{\n" 
+            + tabs + "\t\"SP\":"+systemPoints+"\n" 
+            + tabs + "}";
         return json;
     }
 }

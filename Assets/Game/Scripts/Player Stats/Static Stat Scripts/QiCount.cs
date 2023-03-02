@@ -78,12 +78,18 @@ public static class QiCount
     /// Converts the class into a JSON format for saving.
     /// </summary>
     /// <returns> the JSON representation of the player's QiCount. </returns>
-    public static string ToJson() 
+    public static string ToJson(byte tabcount) 
     {
-        string json = "{";
-        json += "\"Qi\":" + Qi +",";
-        json += "\"Max\":" + Max;
-        json += "}";
+        string tabs = "";
+        for (byte i = 0; i < tabcount; i++)
+        {
+            tabs += "\t";
+        }
+
+        string json = tabs + "{\n";
+        json += tabs + "\t\"Qi\":" + Qi +",\n";
+        json += tabs + "\t\"Max\":" + Max;
+        json += "\n" + tabs + "}";
         return json;
     }
 }

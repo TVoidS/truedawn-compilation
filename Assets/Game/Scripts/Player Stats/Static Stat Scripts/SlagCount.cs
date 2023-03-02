@@ -103,17 +103,30 @@ public class SlagCount
         // This results in each tier selling for 10 times more than the last per gram.
     }
 
-    public static string ToJson() 
+    public static string ToJson(byte tabcount) 
     {
+        string tabs = "";
+        for (byte i = 0; i < tabcount; i++)
+        {
+            tabs += "\t";
+        }
+
         string json = "";
 
         foreach (SlagTypes type in typeof(SlagTypes).GetEnumValues()) 
         {
-            json += ",\"" + Enum.GetName(typeof(SlagTypes), type) + "\":" + Slags[(int)type];
+            json += ",\n" 
+                + tabs + "\t\t" + Slags[(int)type];
         }
 
-        json = "\"Slag\":[" + json[1..] + "]";
+        json = "\n" 
+            + tabs + "\t\"Slag\":[" 
+            + json[1..] + "\n" 
+            + tabs + "\t]";
 
-        return "{" + json + "}";
+        return tabs + "{\n" 
+            + tabs + "\t\"Stat\":\""+ StatEnums.Slag +"\","
+            + json + "\n" 
+            + tabs +"}";
     }
 }
