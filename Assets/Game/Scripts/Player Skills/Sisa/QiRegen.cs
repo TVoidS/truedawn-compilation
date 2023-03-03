@@ -30,6 +30,7 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
         Progress = 0f;
 
         SkillController.RegisterTimerSkill(this);
+        isActive = true;
         SkillController.RegisterSkill(this);
 
         CalculateLevelCosts();
@@ -52,6 +53,18 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
         }
         UpdateDisplays(Progress);
     }
+
+    /// <summary>
+    /// Internal storage for the flag.
+    /// This allows us to modify it with local code.
+    /// </summary>
+    private bool isActive = false;
+
+    /// <summary>
+    /// External view for whether the skill is active.
+    /// Determines whether the SkillUpdate function runs.
+    /// </summary>
+    public bool IsActive => isActive;
 
     /// <summary>
     /// Used to handle display of any and all progress bars.

@@ -38,16 +38,9 @@ public partial class SkillController : MonoBehaviour
     /// </summary>
     /// <param name="skill"> The skill to be Updated every frame. This should usually be "this" but can be other skills if a skill triggers multiple things. </param>
     /// <returns> Success state, true or false, always true for now. </returns>
-    public static bool RegisterTimerSkill(ITimerSkill skill)
+    public static void RegisterTimerSkill(ITimerSkill skill)
     {
         ActiveTimerSkills.Add(skill);
-        Type type = skill.GetType();
-        if (type.IsSubclassOf(typeof(Skill)))
-        {
-            var skilled = (Skill)skill;
-            TriggerAnim(skilled.ID, skill.TimeTaken);
-        }
-        return true;
     }
 
     /// <summary>
@@ -68,7 +61,13 @@ public partial class SkillController : MonoBehaviour
     private static void RunTimerSkills()
     {
         float time = Time.deltaTime;
-        ActiveTimerSkills.ForEach(i => i.SkillUpdate(time));
+        ActiveTimerSkills.ForEach(delegate(ITimerSkill i) 
+        {
+            if (i.IsActive) 
+            {
+                i.SkillUpdate(time);
+            }
+        });
     }
 
     /// <summary>

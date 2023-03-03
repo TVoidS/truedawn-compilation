@@ -18,4 +18,9 @@ public interface ITimerSkill
     /// </summary>
     /// <param name="display"> The display that will be registerd as valid. </param>
     public void RegisterDisplay(IGeneralizedProgressDisplay display);
+
+    /// <summary>
+    /// The flag on whether the TimerSkill should be processed.
+    /// </summary>
+    public bool IsActive { get; }
 }

@@ -25,6 +25,7 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
 
         // Add the skill to the SkillList list for event tracking, saving, and identification.
         SkillController.RegisterSkill(this);
+        SkillController.RegisterTimerSkill(this);
 
         // Set the cost of leveling.
         CalculateLevelCosts();
@@ -36,17 +37,11 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
         UpdateFancyRankDisplays();
     }
 
-    /// <summary>
-    /// The status of the conversion process.
-    /// True if the progress bar is filling up.
-    /// </summary>
-    private bool Converting = false;
-
     // Interface Implementation from IActivatable.
     public void Activate() 
     {
         // TODO: register itself to the passive list 
-        if (Converting)
+        if (isActive)
         {
             // fail.
             SkillController.Log("BUSY.  Hold your horses!");
@@ -55,8 +50,9 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
         {
             // TODO: change the 1 in sub() to QiCost for dynamic cost caluclations
             // Start Converting!
-            Converting = true;
-            SkillController.RegisterTimerSkill(this);
+            isActive = true;
+            // SkillController.RegisterTimerSkill(this);
+            SkillController.TriggerAnim(ID, TimeTaken);
         }
         else
         {
@@ -77,8 +73,8 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
         {
             Progress = 0f;
             SlagCount.Add(gains, SlagTypes.InferiorSlag);
-            Converting = false;
-            SkillController.DeregisterTimerSkill(this);
+            // SkillController.DeregisterTimerSkill(this);
+            isActive = false;
         }
         else
         {
@@ -86,6 +82,18 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
         }
         UpdateDisplays(Progress);
     }
+
+    /// <summary>
+    /// Internal storage for the flag.
+    /// This allows us to modify it with local code.
+    /// </summary>
+    private bool isActive = false;
+
+    /// <summary>
+    /// External view for whether the skill is active.
+    /// Determines whether the SkillUpdate function runs.
+    /// </summary>
+    public bool IsActive => isActive;
 
     /// <summary>
     /// The list of progress bars that are going to be updated each frame.
