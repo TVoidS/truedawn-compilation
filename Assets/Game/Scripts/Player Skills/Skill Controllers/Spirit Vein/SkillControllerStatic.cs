@@ -34,6 +34,18 @@ public partial class SkillController : MonoBehaviour
     private static readonly List<IGeneralizedTextDisplay> TextDisplays = new();
 
     /// <summary>
+    /// The internally editable field that will determine how other scripts act.
+    /// If it is set to True, then other scripts will act accordingly.
+    /// </summary>
+    private static bool paused = false;
+    /// <summary>
+    /// Returns the pause state of the game.
+    /// True is paused, false is running fine.
+    /// Pausing should only be done from the Controller itself.
+    /// </summary>
+    public static bool IsPaused => paused;
+
+    /// <summary>
     /// Adds the skill to the list that will be ran over every frame by Unity.
     /// </summary>
     /// <param name="skill"> The skill to be Updated every frame. This should usually be "this" but can be other skills if a skill triggers multiple things. </param>

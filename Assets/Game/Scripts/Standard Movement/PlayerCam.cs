@@ -27,7 +27,8 @@ public class PlayerCam : MonoBehaviour
         Cursor.visible = false;
 
         pointerEventData = new PointerEventData(null);
-        eventSystem = GetComponent<EventSystem>();
+        eventSystem = EventSystem.current;
+        
     }
 
     // Update is called once per frame
@@ -44,44 +45,58 @@ public class PlayerCam : MonoBehaviour
         transform.rotation = Quaternion.Euler(yRotation, xRotation, 0);
         orientation.rotation = Quaternion.Euler(0, xRotation, 0);
 
-        
-        // Testing code from ChatGPT, will edit with any corrections after seeing it in action.
-        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width/2f,Screen.height/2f));
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit)) 
+        // Only do the UI stuff if the game is running.
+        if (!SkillController.IsPaused)
         {
-            Canvas canvas = hit.transform.GetComponent<Canvas>();
-            if (canvas != null) 
+            // Testing code from ChatGPT, will edit with any corrections after seeing it in action.
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit)) // Had to learn about the out keyword to realize this was fine.
             {
-                pointerEventData.position = Input.mousePosition;
+                Canvas canvas = hit.transform.GetComponent<Canvas>();
+                if (canvas != null)
+                {
+                    pointerEventData.position = Input.mousePosition;
 
-                // GPT was way off here.  Had to make a new list before the raycast event so that I could load the results in.
-                List<RaycastResult> hits = new();
-                eventSystem.RaycastAll(pointerEventData, hits);
-                // It was trying to do this:
-                // RaycastAll(ped, null);
-                // RaycastResult[] res = RaycastResult[RaycastAll(ped).Count]
-                // RaycastAll(ped, res);
+                    // GPT was way off here.  Had to make a new list before the raycast event so that I could load the results in.
+                    List<RaycastResult> hits = new();
 
-                // Obviously doesn't work.
+                    eventSystem.RaycastAll(pointerEventData, hits);
+                    // It was trying to do this:
+                    // RaycastAll(ped, null);
+                    // RaycastResult[] res = RaycastResult[RaycastAll(ped).Count]
+                    // RaycastAll(ped, res);
 
-                // Completely restructured to fit the new List format.
-                hits.ForEach(hit => {
-                    Debug.Log("hit ");
-                    if (hit.gameObject.GetComponent<Button>() != null) 
+                    // Obviously doesn't work.
+
+                    // Completely restructured to fit the new List format.
+                    hits.ForEach(hit =>
                     {
-                        if (Input.GetMouseButtonDown(0))
+                        if (hit.gameObject.GetComponent<Button>() != null)
                         {
-                            hit.gameObject.GetComponent<Button>().onClick.Invoke();
+                            if (Input.GetMouseButtonDown(0))
+                            {
+                                hit.gameObject.GetComponent<Button>().onClick.Invoke();
+                            }
+                            else
+                            {
+                                eventSystem.SetSelectedGameObject(hit.gameObject);
+                            }
                         }
-                        else 
+                        // If I want to select other input fields or things, I can add them here instead of GetComponent<Button>.
+                    });
+
+                    // Had to add this to cancel the selection if there were no targets.
+                    // I don't like having my button glow as if it is selected when nothing can be done with it.
+                    if (hits.Count == 0)
+                    {
+                        if (eventSystem.currentSelectedGameObject != null)
                         {
-                            eventSystem.SetSelectedGameObject(hit.gameObject);
+                            eventSystem.SetSelectedGameObject(null);
                         }
                     }
-                    // If I want to select other input fields or things, I can add them here instead of GetComponent<Button>.
-                });
 
+                }
             }
         }
     }

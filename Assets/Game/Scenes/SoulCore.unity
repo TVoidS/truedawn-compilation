@@ -314,6 +314,7 @@ GameObject:
   - component: {fileID: 63851311}
   - component: {fileID: 63851310}
   - component: {fileID: 63851309}
+  - component: {fileID: 63851312}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -407,6 +408,27 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!65 &63851312
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 63851307}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1166.9896, y: 647.79266, z: 0}
+  m_Center: {x: 0.5072736, y: -0.25798947, z: 0.5875103}
 --- !u!1 &95665131
 GameObject:
   m_ObjectHideFlags: 0
