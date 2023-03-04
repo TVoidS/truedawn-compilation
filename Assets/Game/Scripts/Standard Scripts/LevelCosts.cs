@@ -24,7 +24,14 @@ public static class LevelCosts
         // return (ulong)(Costs[(rank-1)%10] * 10^(rank) * 100^((rank-1)/10));
 
         // New Method:
-        return Math.Pow(9, rank) + Math.Pow(rank, rank + 9) - Math.Pow(rank, 2);
+        if (rank < 4)
+        {
+            return Math.Pow(9, rank) + Math.Pow(rank, rank + 9) - Math.Pow(rank, 2);
+        }
+        else 
+        {
+            return Math.Pow(rank, rank + 9);
+        }
     }
 
     /// <summary>
