@@ -1,11 +1,16 @@
-using UnityEngine;
-using UnityEngine.EventSystems;
+//using UnityEngine;
+//using UnityEngine.EventSystems;
 
 /*
  * Class from a public post by EmmaEwert:
  * https://forum.unity.com/threads/fake-mouse-position-in-4-6-ui-answered.283748/
  * THANK YOU.
+ * 
+ * This file has now been superceeded by the updated PlayerCam.
+ * The new method of doing it is a bit wierd, but it isn't as hacky as unlocking the mouse every frame.
 */
+
+/* Locking this code so it doesn't do anything.
 public class FirstPersonInputModule : StandaloneInputModule
 {
     protected override MouseState GetMousePointerEventData(int id)
@@ -36,4 +41,4 @@ public class FirstPersonInputModule : StandaloneInputModule
         Cursor.lockState = lockState;
     }
 }
-
+*/

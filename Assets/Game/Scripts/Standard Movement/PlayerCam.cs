@@ -46,7 +46,7 @@ public class PlayerCam : MonoBehaviour
         orientation.rotation = Quaternion.Euler(0, xRotation, 0);
 
         // Only do the UI stuff if the game is running.
-        if (!SkillController.IsPaused)
+        if (UIController.UIState != UIStates.Paused)
         {
             // Testing code from ChatGPT, will edit with any corrections after seeing it in action.
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
