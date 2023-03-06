@@ -28,7 +28,6 @@ public class PlayerCam : MonoBehaviour
 
         pointerEventData = new PointerEventData(null);
         eventSystem = EventSystem.current;
-        
     }
 
     // Update is called once per frame

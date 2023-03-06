@@ -8,11 +8,14 @@ using UnityEngine;
 public class PauseController : MonoBehaviour
 {
     private static List<GameObject> PauseUI = new();
+    private static List<GameObject> UnpauseUI = new();
+
     private void Start()
     {
-        if (PauseUI.Count == 0)
+        if (PauseUI.Count == 0 && UnpauseUI.Count == 0)
         {
-            PauseUI.AddRange(GameObject.FindGameObjectsWithTag("PauseUI"));
+            UnpauseUI.AddRange(GameObject.FindGameObjectsWithTag("UnpausedUI"));
+            PauseUI.AddRange(GameObject.FindGameObjectsWithTag("PausedUI"));
             PauseUI.ForEach(i => 
             {
                 i.SetActive(false);
@@ -32,23 +35,38 @@ public class PauseController : MonoBehaviour
         }
         else if(UIController.UIState == UIStates.Paused) 
         {
-            if(Input.GetButtonDown("Cancel")) 
+            if(Input.GetButtonDown("Cancel"))
             {
                 UIController.ChangeState(UIStates.Free);
-
-                Time.timeScale = 1.0f;
             }
         }
     }
 
     public static void Pause() 
     {
-        // This will handle any needed
-        UIController.ChangeState(UIStates.Paused);
         PauseUI.ForEach(i => 
         {
             i.SetActive(true);
         });
+        UnpauseUI.ForEach(i => { 
+            i.SetActive(false);
+        });
         Time.timeScale = 0f;
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
+    }
+
+    public static void Unpause() 
+    {
+        PauseUI.ForEach(i => {
+            i.SetActive(false);
+        });
+        UnpauseUI.ForEach(i =>
+        {
+            i.SetActive(true);
+        });
+        Time.timeScale = 1f;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 }
