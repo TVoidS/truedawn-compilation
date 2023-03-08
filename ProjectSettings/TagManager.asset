@@ -4,10 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - UI Group
-  - PauseUI
   - UnpausedUI
   - PausedUI
+  - SaveButton
   layers:
   - Default
   - TransparentFX

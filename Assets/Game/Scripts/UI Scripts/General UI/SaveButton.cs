@@ -4,22 +4,18 @@ using UnityEngine.UI;
 
 public class SaveButton : MonoBehaviour
 {
-    public TMP_InputField saveNameInput;
+    // TODO: Make this not a dropdown, but instead a list of prefab "slots" that will
+    public TMP_Dropdown dropdown;
 
     // Start is called before the first frame update
     void Start()
     {
         gameObject.GetComponent<Button>().onClick.AddListener(delegate() {
-            string saveName = saveNameInput.text;
-            if (saveName != "")
-            {
-                SaveLoad.Save(saveName);
-            }
-            else 
-            {
-                // Display an Invalid Save Name in the field, or just save to QuickSave
-                SaveLoad.Save("QuickSave");
-            }
+            int saveName = dropdown.value;
+            SaveLoad.Save("slot"+saveName);
         });
     }
+
+    // TODO:
+    // Render a quick confirmation window when a potential overwrite is detected.
 }
