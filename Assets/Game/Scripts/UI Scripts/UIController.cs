@@ -14,7 +14,6 @@ public static class UIController
     /// <returns> Wether the change was successful. </returns>
     public static bool ChangeState(UIStates newState) 
     {
-        SkillController.Log("New State Command: " + newState);
         if (UIState == UIStates.Free)
         {
             switch (newState) 
