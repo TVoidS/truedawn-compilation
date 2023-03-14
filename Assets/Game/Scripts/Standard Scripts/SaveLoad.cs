@@ -33,6 +33,18 @@ public static class SaveLoad
         }
     }
 
+    private static string SaveCheck(string saveName) 
+    {
+        int count = 0;
+        string saveAddon = "";
+        while (!File.Exists(SaveLoc + Path.DirectorySeparatorChar + saveName + saveAddon + ".json")) 
+        {
+            saveAddon = "" + count;
+            count++;
+        }
+        return SaveLoc +  Path.DirectorySeparatorChar + saveName + saveAddon + ".json";
+    }
+
     /// <summary>
     /// The save file location
     /// </summary>
@@ -44,17 +56,31 @@ public static class SaveLoad
     /// </summary>
     public static void Save(string saveName)
     {
+        // Save to the save1.json file in the saves directory.
+        // TODO: make this more files.
+        File.WriteAllText(SaveLoc + Path.DirectorySeparatorChar + saveName + ".json", JsonGenerate());
+    }
+
+    /// <summary>
+    /// Creates a new Save
+    /// </summary>
+    /// <param name="saveName"></param>
+    public static void NewSave(string saveName)
+    {
+        // Save to the save1.json file in the saves directory.
+        // TODO: make this more files.
+        File.WriteAllText(SaveCheck(saveName), JsonGenerate());
+    }
+
+    private static string JsonGenerate()
+    {
         // TODO: Add quest saving here!
         string json = "{"
             + SkillController.SerializeSkills(1) + ","
             + PlayerStats.SerializeStats(1)
             + "\n}";
 
-        // json = Prettify(json);
-
-        // Save to the save1.json file in the saves directory.
-        // TODO: make this more files.
-        File.WriteAllText(SaveLoc + Path.DirectorySeparatorChar + saveName + ".json", json);
+        return json;
     }
 
     /// <summary>
