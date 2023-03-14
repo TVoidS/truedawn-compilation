@@ -267,6 +267,7 @@ GameObject:
   - component: {fileID: 452892351}
   - component: {fileID: 452892350}
   - component: {fileID: 452892349}
+  - component: {fileID: 452892352}
   m_Layer: 5
   m_Name: Cancel Button
   m_TagString: Untagged
@@ -377,6 +378,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 452892347}
   m_CullTransparentMesh: 1
+--- !u!114 &452892352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 452892347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb8f6a18fd97b344f82325dc53c29f63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CanvasContentsController: {fileID: 1314908741}
 --- !u!1 &542803626
 GameObject:
   m_ObjectHideFlags: 0
@@ -389,6 +403,7 @@ GameObject:
   - component: {fileID: 542803630}
   - component: {fileID: 542803629}
   - component: {fileID: 542803628}
+  - component: {fileID: 542803631}
   m_Layer: 5
   m_Name: Start Button
   m_TagString: Untagged
@@ -499,6 +514,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 542803626}
   m_CullTransparentMesh: 1
+--- !u!114 &542803631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 542803626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29f9aebcc2ef38849b27f8d960212679, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nameField: {fileID: 1378731189}
+  CanvasContentsController: {fileID: 1314908741}
 --- !u!1 &666144738
 GameObject:
   m_ObjectHideFlags: 0
@@ -1227,6 +1256,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d04a34612e1f84349b85865e82ec68c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CanvasContentsController: {fileID: 1314908741}
 --- !u!1 &1058066613
 GameObject:
   m_ObjectHideFlags: 0
@@ -1613,6 +1643,7 @@ MonoBehaviour:
   LoadingContainer: {fileID: 1121253551}
   SaveSelectContainer: {fileID: 2007780698}
   MainMenuContainer: {fileID: 1717702967}
+  NewSaveContainer: {fileID: 2133267619}
 --- !u!1 &1378731187
 GameObject:
   m_ObjectHideFlags: 0
@@ -2399,7 +2430,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1717702968
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2965,7 +2996,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2133267620
 RectTransform:
   m_ObjectHideFlags: 0
