@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using UnityEngine;
@@ -92,4 +93,75 @@ public static class SaveLoad
     {
         return Directory.GetFiles(SaveLoc,".json");
     }
+    /// <summary>
+    /// Returns a list of SaveData structs for the purpose of generating and feeding the Prefabs of the Save Rows in the Load Game and Save Game screens.
+    /// </summary>
+    /// <returns> The List of SaveData structs. </returns>
+    public static List<SaveData> LoadSaveData() 
+    {
+        List<SaveData> saves = new List<SaveData>();
+
+        // The list of saved files
+        string[] files = SavedFiles();
+
+        // Run the code for each save
+        foreach (string file in files) 
+        {
+            // Create a new empty struct for the data to be transferred.
+            SaveData data = new SaveData();
+
+            // Save the last write time to the struct
+            data.LastSaveTime = File.GetLastWriteTime(file);
+
+            // Read and parse the save file to a JSON Document
+            JsonDocument doc = JsonDocument.Parse(File.ReadAllText(file));
+
+            // Parse the Name from the root.
+            data.Name = doc.RootElement.GetProperty("Name").GetString();
+
+            //TODO: Determine highest slag tier
+            //TODO: Determine quantity of highest slag tier
+
+            // Parse each skill in the save for it's Qi purity tier and grade.
+            foreach (JsonElement skill in doc.RootElement.GetProperty("Skills").EnumerateArray()) 
+            {
+                JsonElement curr = skill.GetProperty("ID");
+                if (curr.GetString().Equals("QiPurity")) 
+                {
+                    data.PurityGrade = curr.GetProperty("Level").GetByte();
+                    data.PurityTier = curr.GetProperty("Rank").GetByte();
+                    
+                    // Delete this if I end up needing more data from other skills.
+                    break;
+                }
+            }
+
+            saves.Add(data);
+        }
+
+        return saves;
+    }
+}
+
+/// <summary>
+/// This is to be handed to the code attatched to the save slot prefab so that the onClick can render it on the SaveRundown object.
+/// </summary>
+public struct SaveData 
+{
+    public string Name;
+    
+    public System.DateTime LastSaveTime;
+    
+    public SlagTypes HighestSlagTier;
+
+    /// <summary>
+    /// This is only for the highest tier
+    /// </summary>
+    public ulong SlagQuantity; // This is only for the highest tier.
+    
+    public byte PurityTier;
+    
+    public byte PurityGrade;
+    
+    // TODO: Add data for stuff that will be displayed so that I can get the loading screen to display it.
 }
