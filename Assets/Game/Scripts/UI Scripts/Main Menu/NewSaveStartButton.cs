@@ -20,11 +20,11 @@ public class NewSaveStartButton : MonoBehaviour
                 // Doesn't contain anything bad, go ahead.
                 // Button Pressed event!
                 // TODO:
-                // Swap Scenes
                 // Send "Don't Load" signal.
-
-                PlayerStats.SetLoadFile(nameField.text);
-                StartCoroutine(AsyncLoad());
+                if (PlayerStats.SetNewName(nameField.text))
+                {
+                    StartCoroutine(AsyncLoad());
+                }
             }
             else 
             {

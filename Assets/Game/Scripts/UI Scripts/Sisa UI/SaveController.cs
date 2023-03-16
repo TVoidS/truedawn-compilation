@@ -7,12 +7,15 @@ public class SaveController : MonoBehaviour
     private Button saveButton;
     private List<GameObject> saveUI = new();
 
+    public List<GameObject> DefaultUI = new();
+    public List <GameObject> SecondUI = new();
+
     // Start is called before the first frame update
     void Start()
     {
         saveButton = GameObject.FindGameObjectWithTag("SaveButton").GetComponent<Button>();
 
-        saveButton.onClick.AddListener(delegate() {
+        saveButton.onClick.AddListener(() => {
             SwapToSaveUI();
         });
 
@@ -25,6 +28,7 @@ public class SaveController : MonoBehaviour
         // Disable old UI.
 
         saveUI.ForEach(x => x.SetActive(true));
+
     }
 
     public void DisableSaveUI() 

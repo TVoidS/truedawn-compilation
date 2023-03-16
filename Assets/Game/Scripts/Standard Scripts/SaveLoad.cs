@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using UnityEngine;
 
@@ -93,6 +95,7 @@ public static class SaveLoad
     {
         return Directory.GetFiles(SaveLoc,".json");
     }
+    
     /// <summary>
     /// Returns a list of SaveData structs for the purpose of generating and feeding the Prefabs of the Save Rows in the Load Game and Save Game screens.
     /// </summary>
@@ -109,6 +112,7 @@ public static class SaveLoad
         {
             // Create a new empty struct for the data to be transferred.
             SaveData data = new SaveData();
+            data.Path = file;
 
             // Save the last write time to the struct
             data.LastSaveTime = File.GetLastWriteTime(file);
@@ -141,6 +145,23 @@ public static class SaveLoad
 
         return saves;
     }
+
+    /// <summary>
+    /// Checks for the existence of a specific file
+    /// </summary>
+    /// <param name="name"> The character name. Don't include the extension. </param>
+    /// <returns> True if the save exists, False if it doesn't. </returns>
+    internal static bool SaveExists(string name)
+    {
+        if (SavedFiles().Contains(name + ".json")) 
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }
 
 /// <summary>
@@ -149,8 +170,10 @@ public static class SaveLoad
 public struct SaveData 
 {
     public string Name;
+
+    public string Path;
     
-    public System.DateTime LastSaveTime;
+    public DateTime LastSaveTime;
     
     public SlagTypes HighestSlagTier;
 

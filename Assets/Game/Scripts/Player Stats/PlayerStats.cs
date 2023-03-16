@@ -1,10 +1,8 @@
-using System.Linq;
-
 public static class PlayerStats
 {
 
     //TODO: Make this the entire character stat and skill screen for all games. :D
-    private static string save = "";
+    public static string Name = "";
 
     public static void Setup() 
     {
@@ -55,7 +53,8 @@ public static class PlayerStats
             tabs += "\t";
         }
 
-        string json = "\n"+tabs+"\"Stats\":[\n";
+        string json = "\n"+tabs+"\"Name\":"+Name+","+
+            "\n"+tabs+"\"Stats\":[\n";
         // Fill with stats
         json += QiCount.ToJson((byte)(tabcount + 1)) + ",\n";
         json += SlagCount.ToJson((byte)(tabcount + 1)) + ",\n";
@@ -64,29 +63,20 @@ public static class PlayerStats
     }
 
     /// <summary>
-    /// Sets the file to be loaded by SaveLoad when the game is about to begin.
-    /// An empty string as the target sets the system to load its default state, making a new game.
+    /// Sets the Save Name for the game.
+    /// This determines the filename for the save as well.
     /// </summary>
-    /// <param name="target"> The save that will be loaded. </param>
-    public static bool SetLoadFile(string target) 
+    /// <param name="name"> The Name of the Character/Save File. </param>
+    public static bool SetNewName(string name) 
     {
-        if (target == "")
+        if (SaveLoad.SaveExists(name))
         {
-            // New Game.
-            return true;
+            return false;
         }
         else 
         {
-            if (SaveLoad.SavedFiles().Contains<string>(target))
-            {
-                save = target;
-                return true;
-            }
-            else 
-            {
-                // This shouldn't happen, but it is here if it does.
-                return false;
-            }
+            Name = name;
+            return true;
         }
     }
 }

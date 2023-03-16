@@ -6,7 +6,6 @@ TagManager:
   tags:
   - UnpausedUI
   - PausedUI
-  - SaveButton
   layers:
   - Default
   - TransparentFX
