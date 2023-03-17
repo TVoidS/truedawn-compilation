@@ -7,20 +7,6 @@ using UnityEngine;
 
 public static class SaveLoad
 {
-    public static string Save(object data) 
-    {
-        return JsonSerializer.Serialize(data);
-    }
-
-    public static string Prettify(string json) 
-    {
-        var options = new JsonSerializerOptions
-        {
-            WriteIndented = true
-        };
-        return JsonSerializer.Serialize(json, options);
-    }
-
     /// <summary>
     /// Verifies the existence of the Save directory, and if it doesn't exist, creates it.
     /// </summary>
@@ -34,18 +20,6 @@ public static class SaveLoad
         {
             Directory.CreateDirectory(SaveLoc);
         }
-    }
-
-    private static string SaveCheck(string saveName) 
-    {
-        int count = 0;
-        string saveAddon = "";
-        while (!File.Exists(SaveLoc + Path.DirectorySeparatorChar + saveName + saveAddon + ".json")) 
-        {
-            saveAddon = "" + count;
-            count++;
-        }
-        return SaveLoc +  Path.DirectorySeparatorChar + saveName + saveAddon + ".json";
     }
 
     /// <summary>
@@ -62,17 +36,6 @@ public static class SaveLoad
         // Save to the save1.json file in the saves directory.
         // TODO: make this more files.
         File.WriteAllText(SaveLoc + Path.DirectorySeparatorChar + saveName + ".json", JsonGenerate());
-    }
-
-    /// <summary>
-    /// Creates a new Save
-    /// </summary>
-    /// <param name="saveName"></param>
-    public static void NewSave(string saveName)
-    {
-        // Save to the save1.json file in the saves directory.
-        // TODO: make this more files.
-        File.WriteAllText(SaveCheck(saveName), JsonGenerate());
     }
 
     private static string JsonGenerate()
@@ -161,6 +124,31 @@ public static class SaveLoad
         {
             return false;
         }
+    }
+
+    /// <summary>
+    /// The SaveData struct for the current game.
+    /// This is used to show the current run-down of the game on the save screen primarily, but can be used anywhere this data may be needed.
+    /// </summary>
+    /// <returns> The SaveData struct representing the current playdata. </returns>
+    public static SaveData CurrentSaveDetails() 
+    {
+        SaveData data = new SaveData();
+        
+        // Basic data retrieval
+        data.Name = PlayerStats.Name;
+        data.HighestSlagTier = SlagCount.GetHighestTier();
+        data.SlagQuantity = SlagCount.GetSlagQuantity(data.HighestSlagTier);
+
+        // Must obtain the QiPurity skill data to retrieve both Rank and Level.
+        ILevelable purity = (ILevelable)SkillController.GetSkill(SkillEnums.Skill.QiPurity);
+        data.PurityTier = purity.Rank;
+        data.PurityGrade = purity.Level;
+
+        // The last time the game was saved.  This is likely to be right, but isn't guaranteed.
+        data.LastSaveTime = File.GetLastWriteTime(SaveLoc + Path.DirectorySeparatorChar + PlayerStats.Name + ".json");
+
+        return data;
     }
 }
 

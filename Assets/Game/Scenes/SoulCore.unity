@@ -1321,6 +1321,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 154838673}
+  - component: {fileID: 154838674}
   m_Layer: 5
   m_Name: DetailedSaveDisplay
   m_TagString: Untagged
@@ -1353,6 +1354,23 @@ RectTransform:
   m_AnchoredPosition: {x: 754, y: 157}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &154838674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 154838672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2b981c9f7e784041b749594c8fbff51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: {fileID: 0}
+  QiPurity: {fileID: 0}
+  SlagTier: {fileID: 0}
+  SlagQuantity: {fileID: 0}
+  LastSaveTime: {fileID: 0}
 --- !u!1 &160982117
 GameObject:
   m_ObjectHideFlags: 0
@@ -5504,7 +5522,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a44c77b8ce9be4749a577b10b0566aa4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DetailedSaveDisplay: {fileID: 154838672}
+  DetailedSaveDisplay: {fileID: 154838674}
 --- !u!1 &924397032
 GameObject:
   m_ObjectHideFlags: 0

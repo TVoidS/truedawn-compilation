@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public class SlagCount
 {
@@ -128,5 +129,34 @@ public class SlagCount
             + tabs + "\t\"Stat\":\""+ StatEnums.Slag +"\","
             + json + "\n" 
             + tabs +"}";
+    }
+
+    /// <summary>
+    /// Simply returns the SlagType enumerator representing the highest tier of Slag that the player has more than 0 grams of.
+    /// </summary>
+    /// <returns> The highest tier of slag that the player posesses, as a SlagTypes enumerator. </returns>
+    public static SlagTypes GetHighestTier() 
+    {
+        SlagTypes tier = SlagTypes.InferiorSlag;
+        
+        for (int i = 0; i < Slags.Count(); i++) 
+        {
+            if (Slags[i] > 0) 
+            {
+                tier = (SlagTypes) i;
+            }
+        }
+
+        return tier;
+    }
+
+    /// <summary>
+    /// Simply returns the quantity of slag for the given type.
+    /// </summary>
+    /// <param name="slagType"> The type of slag that you need to know the amount for. </param>
+    /// <returns> The quantity of slag that the player has for the provided type. </returns>
+    public static ulong GetSlagQuantity(SlagTypes slagType) 
+    {
+        return Slags[(int)slagType];
     }
 }
