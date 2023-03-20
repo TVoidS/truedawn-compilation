@@ -104,6 +104,13 @@ public class SlagCount
         // This results in each tier selling for 10 times more than the last per gram.
     }
 
+    /// <summary>
+    /// Converts the object to a JSON formatted string, with the correct amount of tabbing.
+    /// This is automatically prettified compared to normal JSON serialization.
+    /// If you want to contain this in a normal JSON file without any other data, make sure to encase it in {}.
+    /// </summary>
+    /// <param name="tabcount"> The number of tabs to be included before every line. </param>
+    /// <returns> The JSON formatted string representing the object data. </returns>
     public static string ToJson(byte tabcount) 
     {
         string tabs = "";

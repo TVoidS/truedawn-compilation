@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ONLY HAVE ONE OF THESE.
-/// This system 
+/// ONLY HAVE ONE OF THESE. (may not be necessary to only have one.)
+/// This system controlls whether the game is paused or unpaused.
 /// </summary>
 public class PauseController : MonoBehaviour
 {
@@ -26,18 +26,11 @@ public class PauseController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (UIController.UIState == UIStates.Free)
+        if (Input.GetButtonDown("Cancel")) 
         {
-            if (Input.GetButtonDown("Cancel")) 
+            if (UIController.UIState == UIStates.Free)
             {
                 UIController.ChangeState(UIStates.Paused);
-            }
-        }
-        else if(UIController.UIState == UIStates.Paused) 
-        {
-            if(Input.GetButtonDown("Cancel"))
-            {
-                UIController.ChangeState(UIStates.Free);
             }
         }
     }

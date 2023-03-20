@@ -1,5 +1,9 @@
 using UnityEngine;
 
+/// <summary>
+/// This is primarily to pre-load the DetailedSaveDisplay with the current save data when the SaveUI enables.
+/// It will also swap the data when it is told to by an OnClick that all prefabs will have.
+/// </summary>
 public class InGameSaveController : MonoBehaviour
 {
     public DetailedSaveDisplayDistributor DetailedSaveDisplay;
