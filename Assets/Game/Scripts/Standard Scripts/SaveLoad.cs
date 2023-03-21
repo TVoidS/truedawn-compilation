@@ -56,7 +56,7 @@ public static class SaveLoad
     /// <returns> The array of .json files in the Saves folder. </returns>
     public static string[] SavedFiles() 
     {
-        return Directory.GetFiles(SaveLoc,".json");
+        return Directory.GetFiles(SaveLoc,"*.json");
     }
     
     /// <summary>
@@ -92,11 +92,11 @@ public static class SaveLoad
             // Parse each skill in the save for it's Qi purity tier and grade.
             foreach (JsonElement skill in doc.RootElement.GetProperty("Skills").EnumerateArray()) 
             {
-                JsonElement curr = skill.GetProperty("ID");
-                if (curr.GetString().Equals("QiPurity")) 
+                if (skill.GetProperty("ID").GetString().Equals("QiPurity")) 
                 {
-                    data.PurityGrade = curr.GetProperty("Level").GetByte();
-                    data.PurityTier = curr.GetProperty("Rank").GetByte();
+                    Debug.Log(skill.GetProperty("Level").GetRawText());
+                    data.PurityGrade = skill.GetProperty("Level").GetByte();
+                    data.PurityTier = byte.Parse(skill.GetProperty("Rank").GetRawText());
                     
                     // Delete this if I end up needing more data from other skills.
                     break;
@@ -140,10 +140,18 @@ public static class SaveLoad
         data.HighestSlagTier = SlagCount.GetHighestTier();
         data.SlagQuantity = SlagCount.GetSlagQuantity(data.HighestSlagTier);
 
-        // Must obtain the QiPurity skill data to retrieve both Rank and Level.
-        ILevelable purity = (ILevelable)SkillController.GetSkill(SkillEnums.Skill.QiPurity);
-        data.PurityTier = purity.Rank;
-        data.PurityGrade = purity.Level;
+        try
+        {
+            // Must obtain the QiPurity skill data to retrieve both Rank and Level.
+            ILevelable purity = (ILevelable)SkillController.GetSkill(SkillEnums.Skill.QiPurity);
+            data.PurityTier = purity.Rank;
+            data.PurityGrade = purity.Level;
+        }
+        catch
+        {
+            data.PurityTier = 0;
+            data.PurityGrade = 0;
+        }
 
         // The last time the game was saved.  This is likely to be right, but isn't guaranteed.
         data.LastSaveTime = File.GetLastWriteTime(SaveLoc + Path.DirectorySeparatorChar + PlayerStats.Name + ".json");

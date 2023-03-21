@@ -1,4 +1,3 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,7 +11,4 @@ public class SaveButton : MonoBehaviour
             uISwapper.SwapToSaveUI(); 
         });
     }
-
-    // TODO:
-    // Render a quick confirmation window when a potential overwrite is detected.
 }

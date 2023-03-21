@@ -6,6 +6,7 @@ TagManager:
   tags:
   - UnpausedUI
   - PausedUI
+  - detaileddistributor
   layers:
   - Default
   - TransparentFX

@@ -8,7 +8,7 @@ public static class PlayerStats
     {
         // Load Player Data
         QiCount.Initiate(10, 10);
-        SystemPointsCount.Initiate(100);
+        SystemPointsCount.Initiate(0);
         ulong[] temp = new ulong[1];
         temp[0] = 0;
         SlagCount.Initiate(temp);
@@ -16,10 +16,6 @@ public static class PlayerStats
         Load();
 
         SaveLoad.SaveCheck();
-
-        // This is a debug line more than anything for now.
-        // I use it to check the state on bootup.
-        SaveLoad.Save("autosave");
     }
 
     private static void Load() 

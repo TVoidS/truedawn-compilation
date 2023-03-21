@@ -7,15 +7,9 @@ using UnityEngine;
 public class InGameSaveController : MonoBehaviour
 {
     public DetailedSaveDisplayDistributor DetailedSaveDisplay;
+    private Transform Contents;
 
-    /// <summary>
-    /// Fills the DetailedSaveDisplay gameObject's children with the data from a SaveData struct.
-    /// </summary>
-    /// <param name="save"> The SaveData struct with the rough rundown. </param>
-    public void FillDetailedSaveDisplay(SaveData save) 
-    {
-        DetailedSaveDisplay.Distribute(save);
-    }
+    public GameObject SaveSlotPrefab;
 
     /// <summary>
     /// Fills the DetailedSaveDisplay with the current game's save data, despite there not being a save.
@@ -24,5 +18,14 @@ public class InGameSaveController : MonoBehaviour
     private void OnEnable()
     {
         DetailedSaveDisplay.Distribute(SaveLoad.CurrentSaveDetails());
+
+        Contents = gameObject.transform.Find("Scroll View").transform.Find("Viewport").transform.Find("Content").GetComponent<Transform>();
+
+        SaveLoad.LoadSaveData().ForEach(x => {
+            // Generate Prefab in Content.
+            // Get Prefab Component (SaveSlotController)
+            // Run Fill(x); on component
+            Instantiate(SaveSlotPrefab, Contents);
+        });
     }
 }
