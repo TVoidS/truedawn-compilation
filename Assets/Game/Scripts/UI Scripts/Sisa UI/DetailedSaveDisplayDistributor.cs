@@ -11,6 +11,7 @@ public class DetailedSaveDisplayDistributor : MonoBehaviour
     public TextMeshProUGUI SlagQuantity;
     public TextMeshProUGUI LastSaveTime;
 
+    private SaveData currDisplay;
 
     /// <summary>
     /// Fills the display with the detailed data from a SaveData object
@@ -18,10 +19,27 @@ public class DetailedSaveDisplayDistributor : MonoBehaviour
     /// <param name="saveData"> The detailed data to display. </param>
     public void Distribute(SaveData saveData)
     {
+        currDisplay = saveData;
+
         Name.SetText(saveData.Name);
         QiPurity.SetText("T" + saveData.PurityTier + "G" + saveData.PurityGrade);
         SlagTier.SetText(EnumDescriptions.ToDiscriptionString(saveData.HighestSlagTier));
         SlagQuantity.SetText(saveData.SlagQuantity + "");
         LastSaveTime.SetText(saveData.LastSaveTime.ToString());
+    }
+
+    public void LoadSave() 
+    {
+        if (currDisplay.Name == PlayerStats.Name) 
+        {
+            // DON'T LOAD CURRENT SAVE
+            // THEY AREN'T ALLOWED TO BREAK THE CONTINUITY!
+        }
+        else 
+        {
+            SaveLoad.LoadSave(currDisplay.Path);
+            // TODO: Potentially load the scene again? idk.
+            // At least trigger the scene update.
+        }
     }
 }

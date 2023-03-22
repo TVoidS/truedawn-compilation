@@ -4,6 +4,7 @@ public class PauseUISwapper : MonoBehaviour
 {
     public GameObject SaveUI;
     public GameObject PauseUI;
+    public GameObject Background;
 
     // Start is called before the first frame update
     void Start()
@@ -50,5 +51,11 @@ public class PauseUISwapper : MonoBehaviour
         SaveUI.SetActive(false);
 
         UIController.ChangeState(UIStates.Free);
+    }
+
+    private void OnEnable()
+    {
+        Background.SetActive(true);
+        SwapToPauseUI();
     }
 }

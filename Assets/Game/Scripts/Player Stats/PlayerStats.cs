@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 public static class PlayerStats
 {
 
@@ -13,18 +15,39 @@ public static class PlayerStats
         temp[0] = 0;
         SlagCount.Initiate(temp);
 
-        Load();
+        LoadSkills();
 
         SaveLoad.SaveCheck();
     }
 
-    private static void Load() 
+    private static void LoadSkills() 
     {
-        // TODO: make this read from the saves files.
-        // That will have to wait for when I make a main menu for the game...
         new QiConvert(0, 0);
         new QiRegen(0, 0);
         new QiPurity(0, 0);
+    }
+
+    public static void LoadSkills(JsonElement skills) 
+    {
+        // TODO:
+    }
+
+    public static void LoadStats(JsonElement stats) 
+    {
+        // TODO:
+    }
+
+    /// <summary>
+    /// Sets the name for the character.
+    /// This is for the save filename, and for display in-game.
+    /// </summary>
+    /// <param name="name"> The character's new name. </param>
+    public static void SetName(string name) 
+    {
+        if (name == "") 
+        {
+            Name = name;
+        }
     }
 
     public static void Display() 

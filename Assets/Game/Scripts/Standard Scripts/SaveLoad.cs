@@ -56,14 +56,15 @@ public static class SaveLoad
     /// <returns> The array of .json files in the Saves folder. </returns>
     public static string[] SavedFiles() 
     {
-        return Directory.GetFiles(SaveLoc,"*.json");
+        string[] ret = Directory.GetFiles(SaveLoc, "*.json");
+        return ret;
     }
     
     /// <summary>
     /// Returns a list of SaveData structs for the purpose of generating and feeding the Prefabs of the Save Rows in the Load Game and Save Game screens.
     /// </summary>
     /// <returns> The List of SaveData structs. </returns>
-    public static List<SaveData> LoadSaveData() 
+    public static List<SaveData> GetSaveDatas() 
     {
         List<SaveData> saves = new List<SaveData>();
 
@@ -94,7 +95,6 @@ public static class SaveLoad
             {
                 if (skill.GetProperty("ID").GetString().Equals("QiPurity")) 
                 {
-                    Debug.Log(skill.GetProperty("Level").GetRawText());
                     data.PurityGrade = skill.GetProperty("Level").GetByte();
                     data.PurityTier = byte.Parse(skill.GetProperty("Rank").GetRawText());
                     
@@ -157,6 +157,21 @@ public static class SaveLoad
         data.LastSaveTime = File.GetLastWriteTime(SaveLoc + Path.DirectorySeparatorChar + PlayerStats.Name + ".json");
 
         return data;
+    }
+
+    /// <summary>
+    /// Loads the JSON file at the given path.
+    /// It is recommended to be used in tandem with the SaveData object's Path variable, as that is exactly the data expected.
+    /// </summary>
+    /// <param name="path"> The string representation of the file path for the save to be loaded. </param>
+    public static void LoadSave(string path) 
+    {
+        JsonElement root = JsonDocument.Parse(File.ReadAllText(path)).RootElement;
+        root.GetProperty("Skills");
+
+        PlayerStats.LoadStats(root.GetProperty("Stats")); // TODO
+        PlayerStats.LoadSkills(root.GetProperty("Skills"));
+        PlayerStats.SetName(root.GetProperty("Name").GetString());
     }
 }
 
