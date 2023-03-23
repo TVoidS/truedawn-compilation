@@ -8,16 +8,23 @@ public static class PlayerStats
 
     public static void Setup() 
     {
-        // Load Player Data
-        QiCount.Initiate(10, 10);
-        SystemPointsCount.Initiate(0);
-        ulong[] temp = new ulong[1];
-        temp[0] = 0;
-        SlagCount.Initiate(temp);
-
+        // Initiate the objects and load their default values.
+        LoadStats();
         LoadSkills();
 
         SaveLoad.SaveCheck();
+    }
+
+    public static void Setup(string savePath)
+    {
+        // Initiate the objects and load their default values.
+        LoadStats();
+        LoadSkills();
+
+        SaveLoad.SaveCheck();
+
+        // Load in the correct values to the game, as per the save file.
+        SaveLoad.LoadSave(savePath);
     }
 
     private static void LoadSkills() 
@@ -29,12 +36,30 @@ public static class PlayerStats
 
     public static void LoadSkills(JsonElement skills) 
     {
-        // TODO:
+        // TODO: Finish
+    }
+
+    public static void LoadStats() 
+    {
+        // Load Player Data
+        QiCount.Initiate(10, 10);
+        SystemPointsCount.Initiate(0);
+        SlagCount.Initiate();
     }
 
     public static void LoadStats(JsonElement stats) 
     {
         // TODO:
+        JsonElement.ArrayEnumerator stat = stats.EnumerateArray();
+        do 
+        {
+            switch (stat.Current.GetProperty("Stat").GetRawText()) 
+            {
+                case "Slag": SlagCount.Load(stat.Current.GetProperty("Slag"));  break;
+                case "SP": SystemPointsCount.Load(stat.Current); break;
+                case "Qi": QiCount.Load(stat.Current); break;
+            }
+        } while (stat.MoveNext());
     }
 
     /// <summary>

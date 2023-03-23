@@ -1,4 +1,4 @@
-using TMPro;
+using System.Text.Json;
 
 public static class QiCount
 {
@@ -24,6 +24,12 @@ public static class QiCount
             return false;
         }
 
+    }
+
+    public static void Load(JsonElement QiData) 
+    {
+        _Qi = QiData.GetProperty("Qi").GetUInt64();
+        _Max = QiData.GetProperty("Max").GetUInt64();
     }
 
     public static bool Add(ulong qiAdd)
@@ -87,6 +93,7 @@ public static class QiCount
         }
 
         string json = tabs + "{\n";
+        json += tabs + "\t\"Stat\":\"Qi\",\n"; 
         json += tabs + "\t\"Qi\":" + Qi +",\n";
         json += tabs + "\t\"Max\":" + Max;
         json += "\n" + tabs + "}";

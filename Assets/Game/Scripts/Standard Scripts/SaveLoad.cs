@@ -38,6 +38,18 @@ public static class SaveLoad
         File.WriteAllText(SaveLoc + Path.DirectorySeparatorChar + saveName + ".json", JsonGenerate());
     }
 
+    /// <summary>
+    /// Saves the game to the current character's Name.json
+    /// </summary>
+    public static void Save() 
+    {
+        File.WriteAllText(SaveLoc + Path.DirectorySeparatorChar + PlayerStats.Name + ".json", JsonGenerate());
+    }
+    
+    /// <summary>
+    /// Builds the JSON formatted string from the game statistics.
+    /// </summary>
+    /// <returns> The JSON formatted save string. </returns>
     private static string JsonGenerate()
     {
         // TODO: Add quest saving here!
@@ -170,7 +182,7 @@ public static class SaveLoad
         root.GetProperty("Skills");
 
         PlayerStats.LoadStats(root.GetProperty("Stats")); // TODO
-        PlayerStats.LoadSkills(root.GetProperty("Skills"));
+        PlayerStats.LoadSkills(root.GetProperty("Skills")); // TODO
         PlayerStats.SetName(root.GetProperty("Name").GetString());
     }
 }

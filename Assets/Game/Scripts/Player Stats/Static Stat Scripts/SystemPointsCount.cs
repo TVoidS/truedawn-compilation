@@ -1,9 +1,10 @@
-using System.Security.Principal;
 
-public class SystemPointsCount
+using System.Text.Json;
+
+public static class SystemPointsCount
 {
-    protected static double systemPoints = 0;
-    protected static bool initiated = false;
+    private static double systemPoints = 0;
+    private static bool initiated = false;
     public static bool Initiate(ulong sysPoints) 
     {
         if (initiated)
@@ -16,6 +17,11 @@ public class SystemPointsCount
             initiated = true;
             return true;
         }
+    }
+
+    public static void Load(JsonElement SPElement) 
+    {
+        systemPoints = SPElement.GetProperty("SP").GetDouble();
     }
 
     public static bool Add(ulong spAdd) 
@@ -53,6 +59,7 @@ public class SystemPointsCount
         }
 
         string json = tabs + "{\n" 
+            + tabs + "\t\"Stat\":" + "\"SP\"\n"
             + tabs + "\t\"SP\":"+systemPoints+"\n" 
             + tabs + "}";
         return json;
