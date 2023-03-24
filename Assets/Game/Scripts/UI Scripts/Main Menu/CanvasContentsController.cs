@@ -11,6 +11,7 @@ public class CanvasContentsController : MonoBehaviour
     {
         LoadingContainer.SetActive(false);
         SaveSelectContainer.SetActive(false);
+        NewSaveContainer.SetActive(false);
     }
 
     /// <summary>

@@ -181,8 +181,8 @@ public static class SaveLoad
         JsonElement root = JsonDocument.Parse(File.ReadAllText(path)).RootElement;
         root.GetProperty("Skills");
 
-        PlayerStats.LoadStats(root.GetProperty("Stats")); // TODO
-        PlayerStats.LoadSkills(root.GetProperty("Skills")); // TODO
+        PlayerStats.LoadStats(root.GetProperty("Stats"));
+        PlayerStats.LoadSkills(root.GetProperty("Skills"));
         PlayerStats.SetName(root.GetProperty("Name").GetString());
     }
 }

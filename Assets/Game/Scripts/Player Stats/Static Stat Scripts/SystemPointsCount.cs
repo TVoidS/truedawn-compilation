@@ -1,6 +1,3 @@
-
-using System.Text.Json;
-
 public static class SystemPointsCount
 {
     private static double systemPoints = 0;
@@ -19,9 +16,9 @@ public static class SystemPointsCount
         }
     }
 
-    public static void Load(JsonElement SPElement) 
+    public static void Load(double loadedSP) 
     {
-        systemPoints = SPElement.GetProperty("SP").GetDouble();
+        systemPoints = loadedSP;
     }
 
     public static bool Add(ulong spAdd) 
@@ -59,7 +56,7 @@ public static class SystemPointsCount
         }
 
         string json = tabs + "{\n" 
-            + tabs + "\t\"Stat\":" + "\"SP\"\n"
+            + tabs + "\t\"Stat\":" + "\"SP\",\n"
             + tabs + "\t\"SP\":"+systemPoints+"\n" 
             + tabs + "}";
         return json;

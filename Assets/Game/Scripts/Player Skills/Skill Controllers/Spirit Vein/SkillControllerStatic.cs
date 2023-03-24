@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using UnityEngine;
 
 public partial class SkillController : MonoBehaviour
@@ -38,6 +39,7 @@ public partial class SkillController : MonoBehaviour
     /// If it is set to True, then other scripts will act accordingly.
     /// </summary>
     private static bool paused = false;
+
     /// <summary>
     /// Returns the pause state of the game.
     /// True is paused, false is running fine.
@@ -369,6 +371,23 @@ public partial class SkillController : MonoBehaviour
     public static Skill GetSkill(SkillEnums.Skill skillID) 
     {
         return SkillList.Find(x => x.ID == skillID);
+    }
+
+    /// <summary>
+    /// Forwards the skilldata to the correct skill for loading.
+    /// </summary>
+    /// <param name="skillID"> The ID of the skill the data is for. </param>
+    /// <param name="skillData"> The Data to be loaded, as a JsonElement. </param>
+    public static void LoadSkill(SkillEnums.Skill skillID, JsonElement skillData) 
+    {
+        try
+        {
+            GetSkill(skillID).Load(skillData);
+        }
+        catch 
+        {
+            // Failed to load, likely to be something related to NO LOAD SEQUENCE BUILT
+        }
     }
     // END STATIC SECTION
 }

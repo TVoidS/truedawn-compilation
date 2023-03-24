@@ -70,13 +70,12 @@ public static class SlagCount
     public static void Load(JsonElement SlagArray) 
     {
         JsonElement.ArrayEnumerator slagEnum = SlagArray.EnumerateArray();
-
         int i = 0;
-        do 
+        while (slagEnum.MoveNext())
         {
             Slags[i] = slagEnum.Current.GetUInt64();
             i++;
-        } while (slagEnum.MoveNext());
+        }
     }
 
     /// <summary>

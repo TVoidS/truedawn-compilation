@@ -1,3 +1,5 @@
+using System;
+using System.Diagnostics;
 using System.Text.Json;
 
 public static class PlayerStats
@@ -36,9 +38,18 @@ public static class PlayerStats
 
     public static void LoadSkills(JsonElement skills) 
     {
-        // TODO: Finish
+        // TODO: TEST THIS. 
+        JsonElement.ArrayEnumerator skill = skills.EnumerateArray();
+        while (skill.MoveNext())
+        {
+            SkillController.LoadSkill(Enum.Parse<SkillEnums.Skill>(skill.Current.GetProperty("ID").GetString()), skill.Current);
+        }
     }
 
+    /// <summary>
+    /// Blank LoadStats.
+    /// This is for initializing all of the static objects to their starting values.
+    /// </summary>
     public static void LoadStats() 
     {
         // Load Player Data
@@ -46,20 +57,25 @@ public static class PlayerStats
         SystemPointsCount.Initiate(0);
         SlagCount.Initiate();
     }
-
+    
+    /// <summary>
+    /// Non-Blank LoadStats.
+    /// This is to fill all the data with values from a save.
+    /// </summary>
+    /// <param name="stats"> The JsonElement object that represents the array of Stat objects. </param>
     public static void LoadStats(JsonElement stats) 
     {
-        // TODO:
+        // TODO: TEST THIS. 
         JsonElement.ArrayEnumerator stat = stats.EnumerateArray();
-        do 
+        while (stat.MoveNext())
         {
-            switch (stat.Current.GetProperty("Stat").GetRawText()) 
+            switch (stat.Current.GetProperty("Stat").GetString()) 
             {
                 case "Slag": SlagCount.Load(stat.Current.GetProperty("Slag"));  break;
-                case "SP": SystemPointsCount.Load(stat.Current); break;
-                case "Qi": QiCount.Load(stat.Current); break;
+                case "SP": SystemPointsCount.Load(stat.Current.GetProperty("SP").GetDouble()); break;
+                case "Qi": QiCount.Load(stat.Current.GetProperty("Qi").GetUInt64(), stat.Current.GetProperty("Max").GetUInt64()); break;
             }
-        } while (stat.MoveNext());
+        }
     }
 
     /// <summary>

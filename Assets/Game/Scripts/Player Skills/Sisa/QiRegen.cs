@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text.Json;
 using static SkillEnums;
 
 public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
@@ -160,6 +161,21 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
         UpdateLevelDisplays();
         UpdateFancyRankDisplays();
         UpdateLevelCostDisplays();
+    }
+
+
+    public override void Load(JsonElement skillData)
+    {
+        // No real need for this line
+        base.Load(skillData);
+
+        _Level = skillData.GetProperty("Level").GetByte();
+        _Rank = skillData.GetProperty("Rank").GetByte();
+
+        // Recalculate things due to loaded level and rank. 
+        CalculateLevelCosts();
+
+        UpdateAllText();
     }
 
     // Display code for internal use:

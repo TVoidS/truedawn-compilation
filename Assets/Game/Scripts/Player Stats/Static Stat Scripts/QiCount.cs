@@ -1,5 +1,3 @@
-using System.Text.Json;
-
 public static class QiCount
 {
     private static ulong _Qi = 0;
@@ -26,10 +24,10 @@ public static class QiCount
 
     }
 
-    public static void Load(JsonElement QiData) 
+    public static void Load(ulong loadedQi, ulong loadedMax) 
     {
-        _Qi = QiData.GetProperty("Qi").GetUInt64();
-        _Max = QiData.GetProperty("Max").GetUInt64();
+        _Qi = loadedQi;
+        _Max = loadedMax;
     }
 
     public static bool Add(ulong qiAdd)

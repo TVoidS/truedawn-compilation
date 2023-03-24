@@ -1,4 +1,5 @@
 using System.Security.Principal;
+using System.Text.Json;
 
 public class QiPurity : SpiritVeinSkill, ILevelable
 {
@@ -106,6 +107,20 @@ public class QiPurity : SpiritVeinSkill, ILevelable
         UpdateLevelDisplays();
         UpdateFancyRankDisplays();
         UpdateLevelCostDisplays();
+    }
+
+    public override void Load(JsonElement skillData)
+    {
+        // No real need for this line
+        base.Load(skillData);
+
+        _Level = skillData.GetProperty("Level").GetByte();
+        _Rank = skillData.GetProperty("Rank").GetByte();
+
+        // Recalculate things due to loaded level and rank. 
+        CalculateLevelCosts();
+
+        UpdateAllText();
     }
 
     // Display code for internal use:
