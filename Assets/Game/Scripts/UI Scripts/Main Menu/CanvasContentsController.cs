@@ -9,6 +9,7 @@ public class CanvasContentsController : MonoBehaviour
 
     void Start()
     {
+        MainMenuContainer.SetActive(true);
         LoadingContainer.SetActive(false);
         SaveSelectContainer.SetActive(false);
         NewSaveContainer.SetActive(false);

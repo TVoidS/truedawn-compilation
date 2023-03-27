@@ -28,6 +28,10 @@ public class DetailedSaveDisplayDistributor : MonoBehaviour
         LastSaveTime.SetText(saveData.LastSaveTime.ToString());
     }
 
+    /// <summary>
+    /// Attempts to load the currently selected save.
+    /// It will fail if you have selected a save that shares the same name as your current character.
+    /// </summary>
     public void LoadSave() 
     {
         if (currDisplay.Name == PlayerStats.Name) 
@@ -42,4 +46,10 @@ public class DetailedSaveDisplayDistributor : MonoBehaviour
             // At least trigger the scene update.
         }
     }
+
+    /// <summary>
+    /// The current SaveData.
+    /// This is non-editable.
+    /// </summary>
+    public SaveData SaveData { get { return currDisplay; } }
 }
