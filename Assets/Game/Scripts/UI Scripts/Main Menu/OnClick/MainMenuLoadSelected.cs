@@ -20,7 +20,7 @@ public class MainMenuLoadSelected : MonoBehaviour
         // TODO: Make this actually send the save data to the SaveLoad object properly.
         // I may have to modify the OnStart methods of the SoulCore scene to get this to work.
 
-        SaveData save = DetailedSaveDisplay.SaveData;
+        string savePath = DetailedSaveDisplay.SaveData.Path;
         UISwapper.SwapTo(2);
 
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("SoulCore");
@@ -28,6 +28,6 @@ public class MainMenuLoadSelected : MonoBehaviour
         {
             yield return null;
         }
-        SaveLoad.LoadSave(save.Path);
+        SaveLoad.LoadSave(savePath);
     }
 }
