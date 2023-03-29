@@ -1,3 +1,5 @@
+/*
+
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -10,3 +12,4 @@ public partial class SkillController : MonoBehaviour
     [Header("Spirit Vein System Points")]
     public Button sellSlag;
 }
+*/

@@ -1,4 +1,3 @@
-using System.Security.Principal;
 using System.Text.Json;
 
 public class QiPurity : SpiritVeinSkill, ILevelable
@@ -28,9 +27,7 @@ public class QiPurity : SpiritVeinSkill, ILevelable
         CalculateLevelCosts();
 
         // Set all other displays 
-        UpdateLevelDisplays();
-        base.UpdateAllText();
-        UpdateFancyRankDisplays();
+        UpdateAllText();
     }
 
     private void LoadPurity() 
@@ -103,7 +100,6 @@ public class QiPurity : SpiritVeinSkill, ILevelable
     }
     public override void UpdateAllText()
     {
-        base.UpdateAllText();
         UpdateLevelDisplays();
         UpdateFancyRankDisplays();
         UpdateLevelCostDisplays();

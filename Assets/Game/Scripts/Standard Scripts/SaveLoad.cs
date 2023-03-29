@@ -28,17 +28,6 @@ public static class SaveLoad
     private static readonly string SaveLoc = Application.dataPath + Path.DirectorySeparatorChar + "saves";
 
     /// <summary>
-    /// Saves the game.  TODO: finish this.  It requires double checking everything works and all that.
-    /// And loading.  that too.
-    /// </summary>
-    public static void Save(string saveName)
-    {
-        // Save to the save1.json file in the saves directory.
-        // TODO: make this more files.
-        File.WriteAllText(SaveLoc + Path.DirectorySeparatorChar + saveName + ".json", JsonGenerate());
-    }
-
-    /// <summary>
     /// Saves the game to the current character's Name.json
     /// </summary>
     public static void Save() 
@@ -52,7 +41,7 @@ public static class SaveLoad
     /// <returns> The JSON formatted save string. </returns>
     private static string JsonGenerate()
     {
-        // TODO: Add quest saving here!
+        // NOTE: Add quest saving here!
         string json = "{"
             + SkillController.SerializeSkills(1) + ","
             + PlayerStats.SerializeStats(1)
@@ -184,6 +173,9 @@ public static class SaveLoad
         PlayerStats.LoadStats(root.GetProperty("Stats"));
         PlayerStats.LoadSkills(root.GetProperty("Skills"));
         PlayerStats.SetName(root.GetProperty("Name").GetString());
+
+        SkillController.UpdateAllSkillTextDisplays();
+        PlayerStats.Display();
     }
 }
 
@@ -209,5 +201,5 @@ public struct SaveData
     
     public byte PurityGrade;
     
-    // TODO: Add data for stuff that will be displayed so that I can get the loading screen to display it.
+    // NOTE: Add data for stuff that will be displayed so that I can get the loading screen to display it.
 }

@@ -40,7 +40,7 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
     // Interface Implementation from IActivatable.
     public void Activate() 
     {
-        // TODO: register itself to the passive list 
+        // TODO: register itself to the passive list. 
         if (isActive)
         {
             // fail.
@@ -198,7 +198,7 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
 
     public void RankUp() 
     {
-        //TODO:
+        //TODO: Figure out if this is even needed.
         _Rank++;
         _Level = 0;
         CalculateLevelCosts();

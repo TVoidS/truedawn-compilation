@@ -28,7 +28,7 @@ public class ProgressBarHook : MonoBehaviour, IGeneralizedProgressDisplay
     public void UpdateValue(float newValue)
     {
         _Value = newValue;
-        // TODO: Start the display function.
+        // TODO: Start the display function. May not be a todo? might already be done.
     }
 
     public void AddValue(float value) 

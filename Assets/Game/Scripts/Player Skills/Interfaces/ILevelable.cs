@@ -30,7 +30,7 @@ public interface ILevelable
     public void LevelUp();
 
     /// <summary>
-    /// TODO: Determine if this needs to be public
+    /// TODO: Determine if this needs to be public.  Or if it can be outright deleted.
     /// This method is meant to handle the event of leveling up when at max level.
     /// Increments the Rank, and should trigger an event on the skill ID for anything that may unlock on Rank Up.
     /// </summary>

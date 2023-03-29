@@ -42,7 +42,7 @@ public class DetailedSaveDisplayDistributor : MonoBehaviour
         else 
         {
             SaveLoad.LoadSave(currDisplay.Path);
-            // TODO: Potentially load the scene again? idk.
+            // NOTE?: Potentially load the scene again? idk.
             // At least trigger the scene update.
         }
     }

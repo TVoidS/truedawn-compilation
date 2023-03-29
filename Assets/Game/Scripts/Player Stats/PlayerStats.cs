@@ -3,8 +3,6 @@ using System.Text.Json;
 
 public static class PlayerStats
 {
-
-    //TODO: Make this the entire character stat and skill screen for all games. :D
     public static string Name = "";
 
     public static void Setup() 
@@ -16,18 +14,6 @@ public static class PlayerStats
         SaveLoad.SaveCheck();
     }
 
-    public static void Setup(string savePath)
-    {
-        // Initiate the objects and load their default values.
-        LoadStats();
-        LoadSkills();
-
-        SaveLoad.SaveCheck();
-
-        // Load in the correct values to the game, as per the save file.
-        SaveLoad.LoadSave(savePath);
-    }
-
     private static void LoadSkills() 
     {
         new QiConvert(0, 0);
@@ -37,7 +23,6 @@ public static class PlayerStats
 
     public static void LoadSkills(JsonElement skills) 
     {
-        // TODO: TEST THIS. 
         JsonElement.ArrayEnumerator skill = skills.EnumerateArray();
         while (skill.MoveNext())
         {
@@ -64,7 +49,6 @@ public static class PlayerStats
     /// <param name="stats"> The JsonElement object that represents the array of Stat objects. </param>
     public static void LoadStats(JsonElement stats) 
     {
-        // TODO: TEST THIS. 
         JsonElement.ArrayEnumerator stat = stats.EnumerateArray();
         while (stat.MoveNext())
         {

@@ -35,7 +35,7 @@ public class AnimationTrigger : MonoBehaviour {
 
 
     /// <summary>
-    /// TODO:
+    /// TODO: Check if this is actually needed.  Function below too.
     /// </summary>
     private float AnimDuration = 0f;
     public void UpdateAnimTimes() 
