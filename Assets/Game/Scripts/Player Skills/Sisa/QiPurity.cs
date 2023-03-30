@@ -30,11 +30,20 @@ public class QiPurity : SpiritVeinSkill, ILevelable
         UpdateAllText();
     }
 
+    /// <summary>
+    /// Recalculates the Purity for external viewing.
+    /// This occurs after each LevelUp command.
+    /// </summary>
     private void LoadPurity() 
     {
-        purity = (uint)(_Level + 1);
+        purity = (uint)((_Rank * 10) + _Level);
     }
 
+    /// <summary>
+    /// The Current Purity value without the Level/Rank separate values.
+    /// This starts at 0 on a new game and goes up by one each time a successful level up occurs.
+    /// </summary>
+    /// <returns> The Purity value. </returns>
     public uint GetPurity() { return purity; }
 
     // ILevelable Interface Implementations
@@ -71,16 +80,12 @@ public class QiPurity : SpiritVeinSkill, ILevelable
             _Level++;
         }
 
+        LoadPurity();
+
         // Recalculate the Level Costs
         CalculateLevelCosts();
         // And update the displays.
         UpdateLevelDisplays();
-    }
-
-    public void RankUp()
-    {
-        _Level = 0;
-        _Rank++;
     }
 
     // Skill Override section
@@ -115,6 +120,8 @@ public class QiPurity : SpiritVeinSkill, ILevelable
 
         // Recalculate things due to loaded level and rank. 
         CalculateLevelCosts();
+
+        LoadPurity();
 
         UpdateAllText();
     }

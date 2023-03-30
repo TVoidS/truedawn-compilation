@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using static SkillEnums;
@@ -116,14 +117,31 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
     /// <param name="newValue"> The new % of the displays. </param>
     private void UpdateDisplays(float newValue) 
     {
-        displays.ForEach(x=> { x.UpdateValue(newValue); });
+        displays.ForEach(x => { x.UpdateValue(newValue); });
     }
 
     /// <summary>
     /// The mass of spirit slag of a given type gained from each conversion
     /// TODO: Make this be more than a single ulong.  One for each type of slag!
     /// </summary>
+    private Dictionary<SlagTypes, ulong> slagGains = new Dictionary<SlagTypes, ulong>();
     private ulong gains = 10;
+
+    private void SetGain(SlagTypes Type) 
+    {
+        slagGains[Type] = 0;
+
+        uint purity = ((QiPurity)SkillController.GetSkill(SkillEnums.Skill.QiPurity)).GetPurity();
+        // TODO:  NEXT TASK: Make this work. 
+    }
+
+    private void SetAllGains() 
+    {
+        foreach (SlagTypes Type in Enum.GetValues(typeof(SlagTypes))) 
+        {
+            SetGain(Type);
+        }
+    }
 
     /// <summary>
     /// Recalculates the Conversion Gains for each type of slag.
@@ -142,7 +160,7 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
     /// Or at least recalculate it every time it changes selection...
     /// </summary>
     public float TimeTaken => _timeTaken;
-    private float _timeTaken = 8f;
+    private float _timeTaken = 60f;
 
     /// <summary>
     /// Recalculates the Time Requirements of each slag's conversion from Qi.
@@ -153,7 +171,7 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
     {
         // TODO: Make this based off the type of slag being produced.
         // Base time of 60 seconds for now.
-        _timeTaken = 6f;
+        _timeTaken = 60f;
     }
 
 
@@ -194,16 +212,6 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
         CalculateLevelCosts();
         // And update the displays.
         UpdateLevelDisplays();
-    }
-
-    public void RankUp() 
-    {
-        //TODO: Figure out if this is even needed.
-        _Rank++;
-        _Level = 0;
-        CalculateLevelCosts();
-        CalculateTime();
-        UpdateAllText();
     }
 
     public void CalculateLevelCosts() 

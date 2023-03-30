@@ -4,7 +4,6 @@ using static SkillEnums;
 
 public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
 {
-    // TODO: Tie this to Qi Purity
     private uint RegenQuantity = 1;
 
     // Represents the number of seconds to regen Qi
@@ -30,6 +29,8 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
         _Rank = rank;
         Progress = 0f;
 
+        RegenQuantity = (uint) (_Level + (10 * _Rank));
+
         SkillController.RegisterTimerSkill(this);
         isActive = true;
         SkillController.RegisterSkill(this);
@@ -37,9 +38,7 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
         CalculateLevelCosts();
 
         // Set all other displays 
-        UpdateLevelDisplays();
-        base.UpdateAllText();
-        UpdateFancyRankDisplays();
+        UpdateAllText();
     }
 
     // Interface ITimerSkill implementation
@@ -48,7 +47,6 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
         Progress += (deltaTime / _timeTaken);
         if (Progress >= 1f)
         {
-            // TODO: Send Display Update event 
             Progress = 0f;
             QiCount.Add(RegenQuantity);
         }
@@ -119,17 +117,12 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
             _Level++;
         }
 
+        RegenQuantity = (uint)(_Level + (10 * _Rank));
+
         // Recalculate the Level Costs
         CalculateLevelCosts();
         // And update the displays.
         UpdateLevelDisplays();
-    }
-
-    public void RankUp() 
-    {
-        // TODO: Complete
-        _Rank++;
-        _Level = 0;
     }
 
     public void CalculateLevelCosts() 
