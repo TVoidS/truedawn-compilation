@@ -38,21 +38,27 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
         UpdateFancyRankDisplays();
     }
 
+
+    private uint qiCost = 1;
+
+    private void setQiCost() 
+    {
+        // NOTE: Change this to a dynamic calculation if it ever changes how it is done.
+        qiCost = 1;
+    }
+
     // Interface Implementation from IActivatable.
     public void Activate() 
     {
-        // TODO: register itself to the passive list. 
         if (isActive)
         {
             // fail.
             SkillController.Log("BUSY.  Hold your horses!");
         }
-        else if (QiCount.Sub(1))
+        else if (QiCount.Sub(qiCost))
         {
-            // TODO: change the 1 in sub() to QiCost for dynamic cost caluclations
             // Start Converting!
             isActive = true;
-            // SkillController.RegisterTimerSkill(this);
             SkillController.TriggerAnim(ID, TimeTaken);
         }
         else
@@ -127,12 +133,55 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
     private Dictionary<SlagTypes, ulong> slagGains = new Dictionary<SlagTypes, ulong>();
     private ulong gains = 10;
 
+    /// <summary>
+    /// Sets all of the gains for the given slagtype.
+    /// </summary>
+    /// <param name="Type"> The slag type to generate the gains for. </param>
     private void SetGain(SlagTypes Type) 
     {
         slagGains[Type] = 0;
 
         uint purity = ((QiPurity)SkillController.GetSkill(SkillEnums.Skill.QiPurity)).GetPurity();
         // TODO:  NEXT TASK: Make this work. 
+
+        uint pureCheck = purity - (10 * (uint)Type);
+
+        if (pureCheck >= 0) 
+        {
+            uint pureGrade = pureCheck % 10;
+            pureCheck -= pureGrade;
+            uint pureTier = pureCheck / 10;
+            // Check the google drive NOTE TODO HELP DOTHIS NEXT
+        }
+
+        /* Javascript Webcode.
+         * (mat_tier) input
+        var tiers = {
+            0: 0, // Inferior Spirit Slag
+            1: 1, // Spirit Slag
+            2: 2, // Superior Spirit Slag
+            3: 4 // 
+        }
+
+        var pureCheck = (character.sheet.stats.purity-(10*tiers[mat_tier]))+1;
+        if (pureCheck > 0) {
+            // Grey Magik
+            let pureGrade = pureCheck%10;
+            pureCheck -= pureGrade;
+            let pureTier = pureCheck/10;
+            let ret = pureGrade*fibbo.getMeMyCost(pureTier+2)*10;
+            if(fibbo.avg_f2[pureTier-1]){
+                ret += (pureCheck*fibbo.avg_f2[pureTier-1]*10)
+            }
+            return ret;
+        } else if (pureCheck > -9){
+            pureCheck--;
+            var ret = 10+pureCheck;
+            return ret;
+        } else {
+            return 0;
+        }
+         */
     }
 
     private void SetAllGains() 

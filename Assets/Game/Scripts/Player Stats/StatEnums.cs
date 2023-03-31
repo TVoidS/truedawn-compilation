@@ -17,7 +17,7 @@ public enum StatEnums
 public enum SlagTypes 
 {
     [Description("Inferior Spirit Slag")]
-    InferiorSlag,
+    InferiorSlag = 0,
     [Description("Spirit Slag")]
     Slag,
     [Description("Superior Spirit Slag")]
