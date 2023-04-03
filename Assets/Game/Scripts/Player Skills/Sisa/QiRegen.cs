@@ -29,7 +29,7 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
         _Rank = rank;
         Progress = 0f;
 
-        RegenQuantity = (uint) (_Level + (10 * _Rank));
+        RegenQuantity = (uint) (_Level + (10 * _Rank) + 1);
 
         SkillController.RegisterTimerSkill(this);
         isActive = true;
@@ -117,7 +117,7 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
             _Level++;
         }
 
-        RegenQuantity = (uint)(_Level + (10 * _Rank));
+        RegenQuantity = (uint)(_Level + (10 * _Rank) + 1);
 
         // Recalculate the Level Costs
         CalculateLevelCosts();

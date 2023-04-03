@@ -2,7 +2,7 @@ using System.Text.Json;
 
 public class QiPurity : SpiritVeinSkill, ILevelable
 {
-    private uint purity;
+    private ushort purity;
 
     public QiPurity(byte level, byte rank) : 
         base
@@ -36,7 +36,7 @@ public class QiPurity : SpiritVeinSkill, ILevelable
     /// </summary>
     private void LoadPurity() 
     {
-        purity = (uint)((_Rank * 10) + _Level);
+        purity = (ushort)((_Rank * 10) + _Level);
     }
 
     /// <summary>
@@ -44,7 +44,7 @@ public class QiPurity : SpiritVeinSkill, ILevelable
     /// This starts at 0 on a new game and goes up by one each time a successful level up occurs.
     /// </summary>
     /// <returns> The Purity value. </returns>
-    public uint GetPurity() { return purity; }
+    public ushort GetPurity() { return purity; }
 
     // ILevelable Interface Implementations
     private byte _Level;
@@ -86,6 +86,9 @@ public class QiPurity : SpiritVeinSkill, ILevelable
         CalculateLevelCosts();
         // And update the displays.
         UpdateLevelDisplays();
+
+        // NOTE: Change this to a more targeted system 
+        ((QiConvert)SkillController.GetSkill(SkillEnums.Skill.QiConvert)).SetAllGains();
     }
 
     // Skill Override section

@@ -109,11 +109,13 @@ public static class SkillController
     /// <param name="time"> The duration of the skill.  This may be ignored, or left behind in some cases. </param>
     public static void TriggerAnim(SkillEnums.Skill skillID, float time)
     {
-        int i = AnimTriggers.FindIndex(x => x.TriggerSkill == skillID);
-        if (i >= 0)
+        AnimTriggers.ForEach(x => 
         {
-            AnimTriggers[i].Anim.TriggerAnim(time);
-        }
+            if(x.TriggerSkill == skillID) 
+            {
+                x.Anim.TriggerAnim(time);
+            }
+        });
     }
 
     /// <summary>

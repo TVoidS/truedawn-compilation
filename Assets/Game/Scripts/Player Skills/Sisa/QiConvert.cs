@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text.Json;
 using static SkillEnums;
 
@@ -24,6 +25,8 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
         // Just booted up, there is no progress towards the next Conversion
         Progress = 0f;
 
+        //SetAllGains();
+
         // Add the skill to the SkillList list for event tracking, saving, and identification.
         SkillController.RegisterSkill(this);
         SkillController.RegisterTimerSkill(this);
@@ -38,6 +41,18 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
         UpdateFancyRankDisplays();
     }
 
+    public void SetType(byte type) 
+    {
+        try
+        {
+            currType = (SlagTypes)type;
+        }
+        catch 
+        {
+            // NO CHANGE
+            SkillController.Log("Invalid SlagType for Conversion");
+        }
+    }
 
     private uint qiCost = 1;
 
@@ -70,6 +85,7 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
 
     // Variables used in SkillUpdate()
     private float Progress;
+    private SlagTypes currType = SlagTypes.InferiorSlag;
 
     // Interface Implementation from ITimerSkill
     public void SkillUpdate(float deltaTime)
@@ -79,7 +95,7 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
         if (Progress >= 1f)
         {
             Progress = 0f;
-            SlagCount.Add(gains, SlagTypes.InferiorSlag);
+            SlagCount.Add(slagGains[currType], SlagTypes.InferiorSlag);
             // SkillController.DeregisterTimerSkill(this);
             isActive = false;
         }
@@ -131,7 +147,6 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
     /// TODO: Make this be more than a single ulong.  One for each type of slag!
     /// </summary>
     private Dictionary<SlagTypes, ulong> slagGains = new Dictionary<SlagTypes, ulong>();
-    private ulong gains = 10;
 
     /// <summary>
     /// Sets all of the gains for the given slagtype.
@@ -141,54 +156,38 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
     {
         slagGains[Type] = 0;
 
-        uint purity = ((QiPurity)SkillController.GetSkill(SkillEnums.Skill.QiPurity)).GetPurity();
+        int purity = ((QiPurity)SkillController.GetSkill(SkillEnums.Skill.QiPurity)).GetPurity();
         // TODO:  NEXT TASK: Make this work. 
 
-        uint pureCheck = purity - (10 * (uint)Type);
+        int pureCheck = purity - (10 * (int)Type);
 
-        if (pureCheck >= 0) 
+        if (pureCheck >= 0)
         {
-            uint pureGrade = pureCheck % 10;
+            int pureGrade = pureCheck % 10;
             pureCheck -= pureGrade;
-            uint pureTier = pureCheck / 10;
+            int pureTier = pureCheck / 10;
             // Check the google drive NOTE TODO HELP DOTHIS NEXT
-        }
 
-        /* Javascript Webcode.
-         * (mat_tier) input
-        var tiers = {
-            0: 0, // Inferior Spirit Slag
-            1: 1, // Spirit Slag
-            2: 2, // Superior Spirit Slag
-            3: 4 // 
-        }
+            slagGains[Type] = (ulong)(pureTier + 1) * (ulong)(pureGrade + 1) * 10; // This gives me the amount in the tens place (and the hundreds place, but that gets added to later)
 
-        var pureCheck = (character.sheet.stats.purity-(10*tiers[mat_tier]))+1;
-        if (pureCheck > 0) {
-            // Grey Magik
-            let pureGrade = pureCheck%10;
-            pureCheck -= pureGrade;
-            let pureTier = pureCheck/10;
-            let ret = pureGrade*fibbo.getMeMyCost(pureTier+2)*10;
-            if(fibbo.avg_f2[pureTier-1]){
-                ret += (pureCheck*fibbo.avg_f2[pureTier-1]*10)
+            // We can now ignore pureGrade
+
+            while (pureTier > 0) 
+            {
+                // Extremely simple loop.  Hopefully it doesn't cause problemts, but it shouldn't.
+                slagGains[Type] += (ulong)pureTier * 100;
+
+                pureTier -= 1;
             }
-            return ret;
-        } else if (pureCheck > -9){
-            pureCheck--;
-            var ret = 10+pureCheck;
-            return ret;
-        } else {
-            return 0;
-        }
-         */
-    }
 
-    private void SetAllGains() 
-    {
-        foreach (SlagTypes Type in Enum.GetValues(typeof(SlagTypes))) 
+        }
+        else if (pureCheck == -1)
         {
-            SetGain(Type);
+            slagGains[Type] = 1;
+        }
+        else 
+        {
+            slagGains[Type] = 0;
         }
     }
 
@@ -197,10 +196,12 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
     /// This should be triggered whenever there is a change to the Qi Purity
     /// </summary>
     /// <returns> True if succeeded, false otherwise. </returns>
-    public void CalculateGains()
+    public void SetAllGains() 
     {
-        // TODO: make this dependent on the type of slag being produced.
-        gains = ((QiPurity)SkillController.GetSkill(SkillEnums.Skill.QiPurity)).GetPurity()*10;
+        foreach (SlagTypes Type in Enum.GetValues(typeof(SlagTypes))) 
+        {
+            SetGain(Type);
+        }
     }
 
     /// <summary>
@@ -209,7 +210,7 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
     /// Or at least recalculate it every time it changes selection...
     /// </summary>
     public float TimeTaken => _timeTaken;
-    private float _timeTaken = 60f;
+    private float _timeTaken = 6f;
 
     /// <summary>
     /// Recalculates the Time Requirements of each slag's conversion from Qi.
@@ -220,7 +221,7 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
     {
         // TODO: Make this based off the type of slag being produced.
         // Base time of 60 seconds for now.
-        _timeTaken = 60f;
+        _timeTaken = 6f;
     }
 
 
@@ -300,6 +301,8 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
 
         _Level = skillData.GetProperty("Level").GetByte();
         _Rank = skillData.GetProperty("Rank").GetByte();
+
+        SetAllGains();
 
         // Recalculate things due to loaded level and rank. 
         CalculateLevelCosts();
