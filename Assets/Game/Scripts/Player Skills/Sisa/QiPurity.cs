@@ -64,7 +64,7 @@ public class QiPurity : SpiritVeinSkill, ILevelable
         UpdateLevelCostDisplays();
     }
 
-    public void LevelUp()
+    public bool LevelUp()
     { 
         // If it leveled,
         if (_Level == MaxLevel)
@@ -88,7 +88,10 @@ public class QiPurity : SpiritVeinSkill, ILevelable
         UpdateLevelDisplays();
 
         // NOTE: Change this to a more targeted system 
-        ((QiConvert)SkillController.GetSkill(SkillEnums.Skill.QiConvert)).SetAllGains();
+        // ((QiConvert)SkillController.GetSkill(SkillEnums.Skill.QiConvert)).SetAllGains();
+
+        // Modify this if there is ever a cause for failure.
+        return true;
     }
 
     // Skill Override section

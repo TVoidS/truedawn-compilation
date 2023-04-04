@@ -29,6 +29,11 @@ public static class SkillController
     private static readonly List<Skill> SkillList = new();
 
     /// <summary>
+    /// The list that stores all skills that need to be updated when other skills have an event.
+    /// </summary>
+    private static readonly List<SkillEventCallback> SkillEventList = new();
+
+    /// <summary>
     /// The list of all Text Displays.
     /// Use this to update any text display that has been registered in the event handler.
     /// </summary>
@@ -75,9 +80,9 @@ public static class SkillController
     internal static void RunTimerSkills()
     {
         float time = Time.deltaTime;
-        ActiveTimerSkills.ForEach(delegate(ITimerSkill i) 
+        ActiveTimerSkills.ForEach(delegate (ITimerSkill i)
         {
-            if (i.IsActive) 
+            if (i.IsActive)
             {
                 i.SkillUpdate(time);
             }
@@ -109,9 +114,9 @@ public static class SkillController
     /// <param name="time"> The duration of the skill.  This may be ignored, or left behind in some cases. </param>
     public static void TriggerAnim(SkillEnums.Skill skillID, float time)
     {
-        AnimTriggers.ForEach(x => 
+        AnimTriggers.ForEach(x =>
         {
-            if(x.TriggerSkill == skillID) 
+            if (x.TriggerSkill == skillID)
             {
                 x.Anim.TriggerAnim(time);
             }
@@ -141,15 +146,15 @@ public static class SkillController
     /// Attatches the provided display to a list for handling updates to an associated skill.
     /// </summary>
     /// <param name="display"> The display to track for updates. </param>
-    public static void AttatchTextDisplay(IGeneralizedTextDisplay display) 
+    public static void AttatchTextDisplay(IGeneralizedTextDisplay display)
     {
         // Nasty block for making sure a Skill isn't selected as Slag without a SlagType.
-        try 
+        try
         {
-            if (((IStatTextDisplay)display).Stat == StatEnums.Slag) 
+            if (((IStatTextDisplay)display).Stat == StatEnums.Slag)
             {
                 // Stat, slag.
-                try 
+                try
                 {
                     // Will error if it isn't slag type.  It should right now tho
                     if (((ISlagTextDisplay)display).SlagType >= SlagTypes.InferiorSlag)
@@ -164,13 +169,13 @@ public static class SkillController
                     Debug.Log("Slag selected as a stat!  Not good choice, as it doesn't have a slag type!");
                 }
             }
-            else 
+            else
             {
                 // Stat, but not slag
                 TextDisplays.Add(display);
             }
         }
-        catch 
+        catch
         {
             // Not a stat
             TextDisplays.Add(display);
@@ -199,7 +204,10 @@ public static class SkillController
                     // This will also return false if the player doesn't have enough SystemPoints to spend for the event.
                     if (SystemPointsCount.Sub(skill.LevelCost))
                     {
-                        skill.LevelUp();
+                        if (skill.LevelUp())
+                        {
+                            HandleSkillEvent(SkillID, EventType);
+                        }
                     }
                 }
                 catch // Catch if it fails
@@ -214,7 +222,10 @@ public static class SkillController
                     IActivatable skill = (IActivatable)SkillList.Find(x => x.ID == SkillID);
 
                     // Activate the skill.  This will throw an error if the skill wasn't implementing IActivatable.
-                    skill.Activate();
+                    if (skill.Activate()) 
+                    {
+                        HandleSkillEvent(SkillID, EventType);
+                    }
 
                     // I should be done here.
                 }
@@ -263,9 +274,9 @@ public static class SkillController
     /// <param name="skillID"> The skill that is updated </param>
     /// <param name="dataType"> The type of data being updated. </param>
     /// <param name="text"> The new text to display. </param>
-    public static void UpdateTextDisplay(SkillEnums.Skill skillID, DisplayEnums.TextDisplayType dataType ,string text) 
+    public static void UpdateTextDisplay(SkillEnums.Skill skillID, DisplayEnums.TextDisplayType dataType, string text)
     {
-        TextDisplays.FindAll(delegate(IGeneralizedTextDisplay x) 
+        TextDisplays.FindAll(delegate (IGeneralizedTextDisplay x)
         {
             try
             {
@@ -273,12 +284,12 @@ public static class SkillController
                 {
                     return true;
                 }
-                else 
+                else
                 {
                     return false;
                 }
             }
-            catch 
+            catch
             {
                 return false;
             }
@@ -290,7 +301,7 @@ public static class SkillController
     /// </summary>
     /// <param name="slagType"> The Type of Slag being updated. </param>
     /// <param name="text"> The new text to display in the Text Display. </param>
-    public static void UpdateTextDisplay(SlagTypes slagType, string text) 
+    public static void UpdateTextDisplay(SlagTypes slagType, string text)
     {
         TextDisplays.FindAll(delegate (IGeneralizedTextDisplay x)
         {
@@ -317,7 +328,7 @@ public static class SkillController
     /// </summary>
     /// <param name="stat"> The stat being updated. </param>
     /// <param name="text"> The new text for the StatDisplay </param>
-    public static void UpdateTextDisplay(StatEnums stat, string text) 
+    public static void UpdateTextDisplay(StatEnums stat, string text)
     {
         TextDisplays.FindAll(delegate (IGeneralizedTextDisplay x)
         {
@@ -356,14 +367,14 @@ public static class SkillController
         SkillList.ForEach(x =>
         {
             ret += ",\n"
-                + x.Save((byte)(tabcount +1));
+                + x.Save((byte)(tabcount + 1));
         });
 
         ret = ret[1..];
 
-        return "\n" 
-            + tabs + "\"Skills\":[" 
-            + ret + "\n" 
+        return "\n"
+            + tabs + "\"Skills\":["
+            + ret + "\n"
             + tabs + "]";
     }
 
@@ -373,7 +384,7 @@ public static class SkillController
     /// </summary>
     /// <param name="skillID"></param>
     /// <returns></returns>
-    public static Skill GetSkill(SkillEnums.Skill skillID) 
+    public static Skill GetSkill(SkillEnums.Skill skillID)
     {
         return SkillList.Find(x => x.ID == skillID);
     }
@@ -381,9 +392,9 @@ public static class SkillController
     /// <summary>
     /// Updates all the registered text displays for all skills.
     /// </summary>
-    public static void UpdateAllSkillTextDisplays() 
+    public static void UpdateAllSkillTextDisplays()
     {
-        SkillList.ForEach(x => 
+        SkillList.ForEach(x =>
         {
             x.UpdateAllText();
         });
@@ -394,16 +405,33 @@ public static class SkillController
     /// </summary>
     /// <param name="skillID"> The ID of the skill the data is for. </param>
     /// <param name="skillData"> The Data to be loaded, as a JsonElement. </param>
-    public static void LoadSkill(SkillEnums.Skill skillID, JsonElement skillData) 
+    public static void LoadSkill(SkillEnums.Skill skillID, JsonElement skillData)
     {
         try
         {
             GetSkill(skillID).Load(skillData);
         }
-        catch 
+        catch
         {
             // Failed to load, likely to be something related to NO LOAD SEQUENCE BUILT
         }
     }
+
+    public static void RegisterSkillEventCallback(SkillEventCallback skillEvent)
+    {
+        SkillEventList.Add(skillEvent);
+    }
+
+    private static void HandleSkillEvent(SkillEnums.Skill skillID, SkillEnums.ButtonEvent eventType) 
+    {
+        SkillEventList.ForEach(x => 
+        {
+            if (x.TriggerEvent == eventType && x.TriggerSkill == skillID) 
+            {
+                x.Trigger();
+            }
+        });
+    }
+
     // END STATIC SECTION
 }

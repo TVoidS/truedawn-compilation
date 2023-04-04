@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Text.Json;
 using static SkillEnums;
 
-public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
+public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable, ISkillEventResponder
 {
     /// <summary>
     /// Construct the Qi Conversion skill.
@@ -36,9 +35,9 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
         CalculateTime();
 
         // Set all other displays 
-        UpdateLevelDisplays();
-        base.UpdateAllText();
-        UpdateFancyRankDisplays();
+        UpdateAllText();
+
+        SkillController.RegisterSkillEventCallback(new SkillEventCallback(SkillEnums.Skill.QiPurity, this, SkillEnums.ButtonEvent.Level));
     }
 
     public void SetType(byte type) 
@@ -63,23 +62,26 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
     }
 
     // Interface Implementation from IActivatable.
-    public void Activate() 
+    public bool Activate() 
     {
         if (isActive)
         {
             // fail.
             SkillController.Log("BUSY.  Hold your horses!");
+            return false;
         }
         else if (QiCount.Sub(qiCost))
         {
             // Start Converting!
             isActive = true;
             SkillController.TriggerAnim(ID, TimeTaken);
+            return true;
         }
         else
         {
             // Too broke
             SkillController.Log("Not Enough Qi");
+            return false;
         }
     }
 
@@ -240,7 +242,7 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
 
     public GrowthType Growth = GrowthType.Linear;
 
-    public void LevelUp() 
+    public bool LevelUp() 
     {
         // If it leveled,
         if (_Level == MaxLevel)
@@ -262,6 +264,9 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
         CalculateLevelCosts();
         // And update the displays.
         UpdateLevelDisplays();
+
+        // Modify this if there is ever a cause for failure other than cost.
+        return true;
     }
 
     public void CalculateLevelCosts() 
@@ -302,8 +307,6 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
         _Level = skillData.GetProperty("Level").GetByte();
         _Rank = skillData.GetProperty("Rank").GetByte();
 
-        SetAllGains();
-
         // Recalculate things due to loaded level and rank. 
         CalculateLevelCosts();
         CalculateTime();
@@ -326,5 +329,11 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable
     {
         SkillController.UpdateTextDisplay(ID, DisplayEnums.TextDisplayType.LevelCost, _LevelCost + " SP"); // TODO Make this not big number only.
         // Do shorthand or something.  Like 43M or 1B or 203Sp.
+    }
+
+    // ISkillEventResponder Interface implementation
+    public void Trigger() 
+    {
+        SetAllGains();
     }
 }

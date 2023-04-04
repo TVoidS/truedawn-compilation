@@ -27,7 +27,7 @@ public interface ILevelable
     /// <summary>
     /// This will try to increment the Level of any ILevelable skill.  No return on failure yet.  Will later probably.
     /// </summary>
-    public void LevelUp();
+    public bool LevelUp();
 
     /// <summary>
     /// Run this whenever a potential change to level up costs occurs

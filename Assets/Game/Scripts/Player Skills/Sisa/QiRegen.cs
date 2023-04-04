@@ -101,7 +101,7 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
 
     public readonly GrowthType Growth = GrowthType.Linear;
 
-    public void LevelUp() 
+    public bool LevelUp() 
     {
         // If it leveled,
         if (_Level == MaxLevel)
@@ -123,6 +123,9 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
         CalculateLevelCosts();
         // And update the displays.
         UpdateLevelDisplays();
+
+        // Change this if there is ever a problem that can cause a failure of leveling.
+        return true;
     }
 
     public void CalculateLevelCosts() 
