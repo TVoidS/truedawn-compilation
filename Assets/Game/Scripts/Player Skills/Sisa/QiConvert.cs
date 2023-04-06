@@ -74,6 +74,7 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable,
         {
             // Start Converting!
             isActive = true;
+            CalculateTime();
             SkillController.TriggerAnim(ID, TimeTaken);
             return true;
         }
@@ -87,7 +88,9 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable,
 
     // Variables used in SkillUpdate()
     private float Progress;
+    
     private SlagTypes currType = SlagTypes.InferiorSlag;
+    private SlagTypes nextType = SlagTypes.InferiorSlag;
 
     // Interface Implementation from ITimerSkill
     public void SkillUpdate(float deltaTime)
@@ -106,6 +109,18 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable,
             Progress += (deltaTime / TimeTaken);
         }
         UpdateDisplays(Progress);
+    }
+
+    public void SetNextType(string desc) 
+    {
+        foreach(SlagTypes type in Enum.GetValues(typeof(SlagTypes))) 
+        {
+            if (type.ToDiscriptionString().Equals(desc)) 
+            {
+                nextType = type;
+                break;
+            }
+        }
     }
 
     /// <summary>
@@ -146,7 +161,6 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable,
 
     /// <summary>
     /// The mass of spirit slag of a given type gained from each conversion
-    /// TODO: Make this be more than a single ulong.  One for each type of slag!
     /// </summary>
     private Dictionary<SlagTypes, ulong> slagGains = new Dictionary<SlagTypes, ulong>();
 
@@ -159,7 +173,6 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable,
         slagGains[Type] = 0;
 
         int purity = ((QiPurity)SkillController.GetSkill(SkillEnums.Skill.QiPurity)).GetPurity();
-        // TODO:  NEXT TASK: Make this work. 
 
         int pureCheck = purity - (10 * (int)Type);
 
@@ -168,7 +181,6 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable,
             int pureGrade = pureCheck % 10;
             pureCheck -= pureGrade;
             int pureTier = pureCheck / 10;
-            // Check the google drive NOTE TODO HELP DOTHIS NEXT
 
             slagGains[Type] = (ulong)(pureTier + 1) * (ulong)(pureGrade + 1) * 10; // This gives me the amount in the tens place (and the hundreds place, but that gets added to later)
 
@@ -214,6 +226,12 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable,
     public float TimeTaken => _timeTaken;
     private float _timeTaken = 6f;
 
+    // TODO: Create the different time arrays.
+
+    private float[] time1 = { 60, 55, 50, 45, 40, 35, 30, 25, 20, 15};
+    private float[] time2 = { 10, 9, 8, 7, 6, 5, 4, 3, 2, 1.5f };
+    // Everything else is just +1 so far.
+
     /// <summary>
     /// Recalculates the Time Requirements of each slag's conversion from Qi.
     /// This should be triggered each time there is a change in Level or Qi Purity!
@@ -223,7 +241,31 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable,
     {
         // TODO: Make this based off the type of slag being produced.
         // Base time of 60 seconds for now.
-        _timeTaken = 6f;
+        int purity = ((QiPurity)SkillController.GetSkill(SkillEnums.Skill.QiPurity)).GetPurity();
+
+        int pureCheck = purity - (10 * (int)currType);
+
+        if (pureCheck < 0)
+        {
+            // FAIL UTTERLY.
+            _timeTaken = float.MaxValue;
+        }
+        else if (pureCheck >= 20)
+        {
+            // +1's
+            _timeTaken = 1 / (pureCheck - 20);
+        }
+        else if (pureCheck >= 10)
+        {
+            // time2
+            pureCheck -= 10;
+            _timeTaken = time2[pureCheck];
+        }
+        else 
+        {
+            // time 1
+            _timeTaken = time1[pureCheck];
+        }
     }
 
 
