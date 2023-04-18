@@ -1,16 +1,15 @@
-using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class PlayerCam : MonoBehaviour
 {
     // GPT Test Vars
     private PointerEventData pointerEventData;
     private EventSystem eventSystem;
-
-
 
     public float senseX;
     public float senseY;
@@ -23,8 +22,8 @@ public class PlayerCam : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+        UnityEngine.Cursor.visible = false;
 
         pointerEventData = new PointerEventData(null);
         eventSystem = EventSystem.current;
@@ -71,15 +70,42 @@ public class PlayerCam : MonoBehaviour
                     // Completely restructured to fit the new List format.
                     hits.ForEach(hit =>
                     {
-                        if (hit.gameObject.GetComponent<Button>() != null)
+                        if (hits.Count > 0) 
+                        {
+                            eventSystem.SetSelectedGameObject(hit.gameObject);
+                        }
+
+                        if (hit.gameObject.GetComponent<UnityEngine.UI.Button>() != null)
                         {
                             if (Input.GetMouseButtonDown(0))
                             {
-                                hit.gameObject.GetComponent<Button>().onClick.Invoke();
+                                hit.gameObject.GetComponent<UnityEngine.UI.Button>().onClick.Invoke();
                             }
                             else
                             {
                                 eventSystem.SetSelectedGameObject(hit.gameObject);
+                            }
+                        }
+                        else if (hit.gameObject.GetComponent<TMP_Dropdown>() != null)
+                        {
+                            if (Input.GetMouseButtonDown(0))
+                            {
+                                hit.gameObject.GetComponent<TMP_Dropdown>().OnPointerClick(pointerEventData);
+                            }
+                            else
+                            {
+                                eventSystem.SetSelectedGameObject(hit.gameObject);
+                            }
+                        }
+                        else if (hit.gameObject.transform.CompareTag("dropdownitem"))
+                        {
+                            if (Input.GetMouseButtonDown(0))
+                            {
+                                hit.gameObject.transform.parent.GetComponent<UnityEngine.UI.Toggle>().OnPointerClick(pointerEventData);
+                            }
+                            else 
+                            {
+                                eventSystem.SetSelectedGameObject(hit.gameObject.transform.parent.gameObject);
                             }
                         }
                         // If I want to select other input fields or things, I can add them here instead of GetComponent<Button>.

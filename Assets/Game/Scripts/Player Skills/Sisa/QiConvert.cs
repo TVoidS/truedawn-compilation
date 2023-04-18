@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using UnityEngine;
 using static SkillEnums;
 
 public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable, ISkillEventResponder
@@ -100,7 +101,9 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable,
         if (Progress >= 1f)
         {
             Progress = 0f;
-            SlagCount.Add(slagGains[currType], SlagTypes.InferiorSlag);
+            SlagCount.Add(slagGains[currType], currType);
+            currType = nextType;
+            CalculateTime();
             // SkillController.DeregisterTimerSkill(this);
             isActive = false;
         }
@@ -220,17 +223,13 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable,
 
     /// <summary>
     /// The time taken by the system to complete the conversion of Qi to Slag.
-    /// TODO: Make this have multiple floats.  One for each type of SLAG! 
     /// Or at least recalculate it every time it changes selection...
     /// </summary>
     public float TimeTaken => _timeTaken;
-    private float _timeTaken = 6f;
+    private float _timeTaken = 60f;
 
-    // TODO: Create the different time arrays.
-
-    private float[] time1 = { 60, 55, 50, 45, 40, 35, 30, 25, 20, 15};
-    private float[] time2 = { 10, 9, 8, 7, 6, 5, 4, 3, 2, 1.5f };
-    // Everything else is just +1 so far.
+    private float[] times = { 60, 55, 50, 45, 40, 35, 30, 25, 20, 15, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1.5f };
+    // Everything else is just +1 gain so far.
 
     /// <summary>
     /// Recalculates the Time Requirements of each slag's conversion from Qi.
@@ -239,7 +238,6 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable,
     /// <returns> True if succeeded, false otherwise. </returns>
     public void CalculateTime()
     {
-        // TODO: Make this based off the type of slag being produced.
         // Base time of 60 seconds for now.
         int purity = ((QiPurity)SkillController.GetSkill(SkillEnums.Skill.QiPurity)).GetPurity();
 
@@ -253,23 +251,17 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable,
         else if (pureCheck >= 20)
         {
             // +1's
-            _timeTaken = 1 / (pureCheck - 20);
+            _timeTaken = 1 / (pureCheck - 19);
         }
-        else if (pureCheck >= 10)
-        {
-            // time2
-            pureCheck -= 10;
-            _timeTaken = time2[pureCheck];
-        }
-        else 
+        else
         {
             // time 1
-            _timeTaken = time1[pureCheck];
+            _timeTaken = times[pureCheck];
         }
     }
 
 
-    // TODO: Separate Implementations into a different Partial class file
+    // TODO: MAYBE Separate Implementations into a different Partial class file
     // ILevelable Interface Implementation:
     private byte _Level;
     public byte Level => _Level;
@@ -374,6 +366,14 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable,
     }
 
     // ISkillEventResponder Interface implementation
+    public void Trigger<T>(T input)
+    {
+        if (typeof(T) == typeof(string))
+        {
+            SetNextType(input.ToString());
+        }
+    }
+
     public void Trigger() 
     {
         SetAllGains();

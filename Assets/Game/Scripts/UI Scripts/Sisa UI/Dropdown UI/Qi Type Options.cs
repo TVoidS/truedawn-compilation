@@ -12,8 +12,10 @@ public class QiTypeOptions : MonoBehaviour
         List<TMP_Dropdown.OptionData> options = new();
         foreach (SlagTypes type in Enum.GetValues(typeof(SlagTypes))) 
         {
-            TMP_Dropdown.OptionData optionData = new();
-            optionData.text = type.ToDiscriptionString();
+            TMP_Dropdown.OptionData optionData = new()
+            {
+                text = type.ToDiscriptionString()
+            };
             options.Add(optionData);
         }
 
@@ -21,7 +23,8 @@ public class QiTypeOptions : MonoBehaviour
 
         dropdown.onValueChanged.AddListener(x => 
         {
-            ((QiConvert)SkillController.GetSkill(SkillEnums.Skill.QiConvert)).SetNextType(dropdown.options[x].text);
+            QiConvert convert = (QiConvert)SkillController.GetSkill(SkillEnums.Skill.QiConvert);
+            convert.SetNextType(dropdown.options[dropdown.value].text);
         });
     }
 }
