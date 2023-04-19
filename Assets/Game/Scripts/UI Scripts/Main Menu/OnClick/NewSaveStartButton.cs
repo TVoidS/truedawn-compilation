@@ -36,6 +36,7 @@ public class NewSaveStartButton : MonoBehaviour
 
     IEnumerator AsyncLoad()
     {
+        SaveLoad.NewGame();
         CanvasContentsController.SwapTo(2);
 
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("SoulCore");

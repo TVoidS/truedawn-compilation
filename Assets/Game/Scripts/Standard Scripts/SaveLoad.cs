@@ -177,6 +177,15 @@ public static class SaveLoad
         SkillController.UpdateAllSkillTextDisplays();
         PlayerStats.Display();
     }
+
+    /// <summary>
+    /// Starts the game with the basic stats rather than loaded stats.
+    /// </summary>
+    public static void NewGame() 
+    {
+        SkillController.UpdateAllSkillTextDisplays();
+        PlayerStats.Display();
+    }
 }
 
 /// <summary>

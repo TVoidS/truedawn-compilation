@@ -180,6 +180,7 @@ public static class SkillController
             // Not a stat
             TextDisplays.Add(display);
         }
+        UpdateAllSkillTextDisplays();
     }
 
     /// <summary>
@@ -187,7 +188,7 @@ public static class SkillController
     /// </summary>
     /// <param name="SkillID"> The Enumerated ID of the skill the event will trigger on. </param>
     /// <param name="EventType">The Enumerated ID of the type of event that will trigger. </param>
-    public static void ButtonEvent(SkillEnums.Skill SkillID, SkillEnums.ButtonEvent EventType)
+    public static void ButtonEvent(SkillEnums.Skill SkillID, SkillEnums.ButtonEvent EventType, string? input)
     {
         // Filter by event type
         switch (EventType)
@@ -206,7 +207,7 @@ public static class SkillController
                     {
                         if (skill.LevelUp())
                         {
-                            HandleSkillEvent(SkillID, EventType);
+                            HandleSkillEvent(SkillID, EventType, input);
                         }
                     }
                 }
@@ -219,12 +220,12 @@ public static class SkillController
                 try
                 {
                     // Find the skill and pretend that it is Activatable.
-                    IActivatable skill = (IActivatable)SkillList.Find(x => x.ID == SkillID);
+                    IActivatable skill = (IActivatable)SkillList.Find(x => (x.ID == SkillID));
 
                     // Activate the skill.  This will throw an error if the skill wasn't implementing IActivatable.
                     if (skill.Activate()) 
                     {
-                        HandleSkillEvent(SkillID, EventType);
+                        HandleSkillEvent(SkillID, EventType, input);
                     }
 
                     // I should be done here.
@@ -422,13 +423,13 @@ public static class SkillController
         SkillEventList.Add(skillEvent);
     }
 
-    private static void HandleSkillEvent(SkillEnums.Skill skillID, SkillEnums.ButtonEvent eventType) 
+    private static void HandleSkillEvent(SkillEnums.Skill skillID, SkillEnums.ButtonEvent eventType, string? input) 
     {
         SkillEventList.ForEach(x => 
         {
             if (x.TriggerEvent == eventType && x.TriggerSkill == skillID) 
             {
-                x.Trigger();
+                x.Trigger(input);
             }
         });
     }

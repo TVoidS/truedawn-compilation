@@ -39,6 +39,7 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable,
         UpdateAllText();
 
         SkillController.RegisterSkillEventCallback(new SkillEventCallback(SkillEnums.Skill.QiPurity, this, SkillEnums.ButtonEvent.Level));
+        SkillController.RegisterSkillEventCallback(new SkillEventCallback(SkillEnums.Skill.QiPurity, this, SkillEnums.ButtonEvent.Activate));
     }
 
     public void SetType(byte type) 
@@ -366,16 +367,15 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable,
     }
 
     // ISkillEventResponder Interface implementation
-    public void Trigger<T>(T input)
-    {
-        if (typeof(T) == typeof(string))
+    public void Trigger(ButtonEvent triggerEvent, string? input) 
+    {// TODO: BIGTIME Setup the Trigger system to allow for String and Event messaging between UI and Skills.
+        if (input == null)
         {
-            SetNextType(input.ToString());
+            SetAllGains();
         }
-    }
-
-    public void Trigger() 
-    {
-        SetAllGains();
+        else 
+        {
+            SetNextType(input);
+        }
     }
 }

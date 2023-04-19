@@ -6,9 +6,9 @@ public class SkillEventCallback
 
     ISkillEventResponder Handler;
 
-    public void Trigger() 
+    public void Trigger(string? input) 
     {
-        Handler.Trigger();
+        Handler.Trigger(TriggerEvent, input);
     }
 
     public SkillEventCallback(SkillEnums.Skill triggerSkill, ISkillEventResponder handler, SkillEnums.ButtonEvent triggerEvent)

@@ -19,7 +19,7 @@ public class SkillButton : MonoBehaviour
         gameObject.GetComponent<Button>().onClick.AddListener(() => 
         {
             // On click event.  Notify the Skill Controller
-            SkillController.ButtonEvent(SkillID, EventType);
+            SkillController.ButtonEvent(SkillID, EventType, null);
         });
     }
 }
