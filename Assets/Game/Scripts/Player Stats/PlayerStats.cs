@@ -16,9 +16,9 @@ public static class PlayerStats
 
     private static void LoadSkills() 
     {
-        new QiConvert(0, 0);
-        new QiRegen(0, 0);
-        new QiPurity(0, 0);
+        new QiConvert();
+        new QiRegen();
+        new QiPurity();
     }
 
     public static void LoadSkills(JsonElement skills) 

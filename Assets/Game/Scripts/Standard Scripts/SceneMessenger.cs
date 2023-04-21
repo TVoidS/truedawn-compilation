@@ -34,7 +34,7 @@ public class SceneMessenger : MonoBehaviour
         {
             switch (newScene.name)
             {
-                case "SoulCore": SkillController.UpdateAllSkillTextDisplays();  break;
+                case "SoulCore": SkillController.Startup();  break;
             }
         }
 

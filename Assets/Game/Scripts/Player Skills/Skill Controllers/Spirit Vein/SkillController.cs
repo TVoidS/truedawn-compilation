@@ -434,5 +434,14 @@ public static class SkillController
         });
     }
 
+    /// <summary>
+    /// This will run the Startup function of all skills, allowing them to turn Active if they are passives, or send display messages to their UI.
+    /// This is supposed to run only at the end of the Load or New Game functions.
+    /// </summary>
+    public static void Startup() 
+    {
+        SkillList.ForEach(x => { x.Startup(); });
+    }
+
     // END STATIC SECTION
 }

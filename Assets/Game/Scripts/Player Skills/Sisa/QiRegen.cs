@@ -15,9 +15,7 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
     /// <summary>
     /// Initiates the QiRegen skill for the player.
     /// </summary>
-    /// <param name="level"> The player's level in Qi Regen </param>
-    /// <param name="rank"> The player's rank in Qi Regen </param>
-    public QiRegen(byte level, byte rank) : 
+    public QiRegen() : 
         // Everything fed into the base() call is generic data that all skills have, but customized to Qi Regen.
         base(SkillEnums.Skill.QiRegen,
              DurationType.PassiveTimer,
@@ -25,20 +23,21 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
              "The basic ability all Spirit Veins have.  To recover Qi naturally. \n You however have the ability to recover Qi much faster. \n If you invest in this Skill that is...")
     {
         // Recieved and Standard values
-        _Level = level;
-        _Rank = rank;
+        _Level = 0;
+        _Rank = 0;
         Progress = 0f;
 
         RegenQuantity = (uint) (_Level + (10 * _Rank) + 1);
 
         SkillController.RegisterTimerSkill(this);
-        isActive = true;
         SkillController.RegisterSkill(this);
 
-        CalculateLevelCosts();
+        isActive = false;
+    }
 
-        // Set all other displays 
-        UpdateAllText();
+    private void CalculateRegenQuantity() 
+    {
+        RegenQuantity = (uint)(_Level + (10 * _Rank) + 1);
     }
 
     // Interface ITimerSkill implementation
@@ -171,6 +170,16 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
         // Recalculate things due to loaded level and rank. 
         CalculateLevelCosts();
 
+        UpdateAllText();
+    }
+
+    public override void Startup()
+    {
+        base.Startup();
+
+        isActive = true;
+
+        CalculateLevelCosts();
         UpdateAllText();
     }
 

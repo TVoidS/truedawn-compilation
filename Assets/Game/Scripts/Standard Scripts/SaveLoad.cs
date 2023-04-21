@@ -173,9 +173,6 @@ public static class SaveLoad
         PlayerStats.LoadStats(root.GetProperty("Stats"));
         PlayerStats.LoadSkills(root.GetProperty("Skills"));
         PlayerStats.SetName(root.GetProperty("Name").GetString());
-
-        SkillController.UpdateAllSkillTextDisplays();
-        PlayerStats.Display();
     }
 
     /// <summary>
@@ -183,8 +180,7 @@ public static class SaveLoad
     /// </summary>
     public static void NewGame() 
     {
-        SkillController.UpdateAllSkillTextDisplays();
-        PlayerStats.Display();
+        // nothing?
     }
 }
 

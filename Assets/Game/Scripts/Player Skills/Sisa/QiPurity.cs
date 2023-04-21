@@ -4,7 +4,7 @@ public class QiPurity : SpiritVeinSkill, ILevelable
 {
     private ushort purity;
 
-    public QiPurity(byte level, byte rank) : 
+    public QiPurity() : 
         base
         (
             SkillEnums.Skill.QiPurity,
@@ -14,20 +14,14 @@ public class QiPurity : SpiritVeinSkill, ILevelable
         ) 
     {
 
-        _Level = level;
-        _Rank = rank;
+        _Level = 0;
+        _Rank = 0;
 
         // Add the skill to the SkillController SkillList for saving and handling events.
         SkillController.RegisterSkill(this);
 
         // Set the current purity for the purposes of QiConversion and any other skill that requires it.
         LoadPurity();
-
-        // Set the level costs
-        CalculateLevelCosts();
-
-        // Set all other displays 
-        UpdateAllText();
     }
 
     /// <summary>
@@ -129,6 +123,17 @@ public class QiPurity : SpiritVeinSkill, ILevelable
 
         LoadPurity();
 
+        UpdateAllText();
+    }
+
+    public override void Startup()
+    {
+        base.Startup();
+
+        // Set the level costs
+        CalculateLevelCosts();
+
+        // Set all other displays 
         UpdateAllText();
     }
 

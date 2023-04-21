@@ -12,15 +12,15 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable,
     /// </summary>
     /// <param name="level"> The player's level in the skill </param>
     /// <param name="rank"> The player's rank in the skill </param>
-    public QiConvert(byte level, byte rank) :
+    public QiConvert() :
         base(SkillEnums.Skill.QiConvert,
              DurationType.DelayedInstant, // Skill's trigger/duration type, tells how to treat the trigger event Probably useless, but keeping for now.
              "Qi Conversion",
              "This skill converts your Qi into Spirit Slag of various types!")
     {
         // Loaded and Standard Data
-        _Level = level;
-        _Rank = rank;
+        _Level = 0;
+        _Rank = 0;
 
         // Just booted up, there is no progress towards the next Conversion
         Progress = 0f;
@@ -30,13 +30,6 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable,
         // Add the skill to the SkillList list for event tracking, saving, and identification.
         SkillController.RegisterSkill(this);
         SkillController.RegisterTimerSkill(this);
-
-        // Set the cost of leveling.
-        CalculateLevelCosts();
-        CalculateTime();
-
-        // Set all other displays 
-        UpdateAllText();
 
         SkillController.RegisterSkillEventCallback(new SkillEventCallback(SkillEnums.Skill.QiPurity, this, SkillEnums.ButtonEvent.Level));
         SkillController.RegisterSkillEventCallback(new SkillEventCallback(SkillEnums.Skill.QiPurity, this, SkillEnums.ButtonEvent.Activate));
@@ -117,14 +110,20 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable,
 
     public void SetNextType(string desc) 
     {
-        foreach(SlagTypes type in Enum.GetValues(typeof(SlagTypes))) 
+        SlagTypes targ = SlagTypes.InferiorSlag;
+        foreach (SlagTypes type in Enum.GetValues(typeof(SlagTypes)))
         {
-            if (type.ToDiscriptionString().Equals(desc)) 
+            if (type.ToDiscriptionString().Equals(desc))
             {
-                nextType = type;
+                targ = type;
                 break;
             }
         }
+        if (!IsActive) 
+        {
+            currType = targ;
+        }
+        nextType = targ;
     }
 
     /// <summary>
@@ -343,6 +342,17 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable,
         _Rank = skillData.GetProperty("Rank").GetByte();
 
         // Recalculate things due to loaded level and rank. 
+        CalculateLevelCosts();
+        CalculateTime();
+
+        UpdateAllText();
+    }
+
+    public override void Startup()
+    {
+        base.Startup();
+
+        SetAllGains();
         CalculateLevelCosts();
         CalculateTime();
 

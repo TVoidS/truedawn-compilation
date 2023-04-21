@@ -72,4 +72,13 @@ public class Skill
     {
         // Nothing to do here.  All data is pre-built and not related to the save. 
     }
+
+    /// <summary>
+    /// This is to be run by the SkillController when the game finishes loading.
+    /// All skills will have a process to follow, but this only is supposed to occur AFTER the images attatch.
+    /// </summary>
+    public virtual void Startup() 
+    {
+
+    }
 }
