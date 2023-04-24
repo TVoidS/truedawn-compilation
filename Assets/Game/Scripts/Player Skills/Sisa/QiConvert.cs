@@ -305,7 +305,7 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable,
 
     public void CalculateLevelCosts() 
     {
-        _LevelCost = LevelCosts.CalculateCost(_Level, MaxLevel, _Rank, 10);
+        _LevelCost = LevelCosts.CalculateCost(_Level, _Rank, 10);
         UpdateLevelCostDisplays();
     }
 

@@ -129,7 +129,7 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
 
     public void CalculateLevelCosts() 
     {
-        _LevelCost = LevelCosts.CalculateCost(_Level, MaxLevel, _Rank, 10);
+        _LevelCost = LevelCosts.CalculateCost(_Level, _Rank, 10);
         UpdateLevelCostDisplays();
     }
     // End Interface Implementations

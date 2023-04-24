@@ -15,7 +15,7 @@ public static class LevelCosts
     /// </summary>
     /// <param name="rank"></param>
     /// <returns></returns>
-    private static double TierCost(byte rank) 
+    private static double TierCost(short rank) 
     {
         // This has not been tested against the really high values that would exceed an int.
         // It might not work high enough to be worth ulong yet.
@@ -24,7 +24,11 @@ public static class LevelCosts
         // return (ulong)(Costs[(rank-1)%10] * 10^(rank) * 100^((rank-1)/10));
 
         // New Method:
-        if (rank < 4)
+        if (rank < 0) 
+        {
+            return 0;
+        }
+        else if (rank < 4)
         {
             return Math.Pow(9, rank) + Math.Pow(rank, rank + 9) - Math.Pow(rank, 2);
         }
@@ -43,7 +47,7 @@ public static class LevelCosts
     /// <param name="baseMulti"> The Cost multiplier.  Defaults to 1. </param>
     /// <param name="steps"> The Steps count. More steps requires more levels to go up in cost. </param>
     /// <returns></returns>
-    public static double CalculateCost(byte level, byte maxLevel, byte rank, byte baseMulti = 1, byte steps = 1) 
+    public static double CalculateCost(byte level, byte rank, byte baseMulti = 1, byte steps = 1) 
     {
         // TODO: Test the case where Steps is anything other than 1.  We need to make sure that doesn't break anything...
 
@@ -54,6 +58,8 @@ public static class LevelCosts
         // Gc = Grade cost
         // Bm = Base Multiplier
 
+        return baseMulti * (Costs[GetFinalLevel(level, steps)] * TierCost(rank) + (100*TierCost((short)(rank-1))));
+        /*
         if (rank == 0)
         {
             return baseMulti * Costs[level / steps];
@@ -66,5 +72,11 @@ public static class LevelCosts
         {
             return baseMulti * (Costs[level / steps] * TierCost(rank) + TierCost((byte)(rank - 1)));
         }
+        */
+    }
+
+    private static short GetFinalLevel(byte level, byte steps) 
+    {
+        return (short)(level / steps);
     }
 }

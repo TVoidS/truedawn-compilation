@@ -198,7 +198,7 @@ public struct SaveData
     public SlagTypes HighestSlagTier;
 
     /// <summary>
-    /// This is only for the highest tier
+    /// This is only for the highest tier TODO
     /// </summary>
     public ulong SlagQuantity; // This is only for the highest tier.
     
@@ -207,4 +207,6 @@ public struct SaveData
     public byte PurityGrade;
     
     // NOTE: Add data for stuff that will be displayed so that I can get the loading screen to display it.
+    // TODO: Add SP as one of the displays!
+
 }
