@@ -46,6 +46,7 @@ public class QiRegen : SpiritVeinSkill, ITimerSkill, ILevelable
         Progress += (deltaTime / _timeTaken);
         if (Progress >= 1f)
         {
+            PlayerEventCount.RegisterEvent("qiregen.regenqi:Cycles", 1);
             Progress = 0f;
             QiCount.Add(RegenQuantity);
         }

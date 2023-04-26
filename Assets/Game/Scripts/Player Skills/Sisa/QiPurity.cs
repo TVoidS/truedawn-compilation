@@ -103,6 +103,7 @@ public class QiPurity : SpiritVeinSkill, ILevelable
             + tabs + "\t\"Rank\":" + Rank + "\n"
             + tabs + "}";
     }
+
     public override void UpdateAllText()
     {
         UpdateLevelDisplays();

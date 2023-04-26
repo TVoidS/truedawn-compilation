@@ -44,7 +44,8 @@ public static class SaveLoad
         // NOTE: Add quest saving here!
         string json = "{"
             + SkillController.SerializeSkills(1) + ","
-            + PlayerStats.SerializeStats(1)
+            + PlayerStats.SerializeStats(1) + ","
+            + PlayerEventCount.Save(1)
             + "\n}";
 
         return json;
@@ -173,6 +174,7 @@ public static class SaveLoad
         PlayerStats.LoadStats(root.GetProperty("Stats"));
         PlayerStats.LoadSkills(root.GetProperty("Skills"));
         PlayerStats.SetName(root.GetProperty("Name").GetString());
+        PlayerEventCount.Load(root.GetProperty("Events"));
     }
 
     /// <summary>

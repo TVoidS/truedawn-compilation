@@ -38,10 +38,12 @@ public static class QiCount
             {
                 _Qi += qiAdd;
                 Display();
+                PlayerEventCount.RegisterEvent("qi.qiregenerated", qiAdd);
                 return true;
             }
             else
             {
+                PlayerEventCount.RegisterEvent("qi.qiregenerated", _Max - _Qi);
                 _Qi = _Max;
                 Display();
                 return true;

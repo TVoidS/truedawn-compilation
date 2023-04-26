@@ -94,11 +94,11 @@ public class QiConvert : SpiritVeinSkill, ITimerSkill, ILevelable, IActivatable,
         // It then removes itself from the TimerSkills list in SkillController.  This may need to be Thread-Safe later...
         if (Progress >= 1f)
         {
+            PlayerEventCount.RegisterEvent("qiconvert.convert:" + currType, slagGains[currType]);
             Progress = 0f;
             SlagCount.Add(slagGains[currType], currType);
             currType = nextType;
             CalculateTime();
-            // SkillController.DeregisterTimerSkill(this);
             isActive = false;
         }
         else
