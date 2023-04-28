@@ -56,4 +56,9 @@ public static class PlayerEventCount
         }
         return ret[1..] + "\n";
     }
+
+    public static ulong GetEventCount(string eventTag) 
+    {
+        return EventCounts[eventTag];
+    }
 }

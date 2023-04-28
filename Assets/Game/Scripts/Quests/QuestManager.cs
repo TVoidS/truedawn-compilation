@@ -21,9 +21,25 @@ public static class QuestManager
     /// </summary>
     /// <param name="eventTrigger"> The event that was called. </param>
     /// <param name="count"> The count of the event, to see if it has occured enough. </param>
-    public static void check(string eventTrigger, ulong count) 
+    public static void check(string eventTrigger) 
     {
-
+        Quests.ForEach(quest => 
+        {
+            if (quest.ContainsKey(eventTrigger))
+            {
+                // TODO: Complete these being added to a display or something.
+                if (quest.CheckTriggers())
+                {
+                    // It has completed the triggers, activate the quest in display and other locations
+                }
+                    
+                // This is separate in case of the rare occurance where it is immediately completed.
+                if (quest.CheckRequirements()) 
+                {
+                    // It has met the completion requirements
+                }
+            }
+        });
     }
 
     public static void Load(JsonElement PlayerQuestJson) 
